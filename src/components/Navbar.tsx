@@ -7,6 +7,10 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { User } from "@prisma/client";
 import { IoWalletOutline } from "react-icons/io5";
+import { VscAccount } from "react-icons/vsc";
+import { CiSettings } from "react-icons/ci";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import { FiLogIn, FiUser, FiUserPlus } from "react-icons/fi";
 
 interface NavbarProps {}
 
@@ -23,47 +27,98 @@ const ProfileButton = () => {
             alt="Profile image"
           />
         </button>
-        <div className="border-orange bg-creme absolute right-0  top-full z-20 mt-5  h-72 w-64 flex-col rounded-md border-2 peer-hover:flex ">
-          {/* upper  */}
-          <div className="my-3">
-            {" "}
-            <Image
-              className="mx-auto rounded-full"
-              src={sessionData?.user.image || "/default-profile-picture.jpg"}
-              width={40}
-              height={40}
-              alt="Profile image"
-            />
-            <h1 className="text-center">{sessionData?.user.name}</h1>
-            <p className="text-center text-xs  "> {sessionData?.user.email} </p>
-          </div>
 
-          <div className="mt-5 flex flex-col gap-y-2">
-            <div className="flex flex-row items-center px-3   hover:shadow-sm">
+        <div
+          className={`border-orange bg-creme absolute right-0 top-full  z-20 mt-5 hidden ${
+            sessionData ? "h-72" : "h-52"
+          }  w-64 flex-col rounded-md border-2 peer-hover:flex `}
+        >
+          {/* upper  */}
+          {sessionData ? (
+            <>
+              <div className="my-3">
+                {" "}
+                <Image
+                  className="mx-auto rounded-full grayscale"
+                  src={
+                    sessionData?.user.image || "/default-profile-picture.jpg"
+                  }
+                  width={40}
+                  height={40}
+                  alt="Profile image"
+                />
+                <h1 className="text-center">{sessionData?.user.name}</h1>
+                <p className="text-center text-xs  ">
+                  {" "}
+                  {sessionData?.user.email}{" "}
+                </p>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-y-2">
+                <div className="hover:text-orange flex flex-row items-center px-3   hover:shadow-sm">
+                  <span>{<VscAccount className="text-orange text-3xl" />}</span>
+                  <span className="pl-2 text-sm font-semibold">Ver perfil</span>
+                </div>
+                <div className="hover:text-orange flex flex-row items-center px-3 hover:shadow-sm">
+                  <span>
+                    {<IoWalletOutline className="text-orange text-3xl" />}
+                  </span>
+                  <span className="pl-2 text-sm font-semibold">
+                    Ver monedero
+                  </span>
+                </div>
+                <div className="hover:text-orange flex flex-row items-center px-3 hover:shadow-sm">
+                  <span>{<CiSettings className="text-orange text-3xl" />}</span>
+                  <span className="pl-2 text-sm font-semibold">
+                    Configuración
+                  </span>
+                </div>
+                <div className="hover:text-orange flex flex-row items-center px-3 hover:shadow-sm">
+                  <span>
+                    {
+                      <IoIosHelpCircleOutline className="text-orange text-3xl" />
+                    }
+                  </span>
+                  <span className="pl-2 text-sm font-semibold">
+                    Cerrar sesión
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="mt-5 ">
               <span>
-                {<IoWalletOutline className="text-orange text-3xl" />}
+                {
+                  <BsPerson className="text-orange mx-auto text-center text-3xl" />
+                }
+                <h1 className="text-center text-lg">No estas logueado</h1>
               </span>
-              <span className="pl-2 text-sm font-semibold">Su monedero</span>
+              <div className="flex flex-col gap-y-2 ">
+                <div className="mt-5 flex items-center  px-2">
+                  <div>
+                    <FiLogIn className="text-orange text-2xl" />
+                  </div>
+                  <button
+                    className="hover:text-orange pl-3 "
+                    onClick={() => signIn()}
+                  >
+                    Iniciar sesión
+                  </button>
+                </div>
+                <div className="flex items-center px-2">
+                  <div>
+                    <FiUserPlus className="text-orange ml-1 text-2xl" />
+                  </div>
+                  <button
+                    className="hover:text-orange pl-2 "
+                    onClick={() => signIn()}
+                  >
+                    Registrarse
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-row items-center px-3 hover:shadow-sm">
-              <span>
-                {<IoWalletOutline className="text-orange text-3xl" />}
-              </span>
-              <span className="pl-2 text-sm font-semibold">Su monedero</span>
-            </div>
-            <div className="flex flex-row items-center px-3 hover:shadow-sm">
-              <span>
-                {<IoWalletOutline className="text-orange text-3xl" />}
-              </span>
-              <span className="pl-2 text-sm font-semibold">Su monedero</span>
-            </div>
-            <div className="flex flex-row items-center px-3 hover:shadow-sm">
-              <span>
-                {<IoWalletOutline className="text-orange text-3xl" />}
-              </span>
-              <span className="pl-2 text-sm font-semibold">Su monedero</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>
