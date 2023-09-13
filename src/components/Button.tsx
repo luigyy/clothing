@@ -2,9 +2,10 @@ import React from "react";
 
 interface ButtonProps {
   back_color: "orange" | "blue" | "green";
+  content: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ back_color }) => {
+const Button: React.FC<ButtonProps> = ({ back_color, content }) => {
   return (
     <div className="inline-block items-center justify-center ">
       <a
@@ -24,11 +25,11 @@ const Button: React.FC<ButtonProps> = ({ back_color }) => {
           } bg-creme `}
         ></span>
         <span
-          className={`font-antonio relative text-xl tracking-wider ${
+          className={`font-antonio relative text-xl uppercase tracking-wider ${
             back_color === "orange" ? "text-orange" : "text-green"
           }  group-hover:text-blue`}
         >
-          Button
+          {content}
         </span>
       </a>
     </div>

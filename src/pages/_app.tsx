@@ -7,6 +7,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { Antonio, Quicksand } from "next/font/google";
 import { Racing_Sans_One } from "next/font/google";
+import Navbar from "~/components/Navbar";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Navbar />
       <main
         className={`${quicksand.variable} ${antonio.variable} ${racing.variable} `}
       >

@@ -57,10 +57,11 @@ export default function Home() {
   const carouselSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 400,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
+    autoplaySpeed: 3200,
   };
 
   return (
@@ -71,7 +72,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="overflow-x-hidden">
-        <Navbar />
         <div className=" h-[65vh]  overflow-hidden   ">
           {/* *** */}
           {/* first section  */}
@@ -84,7 +84,7 @@ export default function Home() {
               hasta <span className="font-racing text-orange">70% OFF</span>
             </h1>
             <div className="float-right mt-3">
-              <Button back_color="orange" />
+              <Button back_color="orange" content="Ver rebajas" />
             </div>
           </div>
           {/* *** */}
@@ -157,7 +157,7 @@ export default function Home() {
 
         {/* review section  */}
         {/* *** */}
-        <div className="bg-blue relative mb-10 h-32 w-full">
+        <div className="bg-green relative mb-10 h-32 w-full">
           <div className="absolute left-1/2 top-1/2 inline-block  -translate-x-1/2 -translate-y-1/2  items-center justify-center ">
             <h1 className=" text-creme text-center text-2xl italic">
               “Me registre en xxxx y sin ningun esfuerzo estaba vendiendo toda
@@ -183,15 +183,15 @@ export default function Home() {
 
         {/* carousel*/}
         {/* *** */}
-        <div className="relative my-20 ">
+        <div className="relative my-10 px-32 ">
           <Slider className="mx-auto   " {...carouselSettings}>
             <div className="bg-orange h-72 w-full">
               <h3>1</h3>
             </div>{" "}
-            <div className="bg-orange h-72 w-full">
+            <div className="bg-green h-72 w-full">
               <h3>1</h3>
             </div>{" "}
-            <div className="bg-orange h-72 w-full">
+            <div className="bg-blue h-72 w-full">
               <h3>1</h3>
             </div>
           </Slider>
