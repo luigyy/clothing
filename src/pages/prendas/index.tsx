@@ -1,31 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GarmentCard from "~/components/GarmentCard";
 import { api } from "~/utils/api";
-import { CategoriesType, GenreType, SizeType } from "../../constants";
+// import { CategoriesType, GenreType, SizeType } from "../../constants";
+import { useRouter } from "next/router";
+import { CategoriesType, GenreType, SizeType } from "~/constants";
 
 interface indexProps {}
 
-interface FiltersType {
-  genre?: GenreType;
-  category?: CategoriesType;
-  size?: SizeType;
-}
+// interface FiltersType {
+//   genre?: GenreType;
+//   category?: CategoriesType;
+//   size?: SizeType;
+// }
 
 const index: React.FC<indexProps> = ({}) => {
-  //filters
-  const [filters, setFilters] = useState<FiltersType>({
+  const router = useRouter();
+
+  const [filters, setFilters] = useState<{
+    genre?: string;
+    category?: string;
+    size?: string;
+  }>({
     genre: undefined,
     category: undefined,
     size: undefined,
   });
+  //
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    buildFiltersFromUrlParams();
+  }, [router.isReady]);
+
   const { data, isLoading } = api.garments.getAllByFilter.useQuery({
     genre: filters.genre,
     category: filters.category,
     size: filters.size,
   });
 
-  function handleChange(test: string) {
-    setFilters({ ...filters, genre: "male" });
+  function handleGenre(genre: GenreType | "all") {
+    if (genre === "all") {
+      return setFilters({ ...filters, genre: undefined });
+    }
+    setFilters({ ...filters, genre });
+  }
+
+  function handleSize(size: SizeType) {
+    setFilters({ ...filters, size });
+  }
+  function handleCategory(category: CategoriesType) {
+    setFilters({ ...filters, category });
+  }
+
+  function buildFiltersFromUrlParams() {
+    let { genre } = router.query;
+    let { category } = router.query;
+    let { size } = router.query;
+
+    //check they're not arrays
+    if (Array.isArray(genre)) {
+      genre = genre[0];
+    }
+    if (Array.isArray(category)) {
+      category = category[0];
+    }
+    if (Array.isArray(size)) {
+      size = size[0];
+    }
+
+    setFilters({ genre, category, size });
   }
   //loading component
   if (isLoading) {
@@ -55,7 +98,7 @@ const index: React.FC<indexProps> = ({}) => {
               value="male"
               checked={filters.genre === "male"}
               className="h-5 w-5 accent-orange"
-              onClick={() => handleChange("male")}
+              onClick={() => handleGenre("male")}
             />
           </div>{" "}
           <div className="flex flex-col items-center justify-center">
@@ -64,6 +107,7 @@ const index: React.FC<indexProps> = ({}) => {
               type="radio"
               value="female"
               checked={filters.genre === "female"}
+              onClick={() => handleGenre("female")}
               className="h-5 w-5 accent-orange"
             />
           </div>{" "}
@@ -73,6 +117,7 @@ const index: React.FC<indexProps> = ({}) => {
               type="radio"
               value={undefined}
               checked={filters.genre === undefined}
+              onClick={() => handleGenre("all")}
               className="h-5 w-5 accent-orange"
             />
           </div>
