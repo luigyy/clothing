@@ -39,12 +39,12 @@ const SquaredBanner = ({
   return (
     <Link
       href="#_"
-      className="hover:ring-orange relative aspect-[1.2] w-[49.5%] overflow-hidden transition-all duration-300 hover:ring-4 "
+      className="relative aspect-[1.2] w-[49.5%] overflow-hidden transition-all duration-300 hover:ring-4 hover:ring-orange "
     >
       {/* text  */}
       <div className=" absolute  left-1/2 top-1/2 w-[60%] -translate-x-1/2    bg-black  bg-opacity-20 p-3">
-        <h1 className="text-creme mb-2 text-center text-3xl">{title}</h1>
-        <p className="text-creme text-center text-xl">{text}</p>
+        <h1 className="mb-2 text-center text-3xl text-creme">{title}</h1>
+        <p className="text-center text-xl text-creme">{text}</p>
       </div>
       {/*end text  */}
       <img src={image} className="w-full " alt="" />
@@ -76,12 +76,12 @@ export default function Home() {
           {/* *** */}
           {/* first section  */}
           <div className="absolute right-0 top-1/2 mr-10 -translate-y-1/2  ">
-            <h1 className="font-racing text-creme text-right text-6xl">
+            <h1 className="font-fancy text-right text-6xl text-creme">
               Atuendo de verano
             </h1>
-            <p className="text-creme text-right font-semibold">01/01-28/01</p>
-            <h1 className="font-racing text-creme text-right text-7xl">
-              hasta <span className="font-racing text-orange">70% OFF</span>
+            <p className="text-right font-semibold text-creme">01/01-28/01</p>
+            <h1 className="font-fancy text-right text-7xl text-creme">
+              hasta <span className="font-fancy text-orange">70% OFF</span>
             </h1>
             <div className="float-right mt-3">
               <Button back_color="orange" content="Ver rebajas" />
@@ -97,7 +97,7 @@ export default function Home() {
         {/* indicadores  */}
         <div className="my-10 flex  justify-between px-32">
           <div className="flex flex-col  justify-center">
-            <BsCheckCircle className="text-orange mx-auto text-3xl" />
+            <BsCheckCircle className="mx-auto text-3xl text-orange" />
             <h1 className="mt-1 text-center text-xl">Calidad Garantizada</h1>
             <p className="mt-2 w-40 text-center text-sm">
               Nuestra ropa, revisada meticulosamente, garantiza calidad y estado
@@ -105,7 +105,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col  justify-center">
-            <BsArrowReturnLeft className="text-orange mx-auto text-3xl" />
+            <BsArrowReturnLeft className="mx-auto text-3xl text-orange" />
             <h1 className="mt-1 text-center text-xl">Devolución gratuita</h1>
             <p className="mt-2 w-40 text-center text-sm">
               Llevatela y pruebatela. Si no cumple tus expectativas, estamos
@@ -113,7 +113,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col  justify-center">
-            <GiSeaTurtle className="text-orange mx-auto text-3xl" />
+            <GiSeaTurtle className="mx-auto text-3xl text-orange" />
             <h1 className="mt-1 text-center text-xl">Reduzca su impacto</h1>
             <p className="mt-2 w-40 text-center text-sm">
               Una prenda puede llegar a consumir hasta 3000 litros de agua.
@@ -157,13 +157,13 @@ export default function Home() {
 
         {/* review section  */}
         {/* *** */}
-        <div className="bg-green relative mb-10 h-32 w-full">
+        <div className="relative mb-10 h-32 w-full bg-green">
           <div className="absolute left-1/2 top-1/2 inline-block  -translate-x-1/2 -translate-y-1/2  items-center justify-center ">
-            <h1 className=" text-creme text-center text-2xl italic">
+            <h1 className=" text-center text-2xl italic text-creme">
               “Me registre en xxxx y sin ningun esfuerzo estaba vendiendo toda
               la ropa que no usaba”
             </h1>
-            <p className=" text-creme mt-2 text-center">Maria L.</p>
+            <p className=" mt-2 text-center text-creme">Maria L.</p>
           </div>
         </div>
         {/* end review section  */}
@@ -185,13 +185,13 @@ export default function Home() {
         {/* *** */}
         <div className="relative my-10 px-32 ">
           <Slider className="mx-auto   " {...carouselSettings}>
-            <div className="bg-orange h-72 w-full">
+            <div className="h-72 w-full bg-orange">
               <h3>1</h3>
             </div>{" "}
-            <div className="bg-green h-72 w-full">
+            <div className="h-72 w-full bg-green">
               <h3>1</h3>
             </div>{" "}
-            <div className="bg-blue h-72 w-full">
+            <div className="h-72 w-full bg-blue">
               <h3>1</h3>
             </div>
           </Slider>

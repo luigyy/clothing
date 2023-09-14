@@ -6,9 +6,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        quicksand: ["var(--font-quicksand)"],
-        antonio: ["var(--font-antonio)"],
-        racing: ["var(--font-racing)"],
+        text: ["var(--font-text)"],
+        title: ["var(--font-title)"],
+        fancy: ["var(--font-fancy)"],
       },
       colors: {
         blue: "#141631",

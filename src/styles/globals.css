@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 html {
-  @apply text-blue bg-creme;
+  @apply bg-creme text-blue;
 }
 
 p,
 span,
 button,
 li {
-  @apply font-quicksand;
+  @apply font-text;
 }
 
 h1 {
-  @apply font-antonio;
+  @apply font-title;
 }

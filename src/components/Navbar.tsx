@@ -130,8 +130,8 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
     <div className="border-b border-zinc-200 pb-2">
       <div className="relative flex h-16 items-center justify-between  px-[7%]">
         <div className="flex items-center gap-x-5">
-          <Link href="/vende">
-            <h1 className="text-lg">Vende</h1>
+          <Link href="/vende" className="">
+            <h1 className="font-text">Vende</h1>
           </Link>
           <Link href="/prendas">
             <h1 className="text-lg">Compra</h1>
@@ -161,7 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       </div>
       <div className="  mx-auto flex  h-7 items-center justify-center gap-x-14  ">
         <div className="">
-          <button className="peer relative font-antonio text-sm hover:text-orange focus:text-orange">
+          <button className="font-title peer relative text-sm hover:text-orange focus:text-orange">
             Ropa
           </button>
           <div
@@ -169,37 +169,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="px-5 py-2 font-quicksand text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -208,7 +208,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
 
         <div>
-          <button className="p peer font-antonio text-sm hover:text-orange focus:text-orange">
+          <button className="p font-title peer text-sm hover:text-orange focus:text-orange">
             Deporte
           </button>
           <div
@@ -216,37 +216,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="px-5 py-2 font-quicksand text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -254,7 +254,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
         </div>
         <div>
-          <button className="peer font-antonio text-sm hover:text-orange focus:text-orange">
+          <button className="font-title peer text-sm hover:text-orange focus:text-orange">
             Zapatos
           </button>
           <div
@@ -262,37 +262,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="px-5 py-2 font-quicksand text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -301,7 +301,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
 
         <div>
-          <button className="peer font-antonio text-sm hover:text-orange focus:text-orange">
+          <button className="font-title peer text-sm hover:text-orange focus:text-orange">
             Accesorios
           </button>
           <div
@@ -309,37 +309,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          bg-creme  hover:flex peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="px-5 py-2 font-quicksand text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="px-5 py-2 font-quicksand text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans

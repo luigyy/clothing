@@ -7,23 +7,29 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { Antonio, Quicksand } from "next/font/google";
 import { Racing_Sans_One } from "next/font/google";
+import { Poppins } from "next/font/google";
+import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
+// const quicksand = Quicksand({
+//   subsets: ["latin"],
+//   variable: "--font-quicksand",
+//   weight: ["400"],
+// });
 
-const quicksand = Quicksand({
+const poppings = Poppins({
   subsets: ["latin"],
-  variable: "--font-quicksand",
+  variable: "--font-text",
   weight: ["400"],
 });
-
 const antonio = Antonio({
   subsets: ["latin"],
-  variable: "--font-antonio",
+  variable: "--font-title",
 });
 
 const racing = Racing_Sans_One({
   weight: ["400"],
   subsets: ["latin"],
-  variable: "--font-racing",
+  variable: "--font-fancy",
 });
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -34,7 +40,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <Navbar />
       <main
-        className={`${quicksand.variable} ${antonio.variable} ${racing.variable} `}
+        className={`${antonio.variable} ${poppings.variable} ${racing.variable} `}
       >
         <Component {...pageProps} />
       </main>
