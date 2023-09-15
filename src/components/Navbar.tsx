@@ -29,7 +29,7 @@ const ProfileButton = () => {
         </button>
         {/* profile card  */}
         <div
-          className={`absolute right-0 top-full z-20 hidden    bg-creme ${
+          className={`absolute right-0 top-full z-10 hidden    bg-creme ${
             sessionData ? "h-72" : "h-52"
           }  w-64 flex-col rounded-md   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
         >
@@ -131,7 +131,6 @@ const ProfileButton = () => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { data: sessionData } = useSession();
   return (
     <div className="border-b border-zinc-200 pb-2">
       <div className="relative flex h-16 items-center justify-between  px-[7%]">
@@ -165,13 +164,13 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <ProfileButton />
         </div>
       </div>
-      <div className="  mx-auto flex  h-7 items-center justify-center gap-x-14  ">
+      <div className="  z-20 mx-auto  flex h-7 items-center justify-center gap-x-14  ">
         <div className="">
           <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
             Ropa
           </button>
           <div
-            className="absolute right-1/2 mt-[10px]  hidden translate-x-1/2 flex-col border border-zinc-200 bg-creme 
+            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange border-opacity-40 bg-creme shadow-2xl 
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
@@ -218,7 +217,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             Deporte
           </button>
           <div
-            className="absolute right-1/2  mt-[10px] hidden translate-x-1/2 flex-col border border-zinc-200 bg-creme 
+            className="absolute  right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange border-opacity-40  bg-creme 
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
@@ -264,7 +263,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             Zapatos
           </button>
           <div
-            className="absolute right-1/2 mt-[10px] hidden translate-x-1/2 flex-col border border-zinc-200 bg-creme 
+            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col  border border-orange  border-opacity-40 bg-creme 
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
@@ -311,7 +310,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             Accesorios
           </button>
           <div
-            className="absolute right-1/2 mt-[10px] hidden translate-x-1/2 flex-col border border-zinc-200 
+            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange  border-opacity-40  
          bg-creme  hover:flex peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link

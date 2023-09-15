@@ -23,6 +23,9 @@ export const garmentsRouter = createTRPCRouter({
         where: {
           id,
         },
+        include: {
+          pictures: true,
+        },
       });
     }),
   getAllByFilter: publicProcedure

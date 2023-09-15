@@ -102,7 +102,7 @@ const Index: React.FC<indexProps> = ({}) => {
   return (
     <div className="flex ">
       {/* filter sidebar  */}
-      <div className=" sticky  left-0 top-0 h-[calc(100vh-92px)] w-1/4 border-2 border-blue px-10 pt-10">
+      <div className=" sticky  left-0 top-0 h-[calc(100vh-92px)] w-1/4 px-10 pt-10">
         <h1 className="text-xl">Filtrar por </h1>
         {/* genre  */}
         <div className="flex justify-between  pt-5">
@@ -322,7 +322,7 @@ const Index: React.FC<indexProps> = ({}) => {
         {/*end sizes  */}
       </div>
       {/* prendas  */}
-      <div className="grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
+      <div className=" grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
         {data?.map((garment) => (
           <GarmentCard
             id={garment.id}
