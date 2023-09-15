@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import GarmentCard from "~/components/GarmentCard";
 import { api } from "~/utils/api";
-// import { CategoriesType, GenreType, SizeType } from "../../constants";
 import { useRouter } from "next/router";
 import { CategoriesType, GenreType, SizeType } from "~/constants";
+import { IoIosArrowForward } from "react-icons/io";
 
 interface indexProps {}
 
-// interface FiltersType {
-//   genre?: GenreType;
-//   category?: CategoriesType;
-//   size?: SizeType;
-// }
+/**
+ * Roadmap to adding a new filter:
+ *
+ * 1- Add a new field to the filters state object, with the name of the garment filter you wanna filter by
+ * 2- Update the getAllByFilter garments query to accept the new filter as param
+ * 3- Update the new filter in the BuildFiltersFromUrlParams function
+ * 4- Create an input handler for the new filter
+ *
+ */
 
-const index: React.FC<indexProps> = ({}) => {
+const Index: React.FC<indexProps> = ({}) => {
   const router = useRouter();
 
   const [filters, setFilters] = useState<{
@@ -24,6 +28,11 @@ const index: React.FC<indexProps> = ({}) => {
     genre: undefined,
     category: undefined,
     size: undefined,
+  });
+
+  const [openFilters, setOpenFilters] = useState({
+    categories: false,
+    sizes: false,
   });
   //
 
@@ -87,10 +96,10 @@ const index: React.FC<indexProps> = ({}) => {
   return (
     <div className="flex ">
       {/* filter sidebar  */}
-      <div className=" sticky  left-0 top-0 h-[calc(100vh-92px)] w-1/4 border-2 border-blue px-5 pt-10">
+      <div className=" sticky  left-0 top-0 h-[calc(100vh-92px)] w-1/4 border-2 border-blue px-10 pt-10">
         <h1 className="text-xl">Filtrar por </h1>
         {/* genre  */}
-        <div className="flex justify-between px-5 pt-5">
+        <div className="flex justify-between  pt-5">
           <div className="flex flex-col items-center justify-center ">
             <label className="text-sm">Hombre</label>
             <input
@@ -122,6 +131,81 @@ const index: React.FC<indexProps> = ({}) => {
             />
           </div>
         </div>
+
+        {/* category  */}
+        <div className="mt-5">
+          <div>
+            {/* button  */}
+            <button
+              onClick={() =>
+                setOpenFilters({
+                  ...openFilters,
+                  categories: openFilters.categories === true ? false : true,
+                })
+              }
+              className="peer flex items-center gap-x-5"
+            >
+              <h1 className="text-lg">Categoria</h1>
+              <IoIosArrowForward className="mt-1 text-lg text-orange " />
+            </button>
+            <div
+              className={`peer -z-10  gap-x-1 pt-1  ${
+                openFilters.categories
+                  ? "translate-y-0 opacity-100"
+                  : "-translate-y-[200%] opacity-0 "
+              }  transition-transform `}
+            >
+              <button
+                onClick={() => handleCategory("camisas")}
+                className="rounded border px-1 text-sm"
+              >
+                Camisas
+              </button>
+              <button
+                onClick={() => handleCategory("abrigos")}
+                className="rounded border px-1 text-sm"
+              >
+                Abrigos
+              </button>
+              <button
+                onClick={() => handleCategory("jeans")}
+                className="rounded border px-1 text-sm"
+              >
+                Jeans
+              </button>
+              <button
+                onClick={() => handleCategory("pantalones")}
+                className="rounded border px-1 text-sm"
+              >
+                Pantalones
+              </button>
+              <button
+                onClick={() => handleCategory("shorts")}
+                className="rounded border px-1 text-sm"
+              >
+                Shorts
+              </button>
+              <button
+                onClick={() => handleCategory("zapatos")}
+                className="rounded border px-1 text-sm"
+              >
+                Zapatos
+              </button>
+              <button
+                onClick={() => handleCategory("vestidos")}
+                className="rounded border px-1 text-sm"
+              >
+                Vestidos
+              </button>
+              <button
+                onClick={() => handleCategory("enaguas")}
+                className="rounded border px-1 text-sm"
+              >
+                Enaguas
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       {/* prendas  */}
       <div className="grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
@@ -142,4 +226,4 @@ const index: React.FC<indexProps> = ({}) => {
   );
 };
 
-export default index;
+export default Index;

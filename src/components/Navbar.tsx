@@ -27,11 +27,11 @@ const ProfileButton = () => {
             alt="Profile image"
           />
         </button>
-
+        {/* profile card  */}
         <div
-          className={`absolute right-0 top-full z-20 hidden  border-orange  bg-creme ${
+          className={`absolute right-0 top-full z-20 hidden    bg-creme ${
             sessionData ? "h-72" : "h-52"
-          }  w-64 flex-col rounded-md border-2 hover:flex peer-hover:flex  peer-focus:flex`}
+          }  w-64 flex-col rounded-md   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
         >
           {/* upper  */}
           {sessionData ? (
@@ -56,23 +56,29 @@ const ProfileButton = () => {
 
               <div className="mt-5 flex flex-col gap-y-2">
                 <div className="flex flex-row items-center px-3 hover:text-orange   ">
-                  <span>{<VscAccount className="text-3xl text-orange" />}</span>
+                  <span>
+                    {<VscAccount className="text-2xl text-orange opacity-70" />}
+                  </span>
                   <button className="pl-2 text-sm ">Ver perfil</button>
                 </div>
                 <div className="flex flex-row items-center px-3 hover:text-orange">
                   <span>
-                    {<IoWalletOutline className="text-3xl text-orange" />}
+                    {
+                      <IoWalletOutline className="text-2xl text-orange opacity-70" />
+                    }
                   </span>
                   <button className="pl-2 text-sm ">Ver monedero</button>
                 </div>
                 <div className="flex flex-row items-center px-3 hover:text-orange ">
-                  <span>{<CiSettings className="text-3xl text-orange" />}</span>
+                  <span>
+                    {<CiSettings className="text-2xl text-orange opacity-70" />}
+                  </span>
                   <button className="pl-2 text-sm ">Configuración</button>
                 </div>
                 <div className="flex flex-row items-center px-3 hover:text-orange ">
                   <span>
                     {
-                      <IoIosHelpCircleOutline className="text-3xl text-orange" />
+                      <IoIosHelpCircleOutline className="text-2xl text-orange opacity-70" />
                     }
                   </span>
                   <button
@@ -161,7 +167,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       </div>
       <div className="  mx-auto flex  h-7 items-center justify-center gap-x-14  ">
         <div className="">
-          <button className="font-title peer relative text-sm hover:text-orange focus:text-orange">
+          <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
             Ropa
           </button>
           <div
@@ -169,37 +175,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -208,7 +214,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
 
         <div>
-          <button className="p font-title peer text-sm hover:text-orange focus:text-orange">
+          <button className="p peer font-title text-sm hover:text-orange focus:text-orange">
             Deporte
           </button>
           <div
@@ -216,37 +222,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -254,7 +260,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
         </div>
         <div>
-          <button className="font-title peer text-sm hover:text-orange focus:text-orange">
+          <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Zapatos
           </button>
           <div
@@ -262,37 +268,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
@@ -301,7 +307,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
 
         <div>
-          <button className="font-title peer text-sm hover:text-orange focus:text-orange">
+          <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Accesorios
           </button>
           <div
@@ -309,37 +315,37 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
          bg-creme  hover:flex peer-hover:flex peer-focus:flex md:w-1/2"
           >
             <Link
-              className="font-text px-5 py-2 text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Ver todo
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Abrigos
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans
             </Link>
             <Link
-              className="font-text px-5 py-2 text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
               href="#"
             >
               Jeans

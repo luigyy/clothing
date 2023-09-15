@@ -6,6 +6,7 @@ import { z } from "zod";
 export type CategoriesType =
   | "camisas"
   | "jeans"
+  | "abrigos"
   | "pantalones"
   | "shorts"
   | "zapatos"
