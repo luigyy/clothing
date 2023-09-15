@@ -54,10 +54,16 @@ const Index: React.FC<indexProps> = ({}) => {
     setFilters({ ...filters, genre });
   }
 
-  function handleSize(size: SizeType) {
+  function handleSize(size: SizeType | "all") {
+    if (size === "all") {
+      return setFilters({ ...filters, size: undefined });
+    }
     setFilters({ ...filters, size });
   }
-  function handleCategory(category: CategoriesType) {
+  function handleCategory(category: CategoriesType | "all") {
+    if (category === "all") {
+      return setFilters({ ...filters, category: undefined });
+    }
     setFilters({ ...filters, category });
   }
 
@@ -131,7 +137,6 @@ const Index: React.FC<indexProps> = ({}) => {
             />
           </div>
         </div>
-
         {/* category  */}
         <div className="mt-5">
           <div>
@@ -143,69 +148,178 @@ const Index: React.FC<indexProps> = ({}) => {
                   categories: openFilters.categories === true ? false : true,
                 })
               }
-              className="peer flex items-center gap-x-5"
+              className="peer flex items-center gap-x-5 "
             >
-              <h1 className="text-lg">Categoria</h1>
+              <h1 className=" text-lg">Categoria</h1>
               <IoIosArrowForward className="mt-1 text-lg text-orange " />
             </button>
             <div
-              className={`peer -z-10  gap-x-1 pt-1  ${
+              className={`peer gap-x-1 pt-1  ${
                 openFilters.categories
-                  ? "translate-y-0 opacity-100"
-                  : "-translate-y-[200%] opacity-0 "
+                  ? "relative translate-y-0 opacity-100"
+                  : " absolute  -translate-x-[100%] opacity-0  "
               }  transition-transform `}
             >
               <button
+                onClick={() => handleCategory("all")}
+                className={`${
+                  filters.category === undefined ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                Todos
+              </button>
+              <button
                 onClick={() => handleCategory("camisas")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "camisas" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Camisas
               </button>
               <button
                 onClick={() => handleCategory("abrigos")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "abrigos" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Abrigos
               </button>
               <button
                 onClick={() => handleCategory("jeans")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "jeans" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Jeans
               </button>
               <button
                 onClick={() => handleCategory("pantalones")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "pantalones" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Pantalones
               </button>
               <button
                 onClick={() => handleCategory("shorts")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "shorts" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Shorts
               </button>
               <button
                 onClick={() => handleCategory("zapatos")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "zapatos" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Zapatos
               </button>
               <button
                 onClick={() => handleCategory("vestidos")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "vestidos" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Vestidos
               </button>
               <button
                 onClick={() => handleCategory("enaguas")}
-                className="rounded border px-1 text-sm"
+                className={`${
+                  filters.category === "enaguas" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
               >
                 Enaguas
               </button>
             </div>
           </div>
         </div>
+        {/* end category */}
+
+        {/* sizes  */}
+        <div className="pt-5">
+          <div>
+            {/* button  */}
+            <button
+              onClick={() =>
+                setOpenFilters({
+                  ...openFilters,
+                  sizes: openFilters.sizes === true ? false : true,
+                })
+              }
+              className="peer flex items-center gap-x-5"
+            >
+              <h1 className="text-lg">Sizes</h1>
+              <IoIosArrowForward className="mt-1 text-lg text-orange " />
+            </button>
+            <div
+              className={`peer gap-x-1 pt-1  ${
+                openFilters.sizes
+                  ? "flex translate-y-0 opacity-100"
+                  : " absolute  -translate-x-[100%] opacity-0  "
+              }  transition-transform `}
+            >
+              <button
+                onClick={() => handleSize("all")}
+                className={`${
+                  filters.size === undefined ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                Todos
+              </button>
+              <button
+                onClick={() => handleSize("2XS")}
+                className={`${
+                  filters.size === "2XS" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                2XS
+              </button>
+              <button
+                onClick={() => handleSize("XS")}
+                className={`${
+                  filters.size === "XS" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                XS
+              </button>
+              <button
+                onClick={() => handleSize("S")}
+                className={`${
+                  filters.size === "S" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                S
+              </button>
+              <button
+                onClick={() => handleSize("M")}
+                className={`${
+                  filters.size === "M" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                M
+              </button>
+              <button
+                onClick={() => handleSize("L")}
+                className={`${
+                  filters.size === "L" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                L
+              </button>
+              <button
+                onClick={() => handleSize("2XL")}
+                className={`${
+                  filters.size === "2XL" ? "border-orange" : null
+                } rounded border px-1 text-sm`}
+              >
+                2XL
+              </button>
+            </div>
+          </div>
+        </div>
+        {/*end sizes  */}
       </div>
       {/* prendas  */}
       <div className="grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
