@@ -33,26 +33,37 @@ export default function InfiniteGarmentSearch({
     return <h2 className="">No garments</h2>;
   }
   return (
-    <InfiniteScroll
-      dataLength={garments.length}
-      hasMore={hasMore}
-      next={() => fetchNewGarments()}
-      loader={"Loading..."}
-    >
-      <div className=" grid h-screen w-full  grid-cols-2 gap-y-24 border  border-orange px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
-        {garments.map((garment) => (
-          <GarmentCard
-            id={garment.id}
-            key={garment.id}
-            brand={garment.brand}
-            original_price={garment.current_price}
-            genre={garment.genre}
-            image_url={garment.pictures[0]!.url}
-            size={garment.size}
-            current_price={garment.current_price}
-          />
-        ))}
-      </div>
-    </InfiniteScroll>
+    <div className="relative ">
+      <InfiniteScroll
+        dataLength={garments.length}
+        hasMore={hasMore}
+        next={async () => await fetchNewGarments()}
+        loader={
+          <div
+            className="absolute bottom-0 h-28 w-full overflow-hidden  bg-opacity-60  backdrop-blur-sm"
+            key={0}
+          >
+            <h1 className="flex h-full items-center justify-center text-2xl">
+              Loading...
+            </h1>
+          </div>
+        }
+      >
+        <div className="relative grid w-full grid-cols-2  gap-y-24 px-1 pb-14 pt-2 sm:grid-cols-3 md:grid-cols-4">
+          {garments.map((garment) => (
+            <GarmentCard
+              id={garment.id}
+              key={garment.id}
+              brand={garment.brand}
+              original_price={garment.current_price}
+              genre={garment.genre}
+              image_url={garment.pictures[0]!.url}
+              size={garment.size}
+              current_price={garment.current_price}
+            />
+          ))}
+        </div>
+      </InfiniteScroll>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { PiHandbagSimpleLight } from "react-icons/pi";
 import { BsPerson, BsHeart } from "react-icons/bs";
@@ -17,7 +17,7 @@ const ProfileButton = () => {
   const { data: sessionData } = useSession();
   return (
     <>
-      <div className="  relative flex items-center justify-between ">
+      <div className="   relative flex items-center justify-between ">
         <button className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full focus:ring focus:ring-orange  ">
           <Image
             src={sessionData?.user.image || "/default-profile-picture.jpg"}
@@ -131,17 +131,29 @@ const ProfileButton = () => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
+  const [stickyNav, setStickyNav] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.onscroll = () => {
+      setStickyNav(window.scrollY === 0 ? false : true);
+      return () => (window.onscroll = null);
+    };
+  }, []);
+  const hoverUnderlineClass =
+    "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
   return (
-    <div className="border-b border-zinc-200 pb-2">
-      <div className="relative flex h-16 items-center justify-between  px-[7%]">
+    <div className="border-b  border-zinc-200 pb-2">
+      <div
+        className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
+      >
         <div className="flex items-center gap-x-5">
-          <Link href="/vende" className="">
-            <h1 className="font-text">Vende</h1>
+          <Link href="/vende" className={` relative ${hoverUnderlineClass}`}>
+            <h1 className="text-lg">Vende</h1>
           </Link>
-          <Link href="/prendas">
+          <Link href="/prendas" className={`${hoverUnderlineClass} relative`}>
             <h1 className="text-lg">Compra</h1>
           </Link>
-          <Link href="#_">
+          <Link href="#_" className={`${hoverUnderlineClass} relative`}>
             <h1 className="text-lg">Nosotros</h1>
           </Link>
         </div>
@@ -164,7 +176,9 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <ProfileButton />
         </div>
       </div>
-      <div className="  z-20 mx-auto  flex h-7 items-center justify-center gap-x-14  ">
+      <div
+        className={` z-20  mx-auto flex h-7 items-center justify-center gap-x-14  `}
+      >
         <div className="">
           <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
             Ropa

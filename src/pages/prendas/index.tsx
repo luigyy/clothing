@@ -262,7 +262,7 @@ const Index: React.FC<indexProps> = ({}) => {
             <div
               className={`peer gap-x-1 pt-1  ${
                 openFilters.sizes
-                  ? "flex translate-y-0 opacity-100"
+                  ? "relative translate-y-0 opacity-100"
                   : " absolute  -translate-x-[100%] opacity-0  "
               }  transition-transform `}
             >
