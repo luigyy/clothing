@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { CategoriesType, GenreType, SizeType } from "~/constants";
 import { IoIosArrowForward } from "react-icons/io";
 
+import { FiltersType } from "~/constants";
+
 interface indexProps {}
 
 /**
@@ -20,11 +22,7 @@ interface indexProps {}
 const Index: React.FC<indexProps> = ({}) => {
   const router = useRouter();
 
-  const [filters, setFilters] = useState<{
-    genre?: string;
-    category?: string;
-    size?: string;
-  }>({
+  const [filters, setFilters] = useState<FiltersType>({
     genre: undefined,
     category: undefined,
     size: undefined,

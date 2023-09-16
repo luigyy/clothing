@@ -1,11 +1,5 @@
 import React from "react";
-import Button from "~/components/Button";
-import { FiTruck } from "react-icons/fi";
-import { HiMagnifyingGlass } from "react-icons/hi2";
-import { AiOutlineCamera } from "react-icons/ai";
-import { HiOutlinePhotograph } from "react-icons/hi";
-import { RiAdvertisementLine } from "react-icons/ri";
-import { GoPackageDependencies } from "react-icons/go";
+import Button from "../../components/Button";
 
 interface vendeProps {}
 
@@ -17,10 +11,14 @@ const Vende: React.FC<vendeProps> = ({}) => {
         <h1 className="font-quicksand text-5xl font-semibold uppercase">
           Porque todo merece
         </h1>
-        <h1 className="mb-5 text-center font-racing text-6xl uppercase">
+        <h1 className="font-racing mb-5 text-center text-6xl uppercase">
           Una segunda oportunidad
         </h1>
-        <Button back_color="orange" content="Agendar recolecta" />
+        <Button
+          back_color="orange"
+          content="Agendar recolecta"
+          tw_text_size={""}
+        />
       </div>
 
       {/* como funciona  */}

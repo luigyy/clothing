@@ -147,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
         <div className="absolute left-1/2 -translate-x-1/2">
           <Link href="/" className="text-3xl">
-            Logo
+            <Image src="/logo-azul.png" width={130} height={130} alt="logo" />
           </Link>
         </div>
         <div className="flex items-center gap-x-5">

@@ -45,3 +45,9 @@ export const ZodSizesType = z.union([
   z.literal("2XL"),
   z.literal("3XL"),
 ]);
+
+export interface FiltersType {
+  genre?: string;
+  category?: string;
+  size?: string;
+}
