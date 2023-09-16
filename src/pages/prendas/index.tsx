@@ -3,8 +3,8 @@ import GarmentCard from "~/components/GarmentCard";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { CategoriesType, GenreType, SizeType } from "~/constants";
+import InfiniteGarmentSearch from "~/components/InfiniteGarmentSearch";
 import { IoIosArrowForward } from "react-icons/io";
-
 import { FiltersType } from "~/constants";
 
 interface indexProps {}
@@ -39,11 +39,19 @@ const Index: React.FC<indexProps> = ({}) => {
     buildFiltersFromUrlParams();
   }, [router.isReady]);
 
-  const { data, isLoading } = api.garments.getAllByFilter.useQuery({
-    genre: filters.genre,
-    category: filters.category,
-    size: filters.size,
-  });
+  const garments = api.garments.getAll.useInfiniteQuery(
+    {
+      genre: filters.genre,
+      category: filters.category,
+      size: filters.size,
+    },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor },
+  );
+
+  //debug
+  useEffect(() => {
+    console.log(garments.error);
+  }, [garments.isError]);
 
   function handleGenre(genre: GenreType | "all") {
     if (genre === "all") {
@@ -84,7 +92,7 @@ const Index: React.FC<indexProps> = ({}) => {
     setFilters({ genre, category, size });
   }
   //loading component
-  if (isLoading) {
+  if (garments.isLoading) {
     return (
       <div className="flex ">
         <div
@@ -320,10 +328,20 @@ const Index: React.FC<indexProps> = ({}) => {
         {/*end sizes  */}
       </div>
       {/* prendas  */}
-      <div className=" grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
-        {data?.map((garment) => (
+      <div className="w-full">
+        <InfiniteGarmentSearch
+          garments={garments.data?.pages.flatMap((page) => page.garments)}
+          isLoading={garments.isLoading}
+          isError={garments.isError}
+          fetchNewGarments={garments.fetchNextPage}
+          hasMore={garments.hasNextPage}
+        />
+      </div>
+
+      {/* <div className=" grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
+        {garments.data?.pages.flatMap((garment) => (
           <GarmentCard
-            id={garment.id}
+            id={}
             key={garment.id}
             brand={garment.brand}
             original_price={garment.current_price}
@@ -333,7 +351,7 @@ const Index: React.FC<indexProps> = ({}) => {
             current_price={garment.current_price}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

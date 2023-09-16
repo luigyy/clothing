@@ -83,13 +83,13 @@ model Garment {
     original_price Float
     retail_price   Float?
     genre          String
-    created_at     DateTime @default(now())
+    createdAt      DateTime @default(now())
 
     user     User           @relation(fields: [userId], references: [id])
     likes    garmentLikes[]
     pictures Pictures[]
 
-    @@unique([created_at, id])
+    @@unique([createdAt, id])
     @@index([userId])
 }
 
