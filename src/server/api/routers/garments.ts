@@ -90,6 +90,26 @@ export const garmentsRouter = createTRPCRouter({
         },
       });
     }),
+  toggleLike: protectedProcedure
+    .input(z.object({ garmentId: z.string() }))
+    .mutation(async ({ input: { garmentId }, ctx }) => {
+      const data = { garmentId, userId: ctx.session.user.id };
+
+      const existingLike = await ctx.prisma.garmentLikes.findUnique({
+        where: { userId_garmentId: data },
+      });
+
+      if (existingLike == null) {
+        await ctx.prisma.garmentLikes.create({ data });
+        return { addedLike: true };
+      }
+      //exists
+      await ctx.prisma.garmentLikes.delete({
+        where: { userId_garmentId: data },
+      });
+      return { addedLike: false };
+    }),
+
   getAllByFilter: publicProcedure
     .input(
       z.object({

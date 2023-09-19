@@ -5,6 +5,11 @@ import FsLightbox from "fslightbox-react";
 import Button from "~/components/Button";
 import { BsHeart, BsTruck } from "react-icons/bs";
 import Recommendations from "~/components/Recommendations";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { AiFillHeart } from "react-icons/ai";
+import { useSession } from "next-auth/react";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 interface Props {}
 
@@ -32,9 +37,24 @@ const Garment: React.FC<Props> = ({}) => {
   const { id } = useRouter().query;
   //error handling
   if (!id || id instanceof Array) {
-    return <div>NO SUCH GARMENT !!!</div>;
+    return <div>Redirect...</div>;
   }
-  const { data } = api.garments.getOne.useQuery({ id: id });
+
+  const { data, isLoading } = api.garments.getOne.useQuery({ id: id! });
+
+  const toggleLike = api.garments.toggleLike.useMutation();
+  const { data: sessionData } = useSession();
+  const utils = api.useContext();
+
+  async function handleLike() {
+    if (!data?.id) return;
+    //update cache
+    // //perform action
+    await toggleLike.mutateAsync(
+      { garmentId: data.id },
+      { onSuccess: () => utils.garments.getOne.invalidate({ id: data.id }) },
+    );
+  }
 
   // To open the lightbox change the value of the "toggler" prop.
   const [toggler, setToggler] = useState(false);
@@ -47,6 +67,27 @@ const Garment: React.FC<Props> = ({}) => {
     });
     setPicturesUrls(tempArray);
   }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex px-32 py-5">
+        {/* left  */}
+        <div className="sticky top-5 flex h-[475px] w-1/2 justify-evenly  ">
+          <div className="flex w-1/6 flex-col  gap-y-1 py-1 ">
+            <Skeleton height={475} />
+          </div>
+          <div className="w-4/6">
+            <Skeleton height={475} />
+          </div>
+        </div>
+        {/* end left */}
+
+        <div className="mx-auto w-[45%]  px-10   ">
+          <Skeleton height={475} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className=" px-32 py-5">
@@ -132,8 +173,15 @@ const Garment: React.FC<Props> = ({}) => {
               back_color="blue"
               content="Añadir al carrito"
             />
-            <button className="flex items-center gap-x-1  pl-4">
-              <BsHeart className="text-2xl text-green" />
+            <button
+              onClick={handleLike}
+              className="flex items-center gap-x-1  pl-4"
+            >
+              {data?.likes && data?.likes.length > 0 ? (
+                <AiFillHeart className="text-2xl text-green" />
+              ) : (
+                <BsHeart className="text-2xl text-green" />
+              )}
               <p className="text-xl text-green">{data?._count.likes}</p>
             </button>
           </div>
@@ -204,7 +252,6 @@ const Garment: React.FC<Props> = ({}) => {
       <div className=" pb-10 pt-16 ">
         <Recommendations filter={{ genre: undefined }} />
       </div>
-
       <FsLightbox toggler={toggler} sources={picturesUrls} />
     </div>
   );
