@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import GarmentCard from "~/components/GarmentCard";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { CategoriesType, GenreType, SizeType } from "~/constants";

@@ -27,7 +27,6 @@ export default function InfiniteGarmentSearch({
 }: InfiniteTweetListProps) {
   if (isLoading) return <div>loading...</div>;
   if (isError) return <h1>Error...</h1>;
-  console.log(garments);
 
   if (garments == null || garments.length === 0) {
     return <h2 className="">No garments</h2>;
@@ -60,6 +59,7 @@ export default function InfiniteGarmentSearch({
               image_url={garment.pictures[0]!.url}
               size={garment.size}
               current_price={garment.current_price}
+              isFavorite={garment.isFavorite}
             />
           ))}
         </div>

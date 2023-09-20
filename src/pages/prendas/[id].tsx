@@ -10,6 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { AiFillHeart } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { FiHeart } from "react-icons/fi";
 
 interface Props {}
 
@@ -33,33 +34,38 @@ function MeasurementsComponent({
 }
 
 const Garment: React.FC<Props> = ({}) => {
-  //get data
+  //get garment id
   const { id } = useRouter().query;
+
   //error handling
   if (!id || id instanceof Array) {
     return <div>Redirect...</div>;
   }
-
+  //query data with garment id
   const { data, isLoading } = api.garments.getOne.useQuery({ id: id! });
 
+  //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
-  const { data: sessionData } = useSession();
   const utils = api.useContext();
 
+  //handler for liking button
   async function handleLike() {
     if (!data?.id) return;
-    //update cache
     // //perform action
     await toggleLike.mutateAsync(
       { garmentId: data.id },
+      //refresh cache
       { onSuccess: () => utils.garments.getOne.invalidate({ id: data.id }) },
     );
   }
 
   // To open the lightbox change the value of the "toggler" prop.
   const [toggler, setToggler] = useState(false);
+
+  // array of pictures for lightbox
   const [picturesUrls, setPicturesUrls] = useState<string[]>([]);
 
+  //populate array of pictures
   useEffect(() => {
     let tempArray: string[] = [];
     data?.pictures.forEach((picture) => {
@@ -68,6 +74,7 @@ const Garment: React.FC<Props> = ({}) => {
     setPicturesUrls(tempArray);
   }, [data]);
 
+  //show skeleton on loading
   if (isLoading) {
     return (
       <div className="flex px-32 py-5">
@@ -175,14 +182,20 @@ const Garment: React.FC<Props> = ({}) => {
             />
             <button
               onClick={handleLike}
+              disabled={toggleLike.isLoading}
               className="flex items-center gap-x-1  pl-4"
             >
-              {data?.likes && data?.likes.length > 0 ? (
-                <AiFillHeart className="text-2xl text-green" />
+              {toggleLike.isLoading ? (
+                <h1>Is loading</h1>
+              ) : data?.likes && data?.likes.length > 0 ? (
+                <AiFillHeart className="text-3xl text-green" />
               ) : (
-                <BsHeart className="text-2xl text-green" />
+                <FiHeart className="text-2xl text-green" />
               )}
-              <p className="text-xl text-green">{data?._count.likes}</p>
+
+              <p className="text-xl text-green">
+                {!toggleLike.isLoading ? data?._count.likes : null}
+              </p>
             </button>
           </div>
 

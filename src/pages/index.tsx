@@ -76,15 +76,19 @@ export default function Home() {
           {/* *** */}
           {/* first section  */}
           <div className="absolute right-0 top-1/2 mr-10 -translate-y-1/2  ">
-            <h1 className="font-fancy text-right text-6xl text-creme">
+            <h1 className="text-right font-fancy text-6xl text-creme">
               Atuendo de verano
             </h1>
             <p className="text-right font-semibold text-creme">01/01-28/01</p>
-            <h1 className="font-fancy text-right text-7xl text-creme">
+            <h1 className="text-right font-fancy text-7xl text-creme">
               hasta <span className="font-fancy text-orange">70% OFF</span>
             </h1>
             <div className="float-right mt-3">
-              <Button back_color="orange" content="Ver rebajas" />
+              <Button
+                back_color="orange"
+                content="Ver rebajas"
+                tw_text_size=""
+              />
             </div>
           </div>
           {/* *** */}
@@ -198,29 +202,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  );
-}
-
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   );
 }

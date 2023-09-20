@@ -13,13 +13,17 @@ export const garmentsRouter = createTRPCRouter({
         limit: z.number().optional(),
         cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
         //filters
+        id: z.string().nullish(),
         genre: z.string().nullish(),
         category: z.string().nullish(),
         size: z.string().nullish(),
       }),
     )
     .query(
-      async ({ input: { limit = 2, cursor, genre, category, size }, ctx }) => {
+      async ({
+        input: { limit = 2, cursor, genre, category, size, id },
+        ctx,
+      }) => {
         const currentUserId = ctx.session?.user.id;
 
         const data = await ctx.prisma.garment.findMany({
@@ -28,6 +32,7 @@ export const garmentsRouter = createTRPCRouter({
           orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 
           where: {
+            id: id ?? undefined,
             genre: genre ?? undefined,
             category: category ?? undefined,
             size: size ?? undefined,
