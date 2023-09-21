@@ -1,5 +1,14 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
+type Garment = Prisma.GarmentGetPayload<{
+  include: {
+    pictures: true;
+    _count: true;
+    likes: true;
+  };
+}>;
+type ExtendedGarment = Garment & { isFavorite: boolean };
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -72,11 +81,11 @@ export const garmentsRouter = createTRPCRouter({
     ),
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       const currentUserId = ctx.session?.user.id;
       const { id } = input;
       //
-      return ctx.prisma.garment.findFirst({
+      const data = await ctx.prisma.garment.findFirst({
         where: {
           id,
         },
@@ -94,6 +103,9 @@ export const garmentsRouter = createTRPCRouter({
               : { where: { userId: currentUserId } },
         },
       });
+      // return data;
+      const isFavorite = data?.likes && data?.likes.length > 0;
+      return { garment: { ...data! }, isFavorite };
     }),
   toggleLike: protectedProcedure
     .input(z.object({ garmentId: z.string() }))

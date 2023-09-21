@@ -94,11 +94,7 @@ const Index: React.FC<indexProps> = ({}) => {
   if (garments.isLoading) {
     return (
       <div className="flex ">
-        <div
-          className="b sticky left-0 top-0 h-[calc(100vh-92px)]  w-1/4 border-2
-      border-blue"
-        ></div>
-        <div className="grid w-3/4 gap-y-24 border-2  border-red-500 px-1 pt-2 ">
+        <div className="gap-y-24 border-2  border-red-500 px-1 pt-2 ">
           <h1 className="text-blue">Loading...</h1>
         </div>
       </div>

@@ -8,8 +8,6 @@ import Recommendations from "~/components/Recommendations";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AiFillHeart } from "react-icons/ai";
-import { useSession } from "next-auth/react";
-import { revalidatePath, revalidateTag } from "next/cache";
 import { FiHeart } from "react-icons/fi";
 
 interface Props {}
@@ -42,7 +40,8 @@ const Garment: React.FC<Props> = ({}) => {
     return <div>Redirect...</div>;
   }
   //query data with garment id
-  const { data, isLoading } = api.garments.getOne.useQuery({ id: id! });
+  const { data: myData, isLoading } = api.garments.getOne.useQuery({ id: id });
+  const data = myData?.garment;
 
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
@@ -55,7 +54,30 @@ const Garment: React.FC<Props> = ({}) => {
     await toggleLike.mutateAsync(
       { garmentId: data.id },
       //refresh cache
-      { onSuccess: () => utils.garments.getOne.invalidate({ id: data.id }) },
+      {
+        onSuccess: () => {
+          //update cache
+          utils.garments.getOne.setData({ id: data.id }, (oldData) => {
+            if (!oldData?.garment) return;
+
+            //
+            if (!oldData) return;
+            const oldGarment = oldData.garment;
+            //
+            return {
+              ...oldData,
+              garment: {
+                ...oldGarment,
+                _count: {
+                  likes:
+                    oldGarment._count.likes + (oldData.isFavorite ? -1 : 1),
+                },
+              },
+              isFavorite: !oldData.isFavorite,
+            };
+          });
+        },
+      },
     );
   }
 
@@ -185,17 +207,15 @@ const Garment: React.FC<Props> = ({}) => {
               disabled={toggleLike.isLoading}
               className="flex items-center gap-x-1  pl-4"
             >
-              {toggleLike.isLoading ? (
-                <h1>Is loading</h1>
-              ) : data?.likes && data?.likes.length > 0 ? (
-                <AiFillHeart className="text-3xl text-green" />
+              {isLoading ? (
+                <p>loading ...</p>
+              ) : myData?.isFavorite ? (
+                <AiFillHeart className="text-2xl text-green" />
               ) : (
                 <FiHeart className="text-2xl text-green" />
               )}
 
-              <p className="text-xl text-green">
-                {!toggleLike.isLoading ? data?._count.likes : null}
-              </p>
+              <p className="text-xl text-green">{data?._count.likes ?? 0}</p>
             </button>
           </div>
 
