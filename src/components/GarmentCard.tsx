@@ -4,6 +4,7 @@ import { AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
+import { ClipLoader } from "react-spinners";
 
 interface GarmentCardProps {
   brand: string;
@@ -41,7 +42,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
       { garmentId: id },
       //refresh cache
       {
-        onSuccess: ({ addedLike }) => {
+        onSuccess: () => {
           // utils.garments.getAll.invalidate();
           utils.garments.getAll.setInfiniteData({}, (oldData) => {
             if (!oldData) return;
@@ -78,7 +79,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         disabled={toggleLike.isLoading}
       >
         {toggleLike.isLoading ? (
-          <div>loading...</div>
+          <ClipLoader color="#93a571" size={23} />
         ) : isFavorite ? (
           <AiFillHeart className="h-6 w-6 text-green" />
         ) : (

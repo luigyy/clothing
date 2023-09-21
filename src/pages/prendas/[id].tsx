@@ -9,6 +9,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AiFillHeart } from "react-icons/ai";
 import { FiHeart } from "react-icons/fi";
+import { ClipLoader } from "react-spinners";
 
 interface Props {}
 
@@ -39,9 +40,11 @@ const Garment: React.FC<Props> = ({}) => {
   if (!id || id instanceof Array) {
     return <div>Redirect...</div>;
   }
-  //query data with garment id
-  const { data: myData, isLoading } = api.garments.getOne.useQuery({ id: id });
-  const data = myData?.garment;
+  //query garment with garment id
+  const { data: myData, isLoading } = api.garments.getOne.useQuery({
+    id: id,
+  });
+  const garment = myData?.garment;
 
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
@@ -49,31 +52,31 @@ const Garment: React.FC<Props> = ({}) => {
 
   //handler for liking button
   async function handleLike() {
-    if (!data?.id) return;
+    if (!garment?.id) return;
     // //perform action
     await toggleLike.mutateAsync(
-      { garmentId: data.id },
+      { garmentId: garment.id },
       //refresh cache
       {
         onSuccess: () => {
           //update cache
-          utils.garments.getOne.setData({ id: data.id }, (oldData) => {
-            if (!oldData?.garment) return;
+          utils.garments.getOne.setData({ id: garment.id }, (garment) => {
+            if (!garment?.garment) return;
 
             //
-            if (!oldData) return;
-            const oldGarment = oldData.garment;
+            if (!garment) return;
+            const oldGarment = garment.garment;
             //
             return {
-              ...oldData,
+              ...garment,
               garment: {
                 ...oldGarment,
                 _count: {
                   likes:
-                    oldGarment._count.likes + (oldData.isFavorite ? -1 : 1),
+                    oldGarment._count.likes + (garment.isFavorite ? -1 : 1),
                 },
               },
-              isFavorite: !oldData.isFavorite,
+              isFavorite: !garment.isFavorite,
             };
           });
         },
@@ -90,11 +93,11 @@ const Garment: React.FC<Props> = ({}) => {
   //populate array of pictures
   useEffect(() => {
     let tempArray: string[] = [];
-    data?.pictures.forEach((picture) => {
+    garment?.pictures.forEach((picture) => {
       tempArray.push(picture.url);
     });
     setPicturesUrls(tempArray);
-  }, [data]);
+  }, [garment]);
 
   //show skeleton on loading
   if (isLoading) {
@@ -129,7 +132,7 @@ const Garment: React.FC<Props> = ({}) => {
               className="h-1/4 overflow-hidden rounded-md"
             >
               <img
-                src={data?.pictures[0]!.url}
+                src={garment?.pictures[0]!.url}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -139,7 +142,7 @@ const Garment: React.FC<Props> = ({}) => {
               className="h-1/4 overflow-hidden rounded-md"
             >
               <img
-                src={data?.pictures[0]!.url}
+                src={garment?.pictures[0]!.url}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -149,7 +152,7 @@ const Garment: React.FC<Props> = ({}) => {
               className="h-1/4 overflow-hidden rounded-md"
             >
               <img
-                src={data?.pictures[0]!.url}
+                src={garment?.pictures[0]!.url}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -159,7 +162,7 @@ const Garment: React.FC<Props> = ({}) => {
               className="h-1/4 overflow-hidden rounded-md shadow-2xl"
             >
               <img
-                src={data?.pictures[0]!.url}
+                src={garment?.pictures[0]!.url}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -171,7 +174,7 @@ const Garment: React.FC<Props> = ({}) => {
             className=" w-4/6 "
           >
             <img
-              src={data?.pictures[0]!.url}
+              src={garment?.pictures[0]!.url}
               className="h-full  w-full object-cover"
               alt=""
             />
@@ -180,20 +183,21 @@ const Garment: React.FC<Props> = ({}) => {
         {/* specs */}
         <div className="mx-auto w-[45%] rounded-lg border border-blue px-10 py-10  ">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl">{data?.brand}</h1>
+            <h1 className="text-2xl">{garment?.brand}</h1>
             <span className="text-xs text-orange underline">
-              {data?.user.name}
+              {garment?.user.name}
             </span>
           </div>
           <span className="inline text-sm">
-            Talla: {data?.size}/{data?.genre === "male" ? "Hombre" : "Mujer"}
+            Talla: {garment?.size}/
+            {garment?.genre === "male" ? "Hombre" : "Mujer"}
           </span>
           <p className="pt-10  text-2xl">
-            ₡{data?.current_price.toLocaleString()}
+            ₡{garment?.current_price.toLocaleString()}
             <span className="pl-2 text-sm text-orange line-through">
-              {data?.original_price === data?.current_price
+              {garment?.original_price === garment?.current_price
                 ? null
-                : `₡${data?.original_price.toLocaleString()}`}
+                : `₡${garment?.original_price.toLocaleString()}`}
             </span>
           </p>
           <div className=" flex items-center gap-x-2 border-b border-blue border-opacity-50 pb-10 pt-4">
@@ -205,17 +209,17 @@ const Garment: React.FC<Props> = ({}) => {
             <button
               onClick={handleLike}
               disabled={toggleLike.isLoading}
-              className="flex items-center gap-x-1  pl-4"
+              className="flex items-center gap-x-2  pl-4"
             >
-              {isLoading ? (
-                <p>loading ...</p>
+              {toggleLike.isLoading ? (
+                <ClipLoader color="#93a571" size={23} />
               ) : myData?.isFavorite ? (
                 <AiFillHeart className="text-2xl text-green" />
               ) : (
                 <FiHeart className="text-2xl text-green" />
               )}
 
-              <p className="text-xl text-green">{data?._count.likes ?? 0}</p>
+              <p className="text-xl text-green">{garment?._count.likes ?? 0}</p>
             </button>
           </div>
 
@@ -225,27 +229,27 @@ const Garment: React.FC<Props> = ({}) => {
               <h1 className="pb-2 pt-4 font-semibold">Medidas</h1>
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />{" "}
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />{" "}
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />
               <MeasurementsComponent
                 left="Talla original"
-                right={data?.size!}
+                right={garment?.size!}
               />
             </div>
           </div>

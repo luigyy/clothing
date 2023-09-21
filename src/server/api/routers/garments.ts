@@ -30,7 +30,7 @@ export const garmentsRouter = createTRPCRouter({
     )
     .query(
       async ({
-        input: { limit = 2, cursor, genre, category, size, id },
+        input: { limit = 9, cursor, genre, category, size, id },
         ctx,
       }) => {
         const currentUserId = ctx.session?.user.id;
