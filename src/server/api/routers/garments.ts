@@ -26,35 +26,63 @@ export const garmentsRouter = createTRPCRouter({
         genre: z.string().nullish(),
         category: z.string().nullish(),
         size: z.string().nullish(),
+        getFavorites: z.boolean().nullish(),
       }),
     )
     .query(
       async ({
-        input: { limit = 9, cursor, genre, category, size, id },
+        input: { limit = 9, cursor, genre, category, size, id, getFavorites },
         ctx,
       }) => {
         const currentUserId = ctx.session?.user.id;
 
-        const data = await ctx.prisma.garment.findMany({
-          take: limit + 1,
-          cursor: cursor ? { createdAt_id: cursor } : undefined,
-          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        let data;
 
-          where: {
-            id: id ?? undefined,
-            genre: genre ?? undefined,
-            category: category ?? undefined,
-            size: size ?? undefined,
-          },
+        //get the data conditionally
+        if (getFavorites) {
+          data = await ctx.prisma.garment.findMany({
+            take: limit + 1,
+            cursor: cursor ? { createdAt_id: cursor } : undefined,
+            orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 
-          include: {
-            pictures: true,
-            likes:
-              currentUserId == null
-                ? false
-                : { where: { userId: currentUserId } },
-          },
-        });
+            include: {
+              pictures: true,
+              likes:
+                currentUserId == null
+                  ? false
+                  : { where: { userId: currentUserId } },
+            },
+
+            where: {
+              likes: {
+                some: {
+                  userId: currentUserId,
+                },
+              },
+            },
+          });
+        } else {
+          data = await ctx.prisma.garment.findMany({
+            take: limit + 1,
+            cursor: cursor ? { createdAt_id: cursor } : undefined,
+            orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+
+            where: {
+              id: id ?? undefined,
+              genre: genre ?? undefined,
+              category: category ?? undefined,
+              size: size ?? undefined,
+            },
+
+            include: {
+              pictures: true,
+              likes:
+                currentUserId == null
+                  ? false
+                  : { where: { userId: currentUserId } },
+            },
+          });
+        }
 
         // let nextCursor: typeof cursor | undefined;
         // if (data.length > limit) {
@@ -107,6 +135,37 @@ export const garmentsRouter = createTRPCRouter({
       const isFavorite = data?.likes && data?.likes.length > 0;
       return { garment: { ...data! }, isFavorite };
     }),
+  getFavorites: protectedProcedure.query(async ({ ctx }) => {
+    const currentUserId = ctx.session?.user.id;
+    //
+    const data = await ctx.prisma.garment.findMany({
+      where: {
+        userId: currentUserId,
+      },
+      include: {
+        pictures: true,
+        user: { select: { name: true } },
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
+        likes:
+          currentUserId == null ? false : { where: { userId: currentUserId } },
+      },
+    });
+    // return data;
+    // const isFavorite = data?.likes && data?.likes.length > 0;
+    return {
+      garments: data.map((garment) => {
+        return {
+          ...garment,
+          isFavorite: garment.likes.length > 0,
+        };
+      }),
+    };
+  }),
+
   toggleLike: protectedProcedure
     .input(z.object({ garmentId: z.string() }))
     .mutation(async ({ input: { garmentId }, ctx }) => {

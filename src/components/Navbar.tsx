@@ -147,10 +147,10 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
       >
         <div className="flex items-center gap-x-5">
-          <Link href="/vende" className={` relative ${hoverUnderlineClass}`}>
+          <Link href="/sell" className={` relative ${hoverUnderlineClass}`}>
             <h1 className="text-lg">Vende</h1>
           </Link>
-          <Link href="/prendas" className={`${hoverUnderlineClass} relative`}>
+          <Link href="/garments" className={`${hoverUnderlineClass} relative`}>
             <h1 className="text-lg">Compra</h1>
           </Link>
           <Link href="#_" className={`${hoverUnderlineClass} relative`}>
@@ -166,7 +166,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <Link href="#_">
             <IoSearchOutline className="text-3xl" />
           </Link>
-          <Link href="#_">
+          <Link href="/favorites">
             <BsHeart className="text-2xl" />
           </Link>
           <Link href="#_">
