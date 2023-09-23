@@ -71,6 +71,20 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
                 };
               },
             );
+          } else if (currentPage.recommendations) {
+            utils.garments.getRecommendations.setData(undefined, (oldData) => {
+              if (!oldData) return;
+
+              return {
+                ...oldData,
+                garments: oldData.garments.map((garment) => {
+                  if (garment.id === id) {
+                    return { ...garment, isFavorite: !garment.isFavorite };
+                  }
+                  return garment;
+                }),
+              };
+            });
           }
 
           utils.garments.getAll.setInfiniteData({ currentPage }, (oldData) => {

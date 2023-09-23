@@ -1,13 +1,16 @@
 import React from "react";
 import { api } from "~/utils/api";
-import { FiltersType } from "~/constants";
 import GarmentCard from "./GarmentCard";
 
 //TODO: CREATE NEW ROUTE TO HANDLE RECOMMENDATIONS (do not allow to reccomend the same item, handle situation where there isnt enough garments, 4 at least neeeded)
 
-const Recommendations = ({ filter }: { filter: FiltersType }) => {
-  const { data } = api.garments.getAllByFilter.useQuery(filter);
-  const garments = data?.slice(0, 4);
+const Recommendations = () => {
+  const { data } = api.garments.getRecommendations.useQuery();
+  const currentPage = {
+    recommendations: true,
+  };
+
+  const garments = data?.garments;
   return (
     <div>
       <h1 className="text-center text-3xl">Recomendado para ti </h1>
@@ -22,6 +25,8 @@ const Recommendations = ({ filter }: { filter: FiltersType }) => {
             original_price={garment.original_price}
             size={garment.size}
             key={garment.id}
+            currentPage={currentPage}
+            isFavorite={garment.isFavorite}
           />
         ))}
       </div>

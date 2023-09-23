@@ -8,7 +8,6 @@ type Garment = Prisma.GarmentGetPayload<{
     likes: true;
   };
 }>;
-type ExtendedGarment = Garment & { isFavorite: boolean };
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -29,7 +28,6 @@ export const garmentsRouter = createTRPCRouter({
         currentPage: z.object({
           favorites: z.boolean().optional(),
           garments: z.boolean().optional(),
-          recommendations: z.boolean().optional(),
         }),
       }),
     )
@@ -88,13 +86,6 @@ export const garmentsRouter = createTRPCRouter({
           });
         }
 
-        // let nextCursor: typeof cursor | undefined;
-        // if (data.length > limit) {
-        //   const nextItem = data.pop();
-        //   if (nextItem != null) {
-        //     nextCursor = { id: nextItem.id, created_at: nextItem.created_at };
-        //   }
-        // }
         let nextCursor: typeof cursor | undefined;
         if (data.length > limit) {
           const nextItem = data.pop();
@@ -190,27 +181,25 @@ export const garmentsRouter = createTRPCRouter({
       return { addedLike: false };
     }),
 
-  getAllByFilter: publicProcedure
-    .input(
-      z.object({
-        genre: z.string().nullish(),
-        category: z.string().nullish(),
-        size: z.string().nullish(),
+  getRecommendations: publicProcedure.query(async ({ ctx, input }) => {
+    const currentUserId = ctx.session?.user.id;
+
+    const data = await ctx.prisma.garment.findMany({
+      take: 4,
+      include: {
+        pictures: true,
+        likes: !currentUserId ? false : { where: { userId: currentUserId } },
+      },
+    });
+    return {
+      garments: data.map((garment) => {
+        return {
+          ...garment,
+          isFavorite: garment.likes.length > 0,
+        };
       }),
-    )
-    .query(({ ctx, input }) => {
-      const { genre, category, size } = input;
-      return ctx.prisma.garment.findMany({
-        where: {
-          genre: genre ?? undefined,
-          category: category ?? undefined,
-          size: size ?? undefined,
-        },
-        include: {
-          pictures: true,
-        },
-      });
-    }),
+    };
+  }),
   //   getSecretMessage: protectedProcedure.query(() => {
   //     return "you can now see this secret message!";
   //   }),

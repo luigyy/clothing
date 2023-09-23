@@ -287,7 +287,7 @@ const Garment: React.FC<Props> = ({}) => {
         </div>
       </div>
       <div className=" pb-10 pt-16 ">
-        <Recommendations filter={{ genre: undefined }} />
+        <Recommendations />
       </div>
       <FsLightbox toggler={toggler} sources={picturesUrls} />
     </div>
