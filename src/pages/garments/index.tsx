@@ -43,6 +43,7 @@ const Index: React.FC<indexProps> = ({}) => {
       genre: filters.genre,
       category: filters.category,
       size: filters.size,
+      getFavorites: false,
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
@@ -330,6 +331,7 @@ const Index: React.FC<indexProps> = ({}) => {
           isError={garments.isError}
           fetchNewGarments={garments.fetchNextPage}
           hasMore={garments.hasNextPage}
+          favoritesPage={false}
         />
       </div>
 

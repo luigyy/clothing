@@ -15,6 +15,7 @@ interface GarmentCardProps {
   current_price: number;
   isFavorite: boolean;
   id: string;
+  favoritesPage: boolean; //true if for favoritesPage
 }
 
 const GarmentCard: React.FC<GarmentCardProps> = ({
@@ -25,6 +26,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   original_price,
   current_price,
   image_url,
+  favoritesPage,
   isFavorite,
 }) => {
   //validate like the video
@@ -44,28 +46,54 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
       {
         onSuccess: () => {
           // utils.garments.getAll.invalidate();
-          utils.garments.getAll.setInfiniteData({}, (oldData) => {
-            if (!oldData) return;
+          //if we are in the favorites page, we will want to delete a garment from cache if we unlike it
 
-            //
-            return {
-              ...oldData,
-              pages: oldData.pages.map((page) => {
+          if (favoritesPage) {
+            utils.garments.getAll.setInfiniteData(
+              { getFavorites: favoritesPage },
+              (oldData) => {
+                if (!oldData) return;
+
                 return {
-                  ...page,
-                  garments: page.garments.map((currentGarment) => {
-                    if (currentGarment.id === id) {
-                      return {
-                        ...currentGarment,
-                        isFavorite: !currentGarment.isFavorite,
-                      };
-                    }
-                    return currentGarment;
+                  ...oldData,
+                  pages: oldData.pages.map((page) => {
+                    return {
+                      ...page,
+                      garments: page.garments.filter(
+                        (garment) => garment.id != id,
+                      ),
+                    };
                   }),
                 };
-              }),
-            };
-          });
+              },
+            );
+          }
+
+          utils.garments.getAll.setInfiniteData(
+            { getFavorites: false },
+            (oldData) => {
+              if (!oldData) return;
+
+              //
+              return {
+                ...oldData,
+                pages: oldData.pages.map((page) => {
+                  return {
+                    ...page,
+                    garments: page.garments.map((currentGarment) => {
+                      if (currentGarment.id === id) {
+                        return {
+                          ...currentGarment,
+                          isFavorite: !currentGarment.isFavorite,
+                        };
+                      }
+                      return currentGarment;
+                    }),
+                  };
+                }),
+              };
+            },
+          );
         },
       },
     );
@@ -87,7 +115,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         )}
       </button>
       <Link
-        href={`/prendas/${id}`}
+        href={`/garments/${id}`}
         className="relative mx-auto aspect-[3/4] w-[210px]   "
       >
         <img src={image_url} className="h-full w-full object-cover" alt="" />

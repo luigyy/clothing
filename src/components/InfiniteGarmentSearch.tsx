@@ -16,6 +16,7 @@ type InfiniteTweetListProps = {
   hasMore: boolean | undefined;
   fetchNewGarments: () => Promise<unknown>;
   garments?: ExtendedGarment[];
+  favoritesPage: boolean;
 };
 
 export default function InfiniteGarmentSearch({
@@ -24,6 +25,7 @@ export default function InfiniteGarmentSearch({
   isLoading,
   fetchNewGarments,
   hasMore = false,
+  favoritesPage,
 }: InfiniteTweetListProps) {
   if (isLoading) return <div>loading...</div>;
   if (isError) return <h1>Error...</h1>;
@@ -60,6 +62,7 @@ export default function InfiniteGarmentSearch({
               size={garment.size}
               current_price={garment.current_price}
               isFavorite={garment.isFavorite}
+              favoritesPage={favoritesPage}
             />
           ))}
         </div>

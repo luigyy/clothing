@@ -13,11 +13,13 @@ const Index = ({}) => {
   return (
     <div className="min-h-screen w-full px-32">
       <InfiniteGarmentSearch
+      
         garments={garments.data?.pages.flatMap((page) => page.garments)}
         isLoading={garments.isLoading}
         isError={garments.isError}
         fetchNewGarments={garments.fetchNextPage}
         hasMore={garments.hasNextPage}
+        favoritesPage={true}
       />
     </div>
   );
