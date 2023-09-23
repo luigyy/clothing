@@ -38,12 +38,15 @@ const Index: React.FC<indexProps> = ({}) => {
     buildFiltersFromUrlParams();
   }, [router.isReady]);
 
+  const currentPage = {
+    garments: true,
+  };
   const garments = api.garments.getAll.useInfiniteQuery(
     {
       genre: filters.genre,
       category: filters.category,
       size: filters.size,
-      getFavorites: false,
+      currentPage,
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
@@ -331,7 +334,7 @@ const Index: React.FC<indexProps> = ({}) => {
           isError={garments.isError}
           fetchNewGarments={garments.fetchNextPage}
           hasMore={garments.hasNextPage}
-          favoritesPage={false}
+          currentPage={currentPage}
         />
       </div>
 

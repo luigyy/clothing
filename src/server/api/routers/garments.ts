@@ -26,12 +26,16 @@ export const garmentsRouter = createTRPCRouter({
         genre: z.string().nullish(),
         category: z.string().nullish(),
         size: z.string().nullish(),
-        getFavorites: z.boolean().nullish(),
+        currentPage: z.object({
+          favorites: z.boolean().optional(),
+          garments: z.boolean().optional(),
+          recommendations: z.boolean().optional(),
+        }),
       }),
     )
     .query(
       async ({
-        input: { limit = 9, cursor, genre, category, size, id, getFavorites },
+        input: { limit = 9, cursor, genre, category, size, id, currentPage },
         ctx,
       }) => {
         const currentUserId = ctx.session?.user.id;
@@ -39,7 +43,7 @@ export const garmentsRouter = createTRPCRouter({
         let data;
 
         //get the data conditionally
-        if (getFavorites) {
+        if (currentPage.favorites) {
           data = await ctx.prisma.garment.findMany({
             take: limit + 1,
             cursor: cursor ? { createdAt_id: cursor } : undefined,

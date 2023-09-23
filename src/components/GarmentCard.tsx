@@ -15,7 +15,11 @@ interface GarmentCardProps {
   current_price: number;
   isFavorite: boolean;
   id: string;
-  favoritesPage: boolean; //true if for favoritesPage
+  currentPage: {
+    garments?: boolean;
+    favorites?: boolean;
+    recommendations?: boolean;
+  };
 }
 
 const GarmentCard: React.FC<GarmentCardProps> = ({
@@ -26,8 +30,8 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   original_price,
   current_price,
   image_url,
-  favoritesPage,
   isFavorite,
+  currentPage,
 }) => {
   //validate like the video
   //mutation
@@ -48,9 +52,9 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
           // utils.garments.getAll.invalidate();
           //if we are in the favorites page, we will want to delete a garment from cache if we unlike it
 
-          if (favoritesPage) {
+          if (currentPage.favorites) {
             utils.garments.getAll.setInfiniteData(
-              { getFavorites: favoritesPage },
+              { currentPage },
               (oldData) => {
                 if (!oldData) return;
 
@@ -69,31 +73,28 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
             );
           }
 
-          utils.garments.getAll.setInfiniteData(
-            { getFavorites: false },
-            (oldData) => {
-              if (!oldData) return;
+          utils.garments.getAll.setInfiniteData({ currentPage }, (oldData) => {
+            if (!oldData) return;
 
-              //
-              return {
-                ...oldData,
-                pages: oldData.pages.map((page) => {
-                  return {
-                    ...page,
-                    garments: page.garments.map((currentGarment) => {
-                      if (currentGarment.id === id) {
-                        return {
-                          ...currentGarment,
-                          isFavorite: !currentGarment.isFavorite,
-                        };
-                      }
-                      return currentGarment;
-                    }),
-                  };
-                }),
-              };
-            },
-          );
+            //
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => {
+                return {
+                  ...page,
+                  garments: page.garments.map((currentGarment) => {
+                    if (currentGarment.id === id) {
+                      return {
+                        ...currentGarment,
+                        isFavorite: !currentGarment.isFavorite,
+                      };
+                    }
+                    return currentGarment;
+                  }),
+                };
+              }),
+            };
+          });
         },
       },
     );
