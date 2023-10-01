@@ -19,7 +19,9 @@ interface GarmentCardProps {
     garments?: boolean;
     favorites?: boolean;
     recommendations?: boolean;
+    any?: boolean;
   };
+  showFavoriteButton: boolean;
 }
 
 const GarmentCard: React.FC<GarmentCardProps> = ({
@@ -32,6 +34,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   image_url,
   isFavorite,
   currentPage,
+  showFavoriteButton,
 }) => {
   //validate like the video
   //mutation
@@ -51,6 +54,8 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         onSuccess: () => {
           // utils.garments.getAll.invalidate();
           //if we are in the favorites page, we will want to delete a garment from cache if we unlike it
+
+          if (currentPage.any) return;
 
           if (currentPage.favorites) {
             utils.garments.getAll.setInfiniteData(

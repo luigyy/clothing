@@ -59,6 +59,7 @@ model User {
     //non next-auth
     Garment      Garment[]
     garmentLikes garmentLikes[]
+    Order        Order[]
 }
 
 model VerificationToken {
@@ -88,9 +89,12 @@ model Garment {
     user     User           @relation(fields: [userId], references: [id])
     likes    garmentLikes[]
     pictures Pictures[]
+    Order    Order?         @relation(fields: [orderId], references: [id])
+    orderId  String?
 
     @@unique([createdAt, id])
     @@index([userId])
+    @@index([orderId])
 }
 
 model Pictures {
@@ -111,4 +115,16 @@ model garmentLikes {
     @@id([userId, garmentId])
     @@index([userId])
     @@index([garmentId])
+}
+
+model Order {
+    id          String    @id @default(cuid())
+    userId      String
+    garments    Garment[]
+    user        User      @relation(fields: [userId], references: [id])
+    createdAt   DateTime  @default(now())
+    isPaid      Boolean   @default(false) //false === is in cart still 
+    orderStatus String    @default("cart")
+
+    @@index([userId])
 }

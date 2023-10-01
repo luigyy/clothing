@@ -53,7 +53,6 @@ const SquaredBanner = ({
 };
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const carouselSettings = {
     dots: true,
     infinite: true,

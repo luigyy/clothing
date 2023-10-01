@@ -96,7 +96,10 @@ export const garmentsRouter = createTRPCRouter({
 
         return {
           garments: data.map((item) => {
-            return { ...item, isFavorite: item.likes.length > 0 };
+            return {
+              ...item,
+              isFavorite: item.likes ? item.likes.length > 0 : false,
+            };
           }),
           nextCursor,
         };

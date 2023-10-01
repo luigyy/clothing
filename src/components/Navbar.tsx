@@ -29,7 +29,7 @@ const ProfileButton = () => {
         </button>
         {/* profile card  */}
         <div
-          className={`absolute right-0 top-full z-10 hidden    bg-creme ${
+          className={`absolute right-0 top-full z-30 hidden    bg-creme ${
             sessionData ? "h-72" : "h-52"
           }  w-64 flex-col rounded-md   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
         >
@@ -96,7 +96,7 @@ const ProfileButton = () => {
                 {
                   <BsPerson className="mx-auto text-center text-3xl text-orange" />
                 }
-                <h1 className="text-center text-lg">No estas logueado</h1>
+                <h1 className="text-center text-lg">No estás logueado</h1>
               </span>
               <div className="flex flex-col gap-y-4 ">
                 <div className="mt-5 flex items-center  px-2">
@@ -104,7 +104,7 @@ const ProfileButton = () => {
                     <FiLogIn className="text-2xl text-orange" />
                   </div>
                   <button
-                    className="pl-3 text-sm font-semibold hover:text-orange "
+                    className="pl-3 text-sm  hover:text-orange "
                     onClick={() => signIn()}
                   >
                     Iniciar sesión
@@ -115,7 +115,7 @@ const ProfileButton = () => {
                     <FiUserPlus className="ml-1 text-2xl text-orange" />
                   </div>
                   <button
-                    className="pl-2 text-sm font-semibold hover:text-orange "
+                    className="pl-2 text-sm  hover:text-orange "
                     onClick={() => signIn()}
                   >
                     Registrarse
@@ -127,6 +127,52 @@ const ProfileButton = () => {
         </div>
       </div>
     </>
+  );
+};
+
+const DropdownMenu = ({}) => {
+  return (
+    <div
+      className="absolute right-1/2 z-20 mt-[10px] hidden translate-x-1/2 flex-col border border-orange border-opacity-40 bg-creme shadow-2xl 
+         hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
+    >
+      <Link
+        className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Ver todo
+      </Link>
+      <Link
+        className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Abrigos
+      </Link>
+      <Link
+        className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Jeans
+      </Link>
+      <Link
+        className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Jeans
+      </Link>
+      <Link
+        className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Jeans
+      </Link>
+      <Link
+        className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
+        href="#"
+      >
+        Jeans
+      </Link>
+    </div>
   );
 };
 
@@ -169,7 +215,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <Link href="/favorites">
             <BsHeart className="text-2xl" />
           </Link>
-          <Link href="#_">
+          <Link href="/cart">
             <PiHandbagSimpleLight className="text-3xl" />
           </Link>
           {/* <ProfileCard /> */}
@@ -183,187 +229,26 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
             Ropa
           </button>
-          <div
-            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange border-opacity-40 bg-creme shadow-2xl 
-         hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
-          >
-            <Link
-              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Ver todo
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Abrigos
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-          </div>
+          <DropdownMenu />
         </div>
-
         <div>
           <button className="p peer font-title text-sm hover:text-orange focus:text-orange">
             Deporte
           </button>
-          <div
-            className="absolute  right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange border-opacity-40  bg-creme 
-         hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
-          >
-            <Link
-              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Ver todo
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Abrigos
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-          </div>
+          <DropdownMenu />
         </div>
         <div>
           <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Zapatos
           </button>
-          <div
-            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col  border border-orange  border-opacity-40 bg-creme 
-         hover:flex  peer-hover:flex peer-focus:flex md:w-1/2"
-          >
-            <Link
-              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Ver todo
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Abrigos
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-          </div>
+          <DropdownMenu />
         </div>
 
         <div>
           <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Accesorios
           </button>
-          <div
-            className="absolute right-1/2 z-10 mt-[10px] hidden translate-x-1/2 flex-col border border-orange  border-opacity-40  
-         bg-creme  hover:flex peer-hover:flex peer-focus:flex md:w-1/2"
-          >
-            <Link
-              className="px-5 py-2 font-text text-xs  font-semibold hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Ver todo
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Abrigos
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-            <Link
-              className="px-5 py-2 font-text text-xs  hover:-translate-y-[1px] hover:font-semibold hover:text-green"
-              href="#"
-            >
-              Jeans
-            </Link>
-          </div>
+          <DropdownMenu />
         </div>
       </div>
     </div>
