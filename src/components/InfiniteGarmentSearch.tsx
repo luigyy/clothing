@@ -67,6 +67,7 @@ export default function InfiniteGarmentSearch({
               current_price={garment.current_price}
               isFavorite={garment.isFavorite}
               currentPage={currentPage}
+              showFavoriteButton={true}
             />
           ))}
         </div>

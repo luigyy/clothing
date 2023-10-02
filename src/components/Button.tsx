@@ -38,10 +38,10 @@ interface ButtonProps {
   back_color: "orange" | "blue" | "green";
   content: string;
   tw_text_size: string;
-  id: string;
-  isLoading: boolean;
-  loadingContent: string;
-  handlerFn: (id: string) => void;
+  id?: string;
+  isLoading?: boolean;
+  loadingContent?: string;
+  handlerFn?: (id: string) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -56,12 +56,9 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className="inline-block items-center justify-center "
-      onClick={() => handlerFn(id)}
+      onClick={() => (handlerFn && id ? handlerFn(id) : null)}
     >
-      <a
-        href="#_"
-        className="group relative inline-block px-6 py-2 font-medium"
-      >
+      <div className="group relative inline-block px-6 py-2 font-medium">
         <span
           className={`absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform rounded ${AsignColor(
             back_color,
@@ -81,7 +78,7 @@ const Button: React.FC<ButtonProps> = ({
         >
           {isLoading ? loadingContent : content}
         </span>
-      </a>
+      </div>
     </button>
   );
 };

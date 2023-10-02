@@ -11,7 +11,9 @@ import { CiSettings } from "react-icons/ci";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { FiLogIn, FiUserPlus } from "react-icons/fi";
 import { api } from "~/utils/api";
+import { BsTrash } from "react-icons/bs";
 import { Garment } from "@prisma/client";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface NavbarProps {}
 
@@ -132,6 +134,127 @@ const ProfileButton = () => {
   );
 };
 
+export const ItemRow = ({
+  brand,
+  size,
+  genre,
+  garmentId,
+  current_price,
+}: {
+  brand: string;
+  size: string;
+  genre: string;
+  garmentId: string;
+  current_price: number;
+}) => {
+  const [isDeleting, setDeletingId] = useState("");
+  const deleteFromCart = api.orders.deleteGarmentFromCart.useMutation();
+  const utils = api.useContext();
+  //handler for delete button
+  async function handleDeleteFromCart(id: string) {
+    setDeletingId(id);
+    deleteFromCart.mutate(
+      { garmentId: id },
+      {
+        onSuccess: () => {
+          utils.orders.getCurrentUserCart.setData(undefined, (oldData) => {
+            if (!oldData) return;
+
+            return {
+              ...oldData,
+              garments: oldData.garments.filter((garment) => garment.id != id),
+            };
+          });
+          setDeletingId("");
+        },
+      },
+    );
+  }
+
+  return (
+    <>
+      <div className="flex items-center justify-between  px-3 py-1 hover:text-orange">
+        <button onClick={() => handleDeleteFromCart(garmentId)}>
+          {isDeleting ? (
+            <ClipLoader color="#d8690e" size={23} />
+          ) : (
+            <BsTrash className="text-3xl text-orange" />
+          )}
+        </button>
+        <div className="">
+          <span className="text-sm">{brand}</span>
+          <p className="text-xs   ">
+            {size}/{genre}
+          </p>
+        </div>
+        <p className="text-sm">₡{current_price.toLocaleString()}</p>
+      </div>
+    </>
+  );
+};
+
+const ShoppingCartDropdow = () => {
+  const { data } = api.orders.getCurrentUserCart.useQuery();
+  const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
+  //
+  function calculateTotal(garments: Garment[] | null | undefined) {
+    if (!garments) return 0;
+
+    let total = 0;
+    garments.forEach((garment) => {
+      total += garment.current_price;
+    });
+    return total;
+  }
+
+  useEffect(() => {
+    setCartTotal(calculateTotal(data?.garments));
+  }, [data]);
+  return (
+    <div className="relative">
+      <button className="peer ">
+        <PiHandbagSimpleLight className="text-3xl" />
+        {cartTotal != 0 ? (
+          <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center text-[10px] text-creme">
+            {`₡${cartTotal.toLocaleString()}`}
+          </span>
+        ) : null}
+      </button>
+      <div
+        className={`absolute right-0 top-full z-30  hidden ${
+          data?.garments.length ? "min-h-32" : "h-20 text-sm text-opacity-50"
+        }  w-64  flex-col rounded-md bg-creme   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
+      >
+        <h1 className="pb-3 pt-2 text-center text-sm">Tus pedidos</h1>
+        {data?.garments.length ? (
+          <>
+            <div className="mb-5">
+              {data.garments.map((garment, index) => (
+                <ItemRow
+                  garmentId={garment.id}
+                  brand={garment.brand}
+                  current_price={garment.current_price}
+                  genre={garment.genre}
+                  size={garment.size}
+                  key={index}
+                />
+              ))}
+            </div>
+            <Link
+              className="mx-auto mb-3 w-[90%] rounded-md bg-blue text-center text-creme"
+              href={"/cart"}
+            >
+              Ir al carrito
+            </Link>
+          </>
+        ) : (
+          <h1 className="pt-2 text-center">No tienes prendas aún</h1>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const DropdownMenu = ({}) => {
   return (
     <div
@@ -179,23 +302,6 @@ const DropdownMenu = ({}) => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { data } = api.orders.getCurrentUserCart.useQuery();
-  const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
-
-  function calculateTotal(garments: Garment[] | null | undefined) {
-    if (!garments) return 0;
-
-    let total = 0;
-    garments.forEach((garment) => {
-      total += garment.current_price;
-    });
-    return total;
-  }
-
-  useEffect(() => {
-    setCartTotal(calculateTotal(data?.garments));
-  }, [data]);
-
   const hoverUnderlineClass =
     "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
   return (
@@ -226,12 +332,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <Link href="/favorites">
             <BsHeart className="text-2xl" />
           </Link>
-          <Link href="/cart" className="relative ">
-            <PiHandbagSimpleLight className="text-3xl" />
-            <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center text-[10px] text-creme">
-              {`${cartTotal.toLocaleString()}`}
-            </span>
-          </Link>
+          <ShoppingCartDropdow />
           {/* <ProfileCard /> */}
           <ProfileButton />
         </div>
