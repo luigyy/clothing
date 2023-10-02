@@ -52,4 +52,42 @@ export const ordersRouter = createTRPCRouter({
 
       return { message: "Successfully deleted from cart" };
     }),
+
+  addGarmentToCart: publicProcedure
+    .input(z.object({ garmentId: z.string() }))
+    .mutation(async ({ ctx, input: { garmentId } }) => {
+      //get user
+      const currentUserId = ctx.session?.user.id;
+      if (!currentUserId) return { message: "Not logged in" };
+
+      //get order
+      const myOrder = await ctx.prisma.order.findFirst({
+        where: { userId: currentUserId, isPaid: false },
+        include: { garments: true },
+      });
+
+      //check if user already has a cart, if user does have a cart, add the garment.
+      // Else, create a cart with the garment in it
+      if (!myOrder) {
+        await ctx.prisma.order.create({
+          data: {
+            userId: currentUserId,
+            isPaid: false,
+            orderStatus: "cart",
+            garments: { connect: [{ id: garmentId }] },
+          },
+        });
+        return { message: "Created cart and added garment" };
+      }
+      await ctx.prisma.order.update({
+        where: { id: myOrder.id },
+        data: {
+          garments: {
+            connect: [{ id: garmentId }],
+          },
+        },
+      });
+
+      //
+    }),
 });

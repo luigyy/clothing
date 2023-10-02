@@ -48,6 +48,7 @@ const Garment: React.FC<Props> = ({}) => {
 
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
+  const addToCart = api.orders.addGarmentToCart.useMutation();
   const utils = api.useContext();
 
   //handler for liking button
@@ -82,6 +83,10 @@ const Garment: React.FC<Props> = ({}) => {
         },
       },
     );
+  }
+
+  async function handleAddToCart(garmentId: string) {
+    await addToCart.mutateAsync({ garmentId });
   }
 
   // To open the lightbox change the value of the "toggler" prop.
@@ -204,6 +209,8 @@ const Garment: React.FC<Props> = ({}) => {
             <Button
               tw_text_size="text-xs"
               back_color="blue"
+              id={id}
+              handlerFn={handleAddToCart}
               content="Añadir al carrito"
             />
             <button
