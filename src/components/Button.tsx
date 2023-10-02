@@ -1,13 +1,5 @@
 import React from "react";
 
-interface ButtonProps {
-  back_color: "orange" | "blue" | "green";
-  content: string;
-  tw_text_size: string;
-  id: string;
-  handlerFn: (id: string) => void;
-}
-
 function AsignColor(
   color: "blue" | "orange" | "green",
   place: "top" | "middle" | "bottom",
@@ -42,12 +34,23 @@ function AsignColor(
     }
   }
 }
+interface ButtonProps {
+  back_color: "orange" | "blue" | "green";
+  content: string;
+  tw_text_size: string;
+  id: string;
+  isLoading: boolean;
+  loadingContent: string;
+  handlerFn: (id: string) => void;
+}
 
 const Button: React.FC<ButtonProps> = ({
   back_color,
   content,
   tw_text_size,
   id,
+  isLoading,
+  loadingContent,
   handlerFn,
 }) => {
   return (
@@ -66,7 +69,7 @@ const Button: React.FC<ButtonProps> = ({
           )}  transition duration-200 ease-out group-hover:-translate-x-0 group-hover:-translate-y-0`}
         ></span>
         <span
-          className={`absolute inset-0 h-full w-full rounded border-2 ${AsignColor(
+          className={`absolute inset-0 h-full w-full rounded border-2  ${AsignColor(
             back_color,
             "middle",
           )} bg-creme `}
@@ -76,7 +79,7 @@ const Button: React.FC<ButtonProps> = ({
             tw_text_size ?? " text-xl"
           } uppercase tracking-wider ${AsignColor(back_color, "bottom")}  `}
         >
-          {content}
+          {isLoading ? loadingContent : content}
         </span>
       </a>
     </button>

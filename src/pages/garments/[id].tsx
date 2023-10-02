@@ -86,7 +86,21 @@ const Garment: React.FC<Props> = ({}) => {
   }
 
   async function handleAddToCart(garmentId: string) {
-    await addToCart.mutateAsync({ garmentId });
+    await addToCart.mutateAsync(
+      { garmentId },
+      {
+        onSuccess: () => {
+          utils.orders.getCurrentUserCart.setData(undefined, (oldData) => {
+            if (!oldData || !garment) return;
+
+            return {
+              ...oldData,
+              garments: [...oldData.garments, garment],
+            };
+          });
+        },
+      },
+    );
   }
 
   // To open the lightbox change the value of the "toggler" prop.
@@ -210,6 +224,8 @@ const Garment: React.FC<Props> = ({}) => {
               tw_text_size="text-xs"
               back_color="blue"
               id={id}
+              isLoading={addToCart.isLoading}
+              loadingContent="Añadiendo"
               handlerFn={handleAddToCart}
               content="Añadir al carrito"
             />

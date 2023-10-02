@@ -10,6 +10,8 @@ import { VscAccount } from "react-icons/vsc";
 import { CiSettings } from "react-icons/ci";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { FiLogIn, FiUserPlus } from "react-icons/fi";
+import { api } from "~/utils/api";
+import { Garment } from "@prisma/client";
 
 interface NavbarProps {}
 
@@ -177,14 +179,23 @@ const DropdownMenu = ({}) => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
-  const [stickyNav, setStickyNav] = useState<boolean>(false);
+  const { data } = api.orders.getCurrentUserCart.useQuery();
+  const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
+
+  function calculateTotal(garments: Garment[] | null | undefined) {
+    if (!garments) return 0;
+
+    let total = 0;
+    garments.forEach((garment) => {
+      total += garment.current_price;
+    });
+    return total;
+  }
 
   useEffect(() => {
-    window.onscroll = () => {
-      setStickyNav(window.scrollY === 0 ? false : true);
-      return () => (window.onscroll = null);
-    };
-  }, []);
+    setCartTotal(calculateTotal(data?.garments));
+  }, [data]);
+
   const hoverUnderlineClass =
     "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
   return (
@@ -208,15 +219,18 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
             <Image src="/logo-azul.png" width={130} height={130} alt="logo" />
           </Link>
         </div>
-        <div className="flex items-center gap-x-5">
+        <div className="flex items-center gap-x-8">
           <Link href="#_">
             <IoSearchOutline className="text-3xl" />
           </Link>
           <Link href="/favorites">
             <BsHeart className="text-2xl" />
           </Link>
-          <Link href="/cart">
+          <Link href="/cart" className="relative ">
             <PiHandbagSimpleLight className="text-3xl" />
+            <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center text-[10px] text-creme">
+              {`${cartTotal.toLocaleString()}`}
+            </span>
           </Link>
           {/* <ProfileCard /> */}
           <ProfileButton />
