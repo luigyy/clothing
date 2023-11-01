@@ -16,3 +16,11 @@ li {
 h1 {
   @apply font-title;
 }
+
+.clickable-effect:hover {
+  transform: scale(100.5%);
+}
+
+.clickable-effect:active {
+  transform: scale(99.5%);
+}

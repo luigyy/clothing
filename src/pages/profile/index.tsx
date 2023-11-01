@@ -54,6 +54,28 @@ function SelectComponent({
   );
 }
 
+const WalletComponent = () => {
+  return (
+    <div className="relative mx-auto my-16 aspect-[1.7] w-1/2 max-w-[600px] rounded-md border border-blue bg-blue">
+      <h1 className="p-2 text-xl text-creme">Monedero virtual</h1>
+
+      <div className="mt-5 border border-creme ">
+        <h1 className="text-center text-creme">Tu balance es</h1>
+        <p className="text-center text-4xl font-bold text-creme">30.000</p>
+      </div>
+
+      <div className="absolute bottom-2 flex h-10  w-full gap-x-3 px-2 ">
+        <button className="clickable-effect w-1/2 rounded-md bg-creme px-2 py-1 text-blue">
+          Historial
+        </button>
+        <button className="clickable-effect w-1/2 rounded bg-green px-2 py-1">
+          Historial
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Index = ({}) => {
   const [updatingProfile, setUpdatingProfile] = useState(false);
 
@@ -71,6 +93,8 @@ const Index = ({}) => {
           <InputComponent label="Nombre" updatingProfile={updatingProfile} />
           <InputComponent label="Apellido" updatingProfile={updatingProfile} />
           <InputComponent label="Teléfono" updatingProfile={updatingProfile} />
+          <InputComponent label="Email" updatingProfile={updatingProfile} />
+
           <SelectComponent
             label="Provincia"
             updatingProfile={updatingProfile}
@@ -108,6 +132,8 @@ const Index = ({}) => {
           Editar perfil
         </button>
       )}
+
+      <WalletComponent />
     </>
   );
 };

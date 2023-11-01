@@ -22,7 +22,7 @@ const ProfileButton = () => {
   return (
     <>
       <div className="   relative flex items-center justify-between ">
-        <button className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full focus:ring focus:ring-orange  ">
+        <button className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   ">
           <Image
             src={sessionData?.user.image || "/default-profile-picture.jpg"}
             className=""
@@ -63,7 +63,9 @@ const ProfileButton = () => {
                   <span>
                     {<VscAccount className="text-2xl text-orange opacity-70" />}
                   </span>
-                  <button className="pl-2 text-sm ">Ver perfil</button>
+                  <Link href="/profile" className="pl-2 text-sm ">
+                    Ver perfil
+                  </Link>
                 </div>
                 <div className="flex flex-row items-center px-3 hover:text-orange">
                   <span>
@@ -193,7 +195,7 @@ export const ItemRow = ({
   );
 };
 
-const ShoppingCartDropdow = () => {
+const ShoppingCartDropdown = () => {
   const { data } = api.orders.getCurrentUserCart.useQuery();
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
   //
@@ -211,7 +213,7 @@ const ShoppingCartDropdow = () => {
     setCartTotal(calculateTotal(data?.garments));
   }, [data]);
   return (
-    <div className="relative">
+    <div className="relative mt-1 ">
       <button className="peer ">
         <PiHandbagSimpleLight className="text-3xl" />
         {cartTotal != 0 ? (
@@ -220,13 +222,13 @@ const ShoppingCartDropdow = () => {
           </span>
         ) : null}
       </button>
-      <div
-        className={`absolute right-0 top-full z-30  hidden ${
-          data?.garments.length ? "min-h-32" : "h-20 text-sm text-opacity-50"
-        }  w-64  flex-col rounded-md bg-creme   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
-      >
-        <h1 className="pb-3 pt-2 text-center text-sm">Tus pedidos</h1>
-        {data?.garments.length ? (
+      {data?.garments.length ? (
+        <div
+          className={`absolute right-0 top-full z-30  hidden ${
+            data?.garments.length ? "min-h-32" : "h-20 text-sm text-opacity-50"
+          }  w-64  flex-col rounded-md bg-creme   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
+        >
+          <h1 className="pb-3 pt-2 text-center text-sm">Tus pedidos</h1>
           <>
             <div className="mb-5">
               {data.garments.map((garment, index) => (
@@ -247,10 +249,8 @@ const ShoppingCartDropdow = () => {
               Ir al carrito
             </Link>
           </>
-        ) : (
-          <h1 className="pt-2 text-center">No tienes prendas aún</h1>
-        )}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -332,8 +332,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <Link href="/favorites">
             <BsHeart className="text-2xl" />
           </Link>
-          <ShoppingCartDropdow />
-          {/* <ProfileCard /> */}
+          <ShoppingCartDropdown />
           <ProfileButton />
         </div>
       </div>
