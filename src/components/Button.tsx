@@ -30,7 +30,7 @@ function AsignColor(
     } else if (color === "green") {
       return "text-green";
     } else {
-      return "text-orange";
+      return "group-hover:text-creme text-orange";
     }
   }
 }

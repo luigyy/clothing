@@ -1,11 +1,11 @@
 import React from "react";
 import { api } from "~/utils/api";
-import GarmentCard from "~/components/GarmentCard";
 import InfiniteGarmentSearch from "~/components/InfiniteGarmentSearch";
-
-interface indexProps {}
+import { useSession } from "next-auth/react";
 
 const Index = ({}) => {
+  const session = useSession();
+
   const currentPage = {
     favorites: true,
   };
@@ -15,6 +15,10 @@ const Index = ({}) => {
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
+  //
+  if (!session.data) {
+    return <div className="text-center">You have to log in first</div>;
+  }
   return (
     <div className="min-h-screen w-full px-32">
       <InfiniteGarmentSearch

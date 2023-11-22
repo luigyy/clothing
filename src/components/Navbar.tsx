@@ -343,26 +343,26 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
             Ropa
           </button>
-          <DropdownMenu />
+          {/* <DropdownMenu /> */}
         </div>
         <div>
           <button className="p peer font-title text-sm hover:text-orange focus:text-orange">
             Deporte
           </button>
-          <DropdownMenu />
+          {/* <DropdownMenu /> */}
         </div>
         <div>
           <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Zapatos
           </button>
-          <DropdownMenu />
+          {/* <DropdownMenu /> */}
         </div>
 
         <div>
           <button className="peer font-title text-sm hover:text-orange focus:text-orange">
             Accesorios
           </button>
-          <DropdownMenu />
+          {/* <DropdownMenu /> */}
         </div>
       </div>
     </div>

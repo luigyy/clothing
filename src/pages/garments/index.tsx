@@ -58,21 +58,30 @@ const Index: React.FC<indexProps> = ({}) => {
 
   function handleGenre(genre: GenreType | "all") {
     if (genre === "all") {
+      router.replace("/garments", undefined, { shallow: true });
       return setFilters({ ...filters, genre: undefined });
     }
+    router.query.genre = genre;
+    router.push(router);
     setFilters({ ...filters, genre });
   }
 
   function handleSize(size: SizeType | "all") {
     if (size === "all") {
+      router.replace("/garments", undefined, { shallow: true });
       return setFilters({ ...filters, size: undefined });
     }
+    router.query.size = size;
+    router.push(router);
     setFilters({ ...filters, size });
   }
   function handleCategory(category: CategoriesType | "all") {
     if (category === "all") {
+      router.replace("/garments", undefined, { shallow: true });
       return setFilters({ ...filters, category: undefined });
     }
+    router.query.category = category;
+    router.push(router);
     setFilters({ ...filters, category });
   }
 
