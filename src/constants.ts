@@ -1,8 +1,3 @@
-import { z } from "zod";
-
-//
-//
-//everytime a typescript type is changed, the corresponding zod type must be updated
 export type CategoriesType =
   | "camisas"
   | "jeans"

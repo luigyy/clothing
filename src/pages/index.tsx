@@ -12,13 +12,15 @@ import "slick-carousel/slick/slick-theme.css";
 const GarmentCategoryCard = ({
   image_link,
   label,
+  link,
 }: {
   image_link: string;
   label: string;
+  link: string;
 }) => {
   return (
     <Link
-      href="#_"
+      href={link}
       className="relative aspect-[0.8] w-44  transition-transform duration-300 hover:scale-[103%]"
     >
       <img src={image_link} alt="" />
@@ -169,13 +171,30 @@ export default function Home() {
         {/* *** */}
         {/* categories  */}
         <div className="my-10 flex justify-between px-32">
-          <GarmentCategoryCard label="Camisas" image_link="/shirt-image.jpg" />
-          <GarmentCategoryCard label="Jeans" image_link="/jeans-image.jpg" />
-          <GarmentCategoryCard label="Vestidos" image_link="/dress-image.jpg" />
-          <GarmentCategoryCard label="Zapatos" image_link="shoes-image.jpg" />
+          <GarmentCategoryCard
+            label="Camisas"
+            image_link="/shirt-image.jpg"
+            link="/garments?category=camisas"
+          />
+          <GarmentCategoryCard
+            label="Jeans"
+            image_link="/jeans-image.jpg"
+            link="/garments?category=jeans"
+          />
+          <GarmentCategoryCard
+            label="Vestidos"
+            image_link="/dress-image.jpg"
+            link="/garments?category=vestidos"
+          />
+          <GarmentCategoryCard
+            label="Zapatos"
+            image_link="shoes-image.jpg"
+            link="/garments?category=zapatos"
+          />
           <GarmentCategoryCard
             label="Camisetas"
             image_link="t-shirt-image.jpg"
+            link="/garments?category=camisas"
           />
         </div>
         {/* end categories  */}
