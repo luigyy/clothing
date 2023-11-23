@@ -301,6 +301,40 @@ const DropdownMenu = ({}) => {
   );
 };
 
+const SubNavbar = () => {
+  return (
+    <div
+      className={` z-20  mx-auto flex h-7 items-center justify-center gap-x-14  `}
+    >
+      <div className="">
+        <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
+          Ropa
+        </button>
+        <DropdownMenu />
+      </div>
+      <div>
+        <button className="p peer font-title text-sm hover:text-orange focus:text-orange">
+          Deporte
+        </button>
+        <DropdownMenu />
+      </div>
+      <div>
+        <button className="peer font-title text-sm hover:text-orange focus:text-orange">
+          Zapatos
+        </button>
+        <DropdownMenu />
+      </div>
+
+      <div>
+        <button className="peer font-title text-sm hover:text-orange focus:text-orange">
+          Accesorios
+        </button>
+        <DropdownMenu />
+      </div>
+    </div>
+  );
+};
+
 const Navbar: React.FC<NavbarProps> = ({}) => {
   const hoverUnderlineClass =
     "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
@@ -310,14 +344,20 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
       >
         <div className="flex items-center gap-x-5">
-          <Link href="/sell" className={` relative ${hoverUnderlineClass}`}>
-            <h1 className="text-lg">Vende</h1>
+          <Link
+            href="/sell"
+            className={` relative ${hoverUnderlineClass} text-lg`}
+          >
+            Vende
           </Link>
-          <Link href="/garments" className={`${hoverUnderlineClass} relative`}>
-            <h1 className="text-lg">Compra</h1>
+          <Link
+            href="/garments"
+            className={`${hoverUnderlineClass} relative text-lg`}
+          >
+            Compra
           </Link>
-          <Link href="#_" className={`${hoverUnderlineClass} relative`}>
-            <h1 className="text-lg">Nosotros</h1>
+          <Link href="#_" className={`${hoverUnderlineClass} relative text-lg`}>
+            Nosotros
           </Link>
         </div>
         <div className="absolute left-1/2 -translate-x-1/2">
@@ -336,35 +376,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           <ProfileButton />
         </div>
       </div>
-      <div
-        className={` z-20  mx-auto flex h-7 items-center justify-center gap-x-14  `}
-      >
-        <div className="">
-          <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
-            Ropa
-          </button>
-          {/* <DropdownMenu /> */}
-        </div>
-        <div>
-          <button className="p peer font-title text-sm hover:text-orange focus:text-orange">
-            Deporte
-          </button>
-          {/* <DropdownMenu /> */}
-        </div>
-        <div>
-          <button className="peer font-title text-sm hover:text-orange focus:text-orange">
-            Zapatos
-          </button>
-          {/* <DropdownMenu /> */}
-        </div>
-
-        <div>
-          <button className="peer font-title text-sm hover:text-orange focus:text-orange">
-            Accesorios
-          </button>
-          {/* <DropdownMenu /> */}
-        </div>
-      </div>
+      {/* <SubNavbar /> */}
     </div>
   );
 };
