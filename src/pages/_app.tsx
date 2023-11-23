@@ -10,6 +10,8 @@ import { Racing_Sans_One } from "next/font/google";
 import { Poppins } from "next/font/google";
 import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
 // const quicksand = Quicksand({
 //   subsets: ["latin"],
 //   variable: "--font-quicksand",
@@ -31,6 +33,10 @@ const racing = Racing_Sans_One({
   subsets: ["latin"],
   variable: "--font-fancy",
 });
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
