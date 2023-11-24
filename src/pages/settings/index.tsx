@@ -7,15 +7,29 @@ import {
   SubmitHandler,
   UseFormRegister,
   FieldValues,
+  FieldError,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { User } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { api } from "~/utils/api";
+import i18next from "i18next";
+import { zodI18nMap } from "zod-i18n-map";
+// Import your language translation files
+import translation from "zod-i18n-map/locales/es/zod.json";
+
+// lng and resources key depend on your locale.
+i18next.init({
+  lng: "es",
+  resources: {
+    es: { zod: translation },
+  },
+});
+z.setErrorMap(zodI18nMap);
 
 const ProfileFormSchema = z.object({
-  name: z.string(),
+  name: z.string().min(3),
   lastName: z.string(),
   phoneNumber: z.string(),
   email: z.string(),
@@ -35,7 +49,7 @@ const ProfileSettings = () => {
     },
   );
 
-  const { errors } = formState;
+  const { errors, isDirty } = formState;
 
   //handlers
   const onSubmit = (formValues: ProfileFormType) => {
@@ -57,36 +71,52 @@ const ProfileSettings = () => {
   //tsx
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <InputComponent label="Nombre" registerName="name" register={register} />
+      <InputComponent
+        label="Nombre"
+        registerName="name"
+        register={register}
+        error={errors.name}
+      />
       <InputComponent
         label="Apellido"
         registerName="lastName"
         register={register}
+        error={errors.lastName}
       />
       <InputComponent
         label="Teléfono"
         registerName="phoneNumber"
         register={register}
+        error={errors.phoneNumber}
       />
-      <InputComponent label="Email" registerName="email" register={register} />
+      <InputComponent
+        label="Email"
+        registerName="email"
+        register={register}
+        error={errors.email}
+      />
 
       <InputComponent
         label="Link de Google Maps"
         registerName="locationLink"
         register={register}
+        error={errors.locationLink}
       />
       <InputComponent
         label="Dirección exacta"
         registerName="exactLocation"
         register={register}
+        error={errors.exactLocation}
       />
 
-      <button
-        type="submit"
-        className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
-      >
-        Submit
-      </button>
+      {isDirty ? (
+        <button
+          type="submit"
+          className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
+        >
+          Actualizar perfil
+        </button>
+      ) : null}
     </form>
   );
 };
@@ -130,16 +160,21 @@ function InputComponent({
   label,
   updatingProfile,
   registerName,
+  error,
   register,
 }: {
   label: string;
   updatingProfile?: boolean;
   registerName: keyof ProfileFormType;
+  error: FieldError | undefined;
   register: UseFormRegister<ProfileFormType>;
 }) {
   return (
     <div className="col-span-1 flex flex-col">
-      <label htmlFor="" className="mb-1 text-xs font-medium">
+      <label
+        htmlFor=""
+        className={`${error ? "text-red-500" : null} mb-1 text-xs font-medium`}
+      >
         {label}
       </label>
       <input
@@ -149,6 +184,9 @@ function InputComponent({
         className={`rounded border
         border-blue border-opacity-10 bg-creme px-2 py-2 text-sm shadow-sm outline-none  placeholder:text-sm placeholder:tracking-tight `}
       />
+      {error ? (
+        <p className="ml-1 text-xs text-red-500">{error.message}</p>
+      ) : null}
     </div>
   );
 }
