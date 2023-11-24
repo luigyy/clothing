@@ -11,7 +11,6 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { User } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import { api } from "~/utils/api";
 import i18next from "i18next";
@@ -31,8 +30,10 @@ z.setErrorMap(zodI18nMap);
 const ProfileFormSchema = z.object({
   name: z.string().min(3),
   lastName: z.string(),
-  phoneNumber: z.string(),
-  email: z.string(),
+  phoneNumber: z.string().min(7, {
+    message: "El número de celular debe contener al menos 8 caracteres",
+  }),
+  email: z.string().email(),
   locationLink: z.string(),
   exactLocation: z.string(),
 });
@@ -41,6 +42,7 @@ type ProfileFormType = z.infer<typeof ProfileFormSchema>;
 
 const ProfileSettings = () => {
   const { data } = api.users.getCurrentUser.useQuery();
+  const updateUser = api.users.updateUser.useMutation();
 
   //useForm stuff
   const { register, handleSubmit, formState, reset } = useForm<ProfileFormType>(
@@ -49,11 +51,15 @@ const ProfileSettings = () => {
     },
   );
 
-  const { errors, isDirty } = formState;
+  const { errors, isDirty, dirtyFields } = formState;
 
   //handlers
   const onSubmit = (formValues: ProfileFormType) => {
-    console.log(formValues);
+    updateUser.mutate({
+      id: data?.id || "",
+      newLastName: formValues.lastName,
+      newName: formValues.name,
+    });
   };
 
   //set default values when user information is retrieved
@@ -88,6 +94,9 @@ const ProfileSettings = () => {
         registerName="phoneNumber"
         register={register}
         error={errors.phoneNumber}
+        inputInfo="
+ * Por favor NO INCLUIR el código de país
+        "
       />
       <InputComponent
         label="Email"
@@ -162,12 +171,14 @@ function InputComponent({
   registerName,
   error,
   register,
+  inputInfo,
 }: {
   label: string;
   updatingProfile?: boolean;
   registerName: keyof ProfileFormType;
   error: FieldError | undefined;
   register: UseFormRegister<ProfileFormType>;
+  inputInfo?: string;
 }) {
   return (
     <div className="col-span-1 flex flex-col">
@@ -184,6 +195,7 @@ function InputComponent({
         className={`rounded border
         border-blue border-opacity-10 bg-creme px-2 py-2 text-sm shadow-sm outline-none  placeholder:text-sm placeholder:tracking-tight `}
       />
+      <p className="pt-1 text-xs text-blue/40  ">{inputInfo}</p>
       {error ? (
         <p className="ml-1 text-xs text-red-500">{error.message}</p>
       ) : null}
