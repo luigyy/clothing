@@ -34,7 +34,7 @@ const ProfileButton = () => {
         {/* profile card  */}
         <div
           className={`absolute right-0 top-full z-30 hidden    bg-creme ${
-            sessionData ? "h-72" : "h-52"
+            sessionData ? "h-60" : "h-52"
           }  w-64 flex-col rounded-md   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
         >
           {/* upper  */}
@@ -43,7 +43,7 @@ const ProfileButton = () => {
               <div className="my-3">
                 {" "}
                 <Image
-                  className="mx-auto rounded-full grayscale"
+                  className="mx-auto rounded-full "
                   src={
                     sessionData?.user.image || "/default-profile-picture.jpg"
                   }
@@ -59,12 +59,12 @@ const ProfileButton = () => {
               </div>
 
               <div className="mt-5 flex flex-col gap-y-2">
-                <div className="flex flex-row items-center px-3 hover:text-orange   ">
+                <div className="flex flex-row items-center px-3 hover:text-orange ">
                   <span>
-                    {<VscAccount className="text-2xl text-orange opacity-70" />}
+                    {<CiSettings className="text-2xl text-orange opacity-70" />}
                   </span>
-                  <Link href="/profile" className="pl-2 text-sm ">
-                    Ver perfil
+                  <Link href={"/settings"} className="pl-2 text-sm ">
+                    Configuración
                   </Link>
                 </div>
                 <div className="flex flex-row items-center px-3 hover:text-orange">
@@ -75,12 +75,7 @@ const ProfileButton = () => {
                   </span>
                   <button className="pl-2 text-sm ">Ver monedero</button>
                 </div>
-                <div className="flex flex-row items-center px-3 hover:text-orange ">
-                  <span>
-                    {<CiSettings className="text-2xl text-orange opacity-70" />}
-                  </span>
-                  <button className="pl-2 text-sm ">Configuración</button>
-                </div>
+
                 <div className="flex flex-row items-center px-3 hover:text-orange ">
                   <span>
                     {

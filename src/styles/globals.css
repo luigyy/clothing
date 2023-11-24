@@ -18,9 +18,9 @@ h1 {
 }
 
 .clickable-effect:hover {
-  transform: scale(100.5%);
+  transform: scale(100.8%);
 }
 
 .clickable-effect:active {
-  transform: scale(99.5%);
+  transform: scale(99.3%);
 }
