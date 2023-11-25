@@ -1,13 +1,16 @@
 //TODO: create layout and move input componenets to components folder
 import React, { useEffect, useState } from "react";
 import { useForm, UseFormRegister, FieldError } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { usePathname } from "next/navigation";
 import { api } from "~/utils/api";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 // Import your language translation files
+import { useFormContext, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import InputComponent from "~/components/InputComponent";
 import translation from "zod-i18n-map/locales/es/zod.json";
 
 // lng and resources key depend on your locale.
@@ -37,13 +40,14 @@ const ProfileSettings = () => {
   const updateUser = api.users.updateUser.useMutation();
 
   //useForm stuff
-  const { register, handleSubmit, formState, reset } = useForm<ProfileFormType>(
-    {
-      resolver: zodResolver(ProfileFormSchema),
-    },
-  );
+  // const { register, handleSubmit, formState, reset } = useForm({
+  //   resolver: zodResolver(ProfileFormSchema),
+  // });
 
-  const { errors, isDirty, dirtyFields } = formState;
+  // const { errors, isDirty, dirtyFields } = formState;
+  const methods = useForm<ProfileFormType>({
+    resolver: zodResolver(ProfileFormSchema),
+  });
 
   //handlers
   const onSubmit = (formValues: ProfileFormType) => {
@@ -64,61 +68,57 @@ const ProfileSettings = () => {
       locationLink: data?.locationLink ?? "",
       phoneNumber: data?.phoneNumber ?? "",
     };
-    reset({ ...defaultValues });
+    methods.reset({ ...defaultValues });
   }, [data]);
   //tsx
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <InputComponent
-        label="Nombre"
-        registerName="name"
-        register={register}
-        error={errors.name}
-      />
-      <InputComponent
-        label="Apellido"
-        registerName="lastName"
-        register={register}
-        error={errors.lastName}
-      />
-      <InputComponent
-        label="Teléfono"
-        registerName="phoneNumber"
-        register={register}
-        error={errors.phoneNumber}
-        inputInfo="
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+        <InputComponent
+          label="Nombre"
+          registerName="name"
+          error={methods.formState.errors.name}
+        />
+        <InputComponent
+          label="Apellido"
+          registerName="lastName"
+          error={methods.formState.errors.lastName}
+        />
+        <InputComponent
+          label="Teléfono"
+          registerName="phoneNumber"
+          error={methods.formState.errors.phoneNumber}
+          inputInfo="
  * Por favor NO INCLUIR el código de país
         "
-      />
-      <InputComponent
-        label="Email"
-        registerName="email"
-        register={register}
-        error={errors.email}
-      />
+        />
+        <InputComponent
+          label="Email"
+          registerName="email"
+          error={methods.formState.errors.email}
+        />
 
-      <InputComponent
-        label="Link de Google Maps"
-        registerName="locationLink"
-        register={register}
-        error={errors.locationLink}
-      />
-      <InputComponent
-        label="Dirección exacta"
-        registerName="exactLocation"
-        register={register}
-        error={errors.exactLocation}
-      />
+        <InputComponent
+          label="Link de Google Maps"
+          registerName="locationLink"
+          error={methods.formState.errors.locationLink}
+        />
+        <InputComponent
+          label="Dirección exacta"
+          registerName="exactLocation"
+          error={methods.formState.errors.exactLocation}
+        />
 
-      {isDirty ? (
-        <button
-          type="submit"
-          className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
-        >
-          Actualizar perfil
-        </button>
-      ) : null}
-    </form>
+        {methods.formState.isDirty ? (
+          <button
+            type="submit"
+            className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
+          >
+            Actualizar perfil
+          </button>
+        ) : null}
+      </form>
+    </FormProvider>
   );
 };
 const Index = ({}) => {
@@ -156,44 +156,6 @@ const Index = ({}) => {
     </>
   );
 };
-
-function InputComponent({
-  label,
-  updatingProfile,
-  registerName,
-  error,
-  register,
-  inputInfo,
-}: {
-  label: string;
-  updatingProfile?: boolean;
-  registerName: keyof ProfileFormType;
-  error: FieldError | undefined;
-  register: UseFormRegister<ProfileFormType>;
-  inputInfo?: string;
-}) {
-  return (
-    <div className="col-span-1 flex flex-col">
-      <label
-        htmlFor=""
-        className={`${error ? "text-red-500" : null} mb-1 text-xs font-medium`}
-      >
-        {label}
-      </label>
-      <input
-        {...register(registerName)}
-        type="text"
-        placeholder={label}
-        className={`rounded border
-        border-blue border-opacity-10 bg-creme px-2 py-2 text-sm shadow-sm outline-none  placeholder:text-sm placeholder:tracking-tight `}
-      />
-      <p className="pt-1 text-xs text-blue/40  ">{inputInfo}</p>
-      {error ? (
-        <p className="ml-1 text-xs text-red-500">{error.message}</p>
-      ) : null}
-    </div>
-  );
-}
 
 function SelectComponent({
   label,
