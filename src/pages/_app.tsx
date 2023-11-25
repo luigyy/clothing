@@ -5,7 +5,7 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import { Antonio, Quicksand } from "next/font/google";
+import { Antonio } from "next/font/google";
 import { Racing_Sans_One } from "next/font/google";
 import { Poppins } from "next/font/google";
 import {} from "next/font/google";

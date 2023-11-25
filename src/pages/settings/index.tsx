@@ -1,14 +1,6 @@
 //TODO: create layout and move input componenets to components folder
-import { useSession } from "next-auth/react";
-import { PROVINCES_NAMES, PROVINCES_MUNICIPALITIES } from "~/constants";
 import React, { useEffect, useState } from "react";
-import {
-  useForm,
-  SubmitHandler,
-  UseFormRegister,
-  FieldValues,
-  FieldError,
-} from "react-hook-form";
+import { useForm, UseFormRegister, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { usePathname } from "next/navigation";
