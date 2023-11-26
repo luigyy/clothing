@@ -51,6 +51,7 @@ const ProfileSettings = () => {
 
   //handlers
   const onSubmit = (formValues: ProfileFormType) => {
+    return console.log(formValues);
     updateUser.mutate({
       id: data?.id || "",
       newLastName: formValues.lastName,

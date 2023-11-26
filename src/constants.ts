@@ -1,18 +1,33 @@
-export type CategoriesType =
-  | "camisas"
-  | "jeans"
-  | "abrigos"
-  | "pantalones"
-  | "shorts"
-  | "zapatos"
-  | "vestidos"
-  | "enaguas"
-  | "blusa"
-  | "accesorio";
+export const CategoriesOptions = [
+  "camisas",
+  "jeans",
+  "abrigos",
+  "pantalones",
+  "shorts",
+  "zapatos",
+  "vestidos",
+  "enaguas",
+  "blusa",
+  "accesorio",
+] as const;
 
-export type GenreType = "male" | "female";
+export type CategoriesType = (typeof CategoriesOptions)[number];
 
-export type SizeType = "3XS" | "2XS" | "XS" | "S" | "M" | "L" | "2XL" | "3XL";
+export const GenreOptions = ["male", "female"] as const;
+export type GenreType = (typeof GenreOptions)[number];
+
+export const SizeOptions = [
+  "3XS",
+  "2XS",
+  "XS",
+  "S",
+  "M",
+  "L",
+  "2XL",
+  "3XL",
+] as const;
+
+export type SizeType = (typeof SizeOptions)[number];
 
 export const USER_ROLES = {
   ADMIN: "admin",

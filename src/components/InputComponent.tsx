@@ -1,12 +1,6 @@
-import {
-  FieldError,
-  FieldValues,
-  UseFormRegister,
-  useFormContext,
-} from "react-hook-form";
-import { ProfileFormType } from "~/types";
+import { FieldError, useFormContext } from "react-hook-form";
 
-export default function InputComponent<RegisterNameType>({
+export default function InputComponent({
   label,
   registerName,
   inputInfo,
@@ -21,7 +15,6 @@ export default function InputComponent<RegisterNameType>({
   return (
     <div className="col-span-1 flex flex-col">
       <label
-        htmlFor=""
         className={`${error ? "text-red-500" : null} mb-1 text-xs font-medium`}
       >
         {label}

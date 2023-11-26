@@ -1,6 +1,15 @@
+// Don't forget the CSS: core and the UI components + plugins you are using.
+import Uppy from "@uppy/core";
+import { Dashboard } from "@uppy/react";
+
+// Don't forget the CSS: core and the UI components + plugins you are using.
+import "@uppy/core/dist/style.min.css";
+import "@uppy/dashboard/dist/style.min.css";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import SelectComponent from "~/components/SelectComponent";
 import { z } from "zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import InputComponent from "~/components/InputComponent";
 import {
@@ -8,6 +17,7 @@ import {
   GenreTypesSchema,
   CategoriesTypeSchema,
 } from "~/types";
+import { CategoriesOptions, GenreOptions, SizeOptions } from "~/constants";
 
 //types
 export const GarmentSchema = z.object({
@@ -22,21 +32,45 @@ export const GarmentSchema = z.object({
 
 export type GarmentSchemaType = z.infer<typeof GarmentSchema>;
 
+//
+const uppy = new Uppy();
+
 const CreateGarment = ({}) => {
-  //
   //useForm stuff
+  // const { register, handleSubmit, formState, reset } = useForm({
+  //   resolver: zodResolver(ProfileFormSchema),
+  // });
+
+  // const { errors, isDirty, dirtyFields } = formState;
   const methods = useForm<GarmentSchemaType>({
-    resolver: zodResolver(CategoriesTypeSchema),
+    resolver: zodResolver(GarmentSchema),
   });
 
   //handlers
   const onSubmit = (formValues: GarmentSchemaType) => {
     console.log(formValues);
   };
+  useEffect(() => {
+    const defaultValues: GarmentSchemaType = {
+      brand: "",
+      category: "abrigos",
+      current_price: "",
+      email: "",
+      genre: "female",
+      retail_price: "",
+      size: "2XL",
+    };
+    methods.reset({ ...defaultValues });
+  }, []);
+
+  //tsx
   return (
     <FormProvider {...methods}>
-      <form className="" onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className=" grid grid-cols-3  ">
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="space-y-3  px-10"
+      >
+        <div className="mt-5 grid grid-cols-3 gap-x-3 gap-y-1 ">
           <InputComponent
             label="Marca"
             registerName="brand"
@@ -52,30 +86,42 @@ const CreateGarment = ({}) => {
             registerName="retail_price"
             error={methods.formState.errors.retail_price}
           />
-          <InputComponent
+          <SelectComponent
             label="Talla"
             registerName="size"
-            error={methods.formState.errors.size}
+            options={SizeOptions}
+            // error={methods.formState.errors.size}
           />
-          <InputComponent
+          <SelectComponent
             label="Género"
             registerName="genre"
-            error={methods.formState.errors.genre}
+            options={GenreOptions}
+          />
+
+          <SelectComponent
+            label="Categoría"
+            registerName="category"
+            options={CategoriesOptions}
           />
           <InputComponent
             label="Email del vendedor"
             registerName="email"
             error={methods.formState.errors.email}
           />
-          <InputComponent
-            label="Categoría"
-            registerName="category"
-            error={methods.formState.errors.category}
-          />
         </div>
+
+        {/* uppy */}
+        <Dashboard
+          width={500}
+          height={250}
+          uppy={uppy}
+          className="mx-auto flex justify-center "
+        />
+        {/* uppy */}
+
         <button
           type="submit"
-          className="mt-5 rounded bg-blue px-3 py-2 text-sm text-creme "
+          className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
         >
           Crear prenda
         </button>
