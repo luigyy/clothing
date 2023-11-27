@@ -12,6 +12,7 @@ import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
+import { ToastContainer } from "react-toastify";
 // const quicksand = Quicksand({
 //   subsets: ["latin"],
 //   variable: "--font-quicksand",
@@ -49,6 +50,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         className={`${antonio.variable} ${poppings.variable} ${racing.variable} `}
       >
         <Component {...pageProps} />
+        <ToastContainer />
       </main>
     </SessionProvider>
   );

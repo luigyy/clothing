@@ -28,7 +28,11 @@ export default function SelectComponent({
           border-opacity-10 bg-creme p-2 text-sm shadow-sm outline-none placeholder:text-sm`}
           >
             {options.map((option) => (
-              <option value={option} disabled={options.length === 0}>
+              <option
+                value={option}
+                key={option}
+                disabled={options.length === 0}
+              >
                 {option}
               </option>
             ))}

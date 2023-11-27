@@ -79,11 +79,13 @@ const ProfileSettings = () => {
           label="Nombre"
           registerName="name"
           error={methods.formState.errors.name}
+          type="text"
         />
         <InputComponent
           label="Apellido"
           registerName="lastName"
           error={methods.formState.errors.lastName}
+          type="text"
         />
         <InputComponent
           label="Teléfono"
@@ -92,22 +94,26 @@ const ProfileSettings = () => {
           inputInfo="
  * Por favor NO INCLUIR el código de país
         "
+          type="text"
         />
         <InputComponent
           label="Email"
           registerName="email"
           error={methods.formState.errors.email}
+          type="text"
         />
 
         <InputComponent
           label="Link de Google Maps"
           registerName="locationLink"
           error={methods.formState.errors.locationLink}
+          type="text"
         />
         <InputComponent
           label="Dirección exacta"
           registerName="exactLocation"
           error={methods.formState.errors.exactLocation}
+          type="text"
         />
 
         {methods.formState.isDirty ? (

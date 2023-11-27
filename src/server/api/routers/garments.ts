@@ -1,13 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { GarmentSchema } from "~/pages/admin/create-garment";
 
-type Garment = Prisma.GarmentGetPayload<{
-  include: {
-    pictures: true;
-    _count: true;
-    likes: true;
-  };
-}>;
+const ExtendedGarmentSchema = GarmentSchema.extend({
+  pictures: z.array(z.string()),
+});
+
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -203,7 +201,43 @@ export const garmentsRouter = createTRPCRouter({
       }),
     };
   }),
-  //   getSecretMessage: protectedProcedure.query(() => {
-  //     return "you can now see this secret message!";
-  //   }),
+
+  createGarment: protectedProcedure
+    .input(ExtendedGarmentSchema)
+    .mutation(async ({ ctx, input }) => {
+      //link email to the user id
+      const userAccount = await ctx.prisma.user.findFirst({
+        where: { email: input.email },
+      });
+
+      if (!userAccount) {
+        throw Error();
+      }
+
+      //create garment
+      const garment = await ctx.prisma.garment.create({
+        data: {
+          brand: input.brand,
+          category: input.category,
+          current_price: input.current_price,
+          genre: input.genre,
+          original_price: input.current_price,
+          size: input.size,
+          retail_price: input.retail_price,
+          userId: userAccount.id,
+        },
+      });
+
+      //create pictures and attach them to recently created garment
+      input.pictures.forEach(async (pictureUrl) => {
+        await ctx.prisma.pictures.create({
+          data: { url: pictureUrl, garmentId: garment.id },
+        });
+      });
+
+      return {
+        error: false,
+        message: "Se creo la prenda en el sistema exitosamente!",
+      };
+    }),
 });

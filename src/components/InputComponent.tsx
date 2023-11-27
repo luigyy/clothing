@@ -5,11 +5,13 @@ export default function InputComponent({
   registerName,
   inputInfo,
   error,
+  type,
 }: {
   label: string;
   registerName: string;
   inputInfo?: string;
   error: FieldError | undefined;
+  type: "text" | "number";
 }) {
   const { register } = useFormContext();
   return (
@@ -20,8 +22,8 @@ export default function InputComponent({
         {label}
       </label>
       <input
-        {...register(registerName)}
-        type="text"
+        {...register(registerName, { valueAsNumber: type === "number" })}
+        type={type}
         placeholder={label}
         className={`rounded border
         border-blue border-opacity-10 bg-creme px-2 py-2 text-sm shadow-sm outline-none  placeholder:text-sm placeholder:tracking-tight `}

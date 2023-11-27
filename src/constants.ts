@@ -40,6 +40,8 @@ export interface FiltersType {
   size?: string;
 }
 
+export const DEV_CLOUDINARY_GARMENT_IMAGES_PRESET = "gign8p7d";
+
 // export const PROVINCES_NAMES = [
 //   "Alajuela",
 //   "Cartago",

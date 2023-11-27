@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Garment } from "@prisma/client";
 
 //
 export const ProfileFormSchema = z.object({
