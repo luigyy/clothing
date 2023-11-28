@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { KeyboardEvent } from "react";
 import Link from "next/link";
 import { PiHandbagSimpleLight } from "react-icons/pi";
 import { BsPerson, BsHeart } from "react-icons/bs";
@@ -6,7 +7,6 @@ import { IoSearchOutline } from "react-icons/io5";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { IoWalletOutline } from "react-icons/io5";
-import { VscAccount } from "react-icons/vsc";
 import { CiSettings } from "react-icons/ci";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { FiLogIn, FiUserPlus } from "react-icons/fi";
@@ -14,6 +14,8 @@ import { api } from "~/utils/api";
 import { BsTrash } from "react-icons/bs";
 import { Garment } from "@prisma/client";
 import ClipLoader from "react-spinners/ClipLoader";
+import { MdSearch } from "react-icons/md";
+import { useRouter } from "next/router";
 
 interface NavbarProps {}
 
@@ -331,14 +333,43 @@ const SubNavbar = () => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
+  const router = useRouter();
+
   const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
   const inputElement = useRef<HTMLInputElement>(null);
 
+  function handleEnter(e: KeyboardEvent) {
+    const link = `/search?search=${search}`;
+    if (e.key === "Enter") {
+      router.push(link);
+      setSearchBarIsOpen(false);
+    }
+  }
+
+  //autofocus input
   useEffect(() => {
     if (searchBarIsOpen) {
       inputElement.current?.focus();
     }
   });
+
+  //listen for clicks outside of input div and close it
+  useEffect(() => {
+    let handler = (e: any) => {
+      if (!inputElement.current?.contains(e.target)) {
+        setSearchBarIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  });
+
   //
   const hoverUnderlineClass =
     "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
@@ -390,19 +421,28 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         {/* search bar  */}
         <div
           placeholder="Buscar prendas"
-          onBlur={() => setSearchBarIsOpen(false)}
           className={`${
             searchBarIsOpen
               ? "  z-50 -translate-y-0"
               : "  -translate-y-full opacity-0"
-          }  absolute right-1/2 mx-auto flex w-1/2 translate-x-1/2 justify-center   transition-all duration-300 `}
+          }  grid-col-4 absolute right-1/2 mx-auto flex   w-1/3 translate-x-1/2 justify-center   transition-all duration-300 `}
         >
           <input
             ref={inputElement}
+            onKeyDown={(e) => handleEnter(e)}
+            onChange={(e) => setSearch(e.target.value)}
             type="text"
-            className="h-full w-full rounded bg-blue p-2 text-creme outline-none placeholder:text-sm placeholder:text-creme"
+            className=" h-full w-full rounded bg-blue p-2 text-creme outline-none placeholder:text-sm placeholder:text-creme"
             placeholder="Buscar prenda"
           />
+
+          <Link
+            href={`/search${search}`}
+            onFocus={() => setSearchBarIsOpen(true)}
+            className=" rounded  bg-blue px-4  text-sm"
+          >
+            <MdSearch className="text-3xl text-creme" />
+          </Link>
         </div>
       </div>
     </div>
