@@ -1,12 +1,14 @@
+import { NextComponentType } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
 
-function withAdminAuth(Component: any) {
+function withAdminAuth(Component: NextComponentType) {
   return function WithAdminAuth() {
     const router = useRouter();
     const { data: session, status } = useSession();
+    const getLayout = Component.getLayout || ((page) => page);
 
     // Add your authentication logic here
     const {
@@ -26,7 +28,7 @@ function withAdminAuth(Component: any) {
     if (isLoading) {
       return <div>loading...</div>;
     }
-    return status === "authenticated" && <Component />;
+    return status === "authenticated" && getLayout(<Component />);
   };
 }
 

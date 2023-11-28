@@ -10,8 +10,6 @@ import { Racing_Sans_One } from "next/font/google";
 import { Poppins } from "next/font/google";
 import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
-import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
 import { ToastContainer } from "react-toastify";
 // const quicksand = Quicksand({
 //   subsets: ["latin"],
@@ -35,21 +33,18 @@ const racing = Racing_Sans_One({
   variable: "--font-fancy",
 });
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <SessionProvider session={session}>
       <Navbar />
       <main
         className={`${antonio.variable} ${poppings.variable} ${racing.variable}`}
       >
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
         <ToastContainer />
       </main>
     </SessionProvider>

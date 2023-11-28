@@ -1,17 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import withAdminAuth from "./CheckAdminAuth";
+import { NextPageWithLayout } from "next";
+import Layout from "./layout";
 
-const Index = ({}) => {
-  // const router = useRouter();
-  // const { data: userIsAdmin, isLoading } = api.admin.checkAdminRole.useQuery();
-
-  // useEffect(() => {
-  //   if (!userIsAdmin) router.push("/");
-  // }, [isLoading]);
-  // if (isLoading) return <div>loading</div>;
-
-  //
-  return <div> admin page</div>;
+const Index: NextPageWithLayout = ({}) => {
+  return <div>my test</div>;
 };
+
+Index.getLayout = (page: JSX.Element) => <Layout>{page}</Layout>;
 
 export default withAdminAuth(Index);

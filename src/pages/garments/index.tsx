@@ -20,6 +20,10 @@ interface indexProps {}
 
 const Index: React.FC<indexProps> = ({}) => {
   const router = useRouter();
+  let search = router.query.search;
+  if (Array.isArray(search)) {
+    search = search[0];
+  }
 
   const [filters, setFilters] = useState<FiltersType>({
     genre: undefined,
@@ -41,15 +45,22 @@ const Index: React.FC<indexProps> = ({}) => {
   const currentPage = {
     garments: true,
   };
-  const garments = api.garments.getAll.useInfiniteQuery(
-    {
-      genre: filters.genre,
-      category: filters.category,
-      size: filters.size,
-      currentPage,
-    },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor },
-  );
+
+  //if url contains search param, use the search query, otherwise use the default query
+  const garments = search
+    ? api.garments.searchResults.useInfiniteQuery(
+        { searchQuery: search || "" },
+        { getNextPageParam: (lastpage) => lastpage.nextCursor },
+      )
+    : api.garments.getAll.useInfiniteQuery(
+        {
+          genre: filters.genre,
+          category: filters.category,
+          size: filters.size,
+          currentPage,
+        },
+        { getNextPageParam: (lastPage) => lastPage.nextCursor },
+      );
 
   //debug
   useEffect(() => {
@@ -346,21 +357,6 @@ const Index: React.FC<indexProps> = ({}) => {
           currentPage={currentPage}
         />
       </div>
-
-      {/* <div className=" grid w-3/4 grid-cols-2  gap-y-24 px-1 pt-2 sm:grid-cols-3 md:grid-cols-4">
-        {garments.data?.pages.flatMap((garment) => (
-          <GarmentCard
-            id={}
-            key={garment.id}
-            brand={garment.brand}
-            original_price={garment.current_price}
-            genre={garment.genre}
-            image_url={garment.pictures[0]?.url!}
-            size={garment.size}
-            current_price={garment.current_price}
-          />
-        ))}
-      </div> */}
     </div>
   );
 };

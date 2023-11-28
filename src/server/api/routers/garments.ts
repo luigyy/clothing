@@ -240,4 +240,56 @@ export const garmentsRouter = createTRPCRouter({
         message: "Se creo la prenda en el sistema exitosamente!",
       };
     }),
+
+  searchResults: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().optional(),
+        cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
+        searchQuery: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input: { limit = 9, cursor, searchQuery } }) => {
+      const currentUserId = ctx.session?.user.id;
+
+      const data = await ctx.prisma.garment.findMany({
+        take: limit + 1,
+        cursor: cursor ? { createdAt_id: cursor } : undefined,
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+
+        where: {
+          OR: [
+            { brand: { contains: searchQuery } },
+            { category: { contains: searchQuery } },
+          ],
+        },
+
+        include: {
+          pictures: true,
+          likes:
+            currentUserId == null
+              ? false
+              : { where: { userId: currentUserId } },
+        },
+      });
+
+      //
+      let nextCursor: typeof cursor | undefined;
+      if (data.length > limit) {
+        const nextItem = data.pop();
+        if (nextItem != null) {
+          nextCursor = { id: nextItem.id, createdAt: nextItem.createdAt };
+        }
+      }
+
+      return {
+        garments: data.map((item) => {
+          return {
+            ...item,
+            isFavorite: item.likes ? item.likes.length > 0 : false,
+          };
+        }),
+        nextCursor,
+      };
+    }),
 });

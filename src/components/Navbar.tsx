@@ -341,7 +341,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const inputElement = useRef<HTMLInputElement>(null);
 
   function handleEnter(e: KeyboardEvent) {
-    const link = `/search?search=${search}`;
+    const link = `/garments?search=${search}`;
     if (e.key === "Enter") {
       router.push(link);
       setSearchBarIsOpen(false);
@@ -351,6 +351,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   //autofocus input
   useEffect(() => {
     if (searchBarIsOpen) {
+      inputElement.current?.select();
       inputElement.current?.focus();
     }
   });
@@ -424,7 +425,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           className={`${
             searchBarIsOpen
               ? "  z-50 -translate-y-0"
-              : "  -translate-y-full opacity-0"
+              : " -z-10 -translate-y-full opacity-0"
           }  grid-col-4 absolute right-1/2 mx-auto flex   w-1/3 translate-x-1/2 justify-center   transition-all duration-300 `}
         >
           <input
@@ -437,7 +438,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           />
 
           <Link
-            href={`/search${search}`}
+            href={`/garments${search}`}
             onFocus={() => setSearchBarIsOpen(true)}
             className=" rounded  bg-blue px-4  text-sm"
           >
