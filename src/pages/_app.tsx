@@ -47,7 +47,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <Navbar />
       <main
-        className={`${antonio.variable} ${poppings.variable} ${racing.variable} `}
+        className={`${antonio.variable} ${poppings.variable} ${racing.variable}`}
       >
         <Component {...pageProps} />
         <ToastContainer />

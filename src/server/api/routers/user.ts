@@ -5,6 +5,11 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { ProfileFormSchema } from "~/types";
+
+const ExtendedProfileFormSchema = ProfileFormSchema.extend({
+  id: z.string(),
+});
 
 export const userRouter = createTRPCRouter({
   getCurrentUser: protectedProcedure.query(({ ctx }) => {
@@ -27,20 +32,20 @@ export const userRouter = createTRPCRouter({
 
   //creating thiis route
   updateUser: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        newName: z.string(),
-        newLastName: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input: { id, newName, newLastName } }) => {
-      const user = await ctx.prisma.user.findFirst({ where: { id } });
-      if (!user) return { message: "Could not find user" };
+    .input(ExtendedProfileFormSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findFirst({ where: { id: input.id } });
+      if (!user) throw Error("Could not find user");
 
       await ctx.prisma.user.update({
-        where: { id },
-        data: { name: newName, lastName: newLastName },
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          lastName: input.lastName,
+          exactLocation: input.exactLocation,
+          locationLink: input.locationLink,
+          phoneNumber: input.phoneNumber,
+        },
       });
     }),
 });

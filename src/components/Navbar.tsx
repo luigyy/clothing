@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { PiHandbagSimpleLight } from "react-icons/pi";
 import { BsPerson, BsHeart } from "react-icons/bs";
@@ -299,7 +299,7 @@ const DropdownMenu = ({}) => {
 const SubNavbar = () => {
   return (
     <div
-      className={` z-20  mx-auto flex h-7 items-center justify-center gap-x-14  `}
+      className={` relative  z-20 mx-auto flex h-7 items-center justify-center gap-x-14  `}
     >
       <div className="">
         <button className="peer relative font-title text-sm hover:text-orange focus:text-orange">
@@ -331,47 +331,80 @@ const SubNavbar = () => {
 };
 
 const Navbar: React.FC<NavbarProps> = ({}) => {
+  const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
+  const inputElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchBarIsOpen) {
+      inputElement.current?.focus();
+    }
+  });
+  //
   const hoverUnderlineClass =
     "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
   return (
-    <div className="border-b  border-zinc-200 pb-2">
-      <div
-        className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
-      >
-        <div className="flex items-center gap-x-5">
-          <Link
-            href="/sell"
-            className={` relative ${hoverUnderlineClass} text-lg`}
-          >
-            Vende
-          </Link>
-          <Link
-            href="/garments"
-            className={`${hoverUnderlineClass} relative text-lg`}
-          >
-            Compra
-          </Link>
-          <Link href="#_" className={`${hoverUnderlineClass} relative text-lg`}>
-            Nosotros
-          </Link>
+    <div className="relative overflow-x-clip">
+      {searchBarIsOpen ? (
+        <div className="absolute  z-40 h-screen w-screen bg-black/10 backdrop-blur-[1px]  "></div>
+      ) : null}
+      <div className="border-b  border-zinc-200 ">
+        <div
+          className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
+        >
+          <div className="flex items-center gap-x-5">
+            <Link
+              href="/sell"
+              className={` relative ${hoverUnderlineClass} text-lg`}
+            >
+              Vende
+            </Link>
+            <Link
+              href="/garments"
+              className={`${hoverUnderlineClass} relative text-lg`}
+            >
+              Compra
+            </Link>
+            <Link
+              href="#_"
+              className={`${hoverUnderlineClass} relative text-lg`}
+            >
+              Nosotros
+            </Link>
+          </div>
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <Link href="/" className="text-3xl">
+              <Image src="/logo-azul.png" width={130} height={130} alt="logo" />
+            </Link>
+          </div>
+          <div className="flex items-center gap-x-8">
+            <button onClick={() => setSearchBarIsOpen(!searchBarIsOpen)}>
+              <IoSearchOutline className="text-3xl" />
+            </button>
+            <Link href="/favorites">
+              <BsHeart className="text-2xl" />
+            </Link>
+            <ShoppingCartDropdown />
+            <ProfileButton />
+          </div>
         </div>
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <Link href="/" className="text-3xl">
-            <Image src="/logo-azul.png" width={130} height={130} alt="logo" />
-          </Link>
-        </div>
-        <div className="flex items-center gap-x-8">
-          <Link href="#_">
-            <IoSearchOutline className="text-3xl" />
-          </Link>
-          <Link href="/favorites">
-            <BsHeart className="text-2xl" />
-          </Link>
-          <ShoppingCartDropdown />
-          <ProfileButton />
+        {/* search bar  */}
+        <div
+          placeholder="Buscar prendas"
+          onBlur={() => setSearchBarIsOpen(false)}
+          className={`${
+            searchBarIsOpen
+              ? "  z-50 -translate-y-0"
+              : "  -translate-y-full opacity-0"
+          }  absolute right-1/2 mx-auto flex w-1/2 translate-x-1/2 justify-center   transition-all duration-300 `}
+        >
+          <input
+            ref={inputElement}
+            type="text"
+            className="h-full w-full rounded bg-blue p-2 text-creme outline-none placeholder:text-sm placeholder:text-creme"
+            placeholder="Buscar prenda"
+          />
         </div>
       </div>
-      {/* <SubNavbar /> */}
     </div>
   );
 };

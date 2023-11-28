@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { withAdminAuth } from "./Checkauth";
+import withAdminAuth from "./CheckAdminAuth";
 
 const Index = ({}) => {
   // const router = useRouter();

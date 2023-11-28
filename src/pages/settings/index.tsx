@@ -1,16 +1,19 @@
 //TODO: create layout and move input componenets to components folder
-import React, { useEffect, useState } from "react";
-import { useForm, UseFormRegister, FieldError } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePathname } from "next/navigation";
 import { api } from "~/utils/api";
+import { FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import InputComponent from "~/components/InputComponent";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Import your language translation files
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
-// Import your language translation files
-import { useFormContext, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import InputComponent from "~/components/InputComponent";
 import translation from "zod-i18n-map/locales/es/zod.json";
 
 // lng and resources key depend on your locale.
@@ -20,6 +23,7 @@ i18next.init({
     es: { zod: translation },
   },
 });
+
 z.setErrorMap(zodI18nMap);
 
 const ProfileFormSchema = z.object({
@@ -51,11 +55,19 @@ const ProfileSettings = () => {
 
   //handlers
   const onSubmit = (formValues: ProfileFormType) => {
-    return console.log(formValues);
-    updateUser.mutate({
-      id: data?.id || "",
-      newLastName: formValues.lastName,
-      newName: formValues.name,
+    //
+    function updateProfile() {
+      const result = updateUser.mutateAsync({
+        ...formValues,
+        id: data?.id || "",
+      });
+      return result;
+    }
+
+    toast.promise(updateProfile, {
+      pending: "Actualizando perfil",
+      success: "Perfil actualizado exitosamente",
+      error: "Error al actualizar el perfil",
     });
   };
 
@@ -71,6 +83,7 @@ const ProfileSettings = () => {
     };
     methods.reset({ ...defaultValues });
   }, [data]);
+
   //tsx
   return (
     <FormProvider {...methods}>

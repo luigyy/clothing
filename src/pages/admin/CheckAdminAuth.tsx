@@ -1,10 +1,12 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
 
-export function withAdminAuth(Component: any) {
+function withAdminAuth(Component: any) {
   return function WithAdminAuth() {
     const router = useRouter();
+    const { data: session, status } = useSession();
 
     // Add your authentication logic here
     const {
@@ -24,6 +26,8 @@ export function withAdminAuth(Component: any) {
     if (isLoading) {
       return <div>loading...</div>;
     }
-    return <Component />;
+    return status === "authenticated" && <Component />;
   };
 }
+
+export default withAdminAuth;

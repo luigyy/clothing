@@ -3,7 +3,7 @@ import { DEV_CLOUDINARY_GARMENT_IMAGES_PRESET } from "~/constants";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 // Import via ES Modules
-import { withAdminAuth } from "./Checkauth";
+import withAdminAuth from "./CheckAdminAuth";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import SelectComponent from "~/components/SelectComponent";
@@ -64,6 +64,7 @@ const CreateGarment = ({}) => {
 
   //handlers
   const onSubmit = async (formValues: GarmentSchemaType) => {
+    //
     function createGarmentWithData() {
       const result = createGarment.mutateAsync({
         ...formValues,
