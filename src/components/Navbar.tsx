@@ -351,7 +351,6 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   //autofocus input
   useEffect(() => {
     if (searchBarIsOpen) {
-      inputElement.current?.select();
       inputElement.current?.focus();
     }
   });
@@ -379,7 +378,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       {searchBarIsOpen ? (
         <div className="absolute  z-40 h-screen w-screen bg-black/10 backdrop-blur-[1px]  "></div>
       ) : null}
-      <div className="border-b  border-zinc-200 ">
+      <div className="shadow-sm ">
         <div
           className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
         >
@@ -438,7 +437,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           />
 
           <Link
-            href={`/garments${search}`}
+            href={`/garments?search=${search}`}
             onFocus={() => setSearchBarIsOpen(true)}
             className=" rounded  bg-blue px-4  text-sm"
           >

@@ -47,20 +47,16 @@ const Index: React.FC<indexProps> = ({}) => {
   };
 
   //if url contains search param, use the search query, otherwise use the default query
-  const garments = search
-    ? api.garments.searchResults.useInfiniteQuery(
-        { searchQuery: search || "" },
-        { getNextPageParam: (lastpage) => lastpage.nextCursor },
-      )
-    : api.garments.getAll.useInfiniteQuery(
-        {
-          genre: filters.genre,
-          category: filters.category,
-          size: filters.size,
-          currentPage,
-        },
-        { getNextPageParam: (lastPage) => lastPage.nextCursor },
-      );
+  const garments = api.garments.getAll.useInfiniteQuery(
+    {
+      genre: filters.genre,
+      category: filters.category,
+      size: filters.size,
+      searchQuery: search,
+      currentPage,
+    },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor },
+  );
 
   //debug
   useEffect(() => {

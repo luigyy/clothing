@@ -23,6 +23,8 @@ import { api } from "~/utils/api";
 import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import { NextPageWithLayout } from "next";
+import Layout from "./layout";
 
 // lng and resources key depend on your locale.
 i18next.init({
@@ -46,10 +48,7 @@ export const GarmentSchema = z.object({
 
 export type GarmentSchemaType = z.infer<typeof GarmentSchema>;
 
-const CreateGarment = ({}) => {
-  //toasts
-  const notify = () => toast("Wow so easy !");
-
+const CreateGarment: NextPageWithLayout = ({}) => {
   //
   const session = useSession();
   const email = session?.data?.user.email;
@@ -103,9 +102,9 @@ const CreateGarment = ({}) => {
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className="space-y-3 px-10  py-10"
+        className="space-y-3  px-5 py-10"
       >
-        <div className="mt-5 grid grid-cols-3 gap-x-3 gap-y-1 ">
+        <div className="mt-5 grid grid-cols-3 gap-x-3 gap-y-1  ">
           <InputComponent
             label="Marca"
             registerName="brand"
@@ -175,5 +174,7 @@ const CreateGarment = ({}) => {
     </FormProvider>
   );
 };
+
+CreateGarment.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default withAdminAuth(CreateGarment);
