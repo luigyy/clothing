@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/es/zod.json";
+import { NextPageWithLayout } from "next";
+import SettingsLayout from "./layout";
 
 // lng and resources key depend on your locale.
 i18next.init({
@@ -141,40 +143,8 @@ const ProfileSettings = () => {
     </FormProvider>
   );
 };
-const Index = ({}) => {
-  const pathname = usePathname();
-  return (
-    <>
-      <div className="px-20 py-8">
-        <h1 className=" text-2xl tracking-tight">Configuración</h1>
-        <hr className="mt-6" />
-        <div className="my-3 flex ">
-          <aside className="float-left  flex flex-col space-y-6  py-2  text-left [&>*]:px-5 [&>*]:py-2 [&>*]:text-left">
-            <button
-              className={`clickable-effect rounded  text-sm ${
-                pathname === "/settings" ? " bg-green bg-opacity-50" : ""
-              } `}
-            >
-              Perfil
-            </button>
-            <button
-              className={`clickable-effect rounded  text-sm ${
-                pathname === "/settings/monedero"
-                  ? " bg-green bg-opacity-50"
-                  : ""
-              } `}
-            >
-              Monedero
-            </button>
-          </aside>
-
-          <div className="ml-7 w-2/3 max-w-2xl  ">
-            <ProfileSettings />
-          </div>
-        </div>
-      </div>
-    </>
-  );
+const Index: NextPageWithLayout = () => {
+  return <ProfileSettings />;
 };
 
 function SelectComponent({
@@ -210,26 +180,6 @@ function SelectComponent({
   );
 }
 
-const WalletComponent = () => {
-  return (
-    <div className="relative mx-auto my-16 aspect-[1.9] w-1/2 max-w-[600px] rounded-md border border-blue bg-blue">
-      <h1 className="p-2 text-xl text-creme">Monedero virtual</h1>
-
-      <div className="mt-5">
-        <h1 className="text-center text-creme">Tu balance es</h1>
-        <p className="text-center text-4xl font-bold text-creme">30.000</p>
-      </div>
-
-      <div className="absolute bottom-2 flex h-10  w-full gap-x-3 px-2 ">
-        <button className="clickable-effect w-1/2 rounded-md bg-creme px-2 py-1 text-blue">
-          Historial
-        </button>
-        <button className="clickable-effect w-1/2 rounded bg-green px-2 py-1">
-          Retirar
-        </button>
-      </div>
-    </div>
-  );
-};
+Index.getLayout = (page) => <SettingsLayout>{page}</SettingsLayout>;
 
 export default Index;

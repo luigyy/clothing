@@ -44,6 +44,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <main
         className={`${antonio.variable} ${poppings.variable} ${racing.variable}`}
       >
+        {/* @ts-ignore */}
         {getLayout(<Component {...pageProps} />)}
         <ToastContainer />
       </main>
