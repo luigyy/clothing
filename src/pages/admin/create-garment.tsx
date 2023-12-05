@@ -62,7 +62,7 @@ const CreateGarment: NextPageWithLayout = ({}) => {
   });
 
   //handlers
-  const onSubmit = async (formValues: GarmentSchemaType) => {
+  const onSubmit = (formValues: GarmentSchemaType) => {
     //
     function createGarmentWithData() {
       const result = createGarment.mutateAsync({
@@ -156,7 +156,7 @@ const CreateGarment: NextPageWithLayout = ({}) => {
         ) : null}
         <FileUpload
           preset={DEV_CLOUDINARY_GARMENT_IMAGES_PRESET}
-          userEmail={email || ""}
+          userEmail={email ?? ""}
           imagesUrls={imagesUrls}
           setImagesFunction={setImagesUrls}
           maxNumberOfFilesAllowed={40}

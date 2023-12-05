@@ -11,8 +11,6 @@ import { AiFillHeart } from "react-icons/ai";
 import { FiHeart } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
 
-interface Props {}
-
 function MeasurementsComponent({
   left,
   right,
@@ -32,7 +30,7 @@ function MeasurementsComponent({
   );
 }
 
-const Garment: React.FC<Props> = ({}) => {
+const Garment = () => {
   //get garment id
   const { id } = useRouter().query;
 

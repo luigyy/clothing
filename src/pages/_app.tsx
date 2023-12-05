@@ -37,14 +37,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const getLayout = Component.getLayout || ((page) => page);
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <SessionProvider session={session}>
       <Navbar />
       <main
         className={`${antonio.variable} ${poppings.variable} ${racing.variable}`}
       >
-        {/* @ts-ignore */}
         {getLayout(<Component {...pageProps} />)}
         <ToastContainer />
       </main>

@@ -33,12 +33,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <ol className="flex flex-col space-y-6 py-5 ">
           <SideButton
             buttonPath="/admin"
-            currentPath={path || ""}
+            currentPath={path ?? ""}
             title="Dashboard"
           />
           <SideButton
             buttonPath="/admin/create-garment"
-            currentPath={path || ""}
+            currentPath={path ?? ""}
             title="Crear prenda"
           />
         </ol>

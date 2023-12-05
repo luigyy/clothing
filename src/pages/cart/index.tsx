@@ -11,7 +11,7 @@ const Index = ({}) => {
   const utils = api.useContext();
 
   //handler for delete button
-  async function handleDeleteFromCart(id: string) {
+  function handleDeleteFromCart(id: string) {
     setDeletingId(id);
     deleteFromCart.mutate(
       { garmentId: id },
@@ -53,11 +53,12 @@ const Index = ({}) => {
       <div className=" flex  w-[65%] flex-wrap gap-x-4  gap-y-14  pb-14 pt-2">
         {data.garments.map((garment) => (
           <CartGarmentCard
+            key={garment.id}
             brand={garment.brand}
             current_price={garment.current_price}
             genre={garment.genre}
             id={garment.id}
-            image_url={garment.pictures[0]?.url || ""}
+            image_url={garment.pictures[0]?.url ?? ""}
             isFavorite={false}
             original_price={garment.original_price}
             handleDeleteFromCart={handleDeleteFromCart}
@@ -70,6 +71,7 @@ const Index = ({}) => {
         <div className="sticky top-3  mx-auto mt-3 min-h-[200px] w-[85%] rounded-lg  ">
           {data.garments.map((garment) => (
             <ItemRow
+              key={garment.id}
               brand={garment.brand}
               current_price={garment.current_price}
               garmentId={garment.id}

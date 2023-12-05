@@ -7,8 +7,8 @@ import { api } from "~/utils/api";
 function withAdminAuth(Component: NextComponentType) {
   return function WithAdminAuth() {
     const router = useRouter();
-    const { data: session, status } = useSession();
-    const getLayout = Component.getLayout || ((page) => page);
+    const { status } = useSession();
+    const getLayout = Component.getLayout ?? ((page) => page);
 
     // Add your authentication logic here
     const {

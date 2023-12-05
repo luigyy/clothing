@@ -6,7 +6,7 @@ import XHR from "@uppy/xhr-upload";
 // Don't forget the CSS: core and the UI components + plugins you are using.
 import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
-import { useEffect, SetStateAction } from "react";
+import { useEffect } from "react";
 //
 const uppy = new Uppy().use(XHR, {
   endpoint: "https://api.cloudinary.com/v1_1/dyjoitdy2/image/upload",

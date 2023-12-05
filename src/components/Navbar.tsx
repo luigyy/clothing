@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { KeyboardEvent } from "react";
+import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { PiHandbagSimpleLight } from "react-icons/pi";
 import { BsPerson, BsHeart } from "react-icons/bs";
@@ -12,12 +12,10 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { FiLogIn, FiUserPlus } from "react-icons/fi";
 import { api } from "~/utils/api";
 import { BsTrash } from "react-icons/bs";
-import { Garment } from "@prisma/client";
+import type { Garment } from "@prisma/client";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MdSearch } from "react-icons/md";
 import { useRouter } from "next/router";
-
-interface NavbarProps {}
 
 const ProfileButton = () => {
   const { data: sessionData } = useSession();
@@ -26,7 +24,7 @@ const ProfileButton = () => {
       <div className="   relative flex items-center justify-between ">
         <button className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   ">
           <Image
-            src={sessionData?.user.image || "/default-profile-picture.jpg"}
+            src={sessionData?.user.image ?? "/default-profile-picture.jpg"}
             className=""
             width={32}
             height={32}
@@ -47,7 +45,7 @@ const ProfileButton = () => {
                 <Image
                   className="mx-auto rounded-full "
                   src={
-                    sessionData?.user.image || "/default-profile-picture.jpg"
+                    sessionData?.user.image ?? "/default-profile-picture.jpg"
                   }
                   width={40}
                   height={40}
@@ -150,7 +148,7 @@ export const ItemRow = ({
   const deleteFromCart = api.orders.deleteGarmentFromCart.useMutation();
   const utils = api.useContext();
   //handler for delete button
-  async function handleDeleteFromCart(id: string) {
+  function handleDeleteFromCart(id: string) {
     setDeletingId(id);
     deleteFromCart.mutate(
       { garmentId: id },
@@ -332,7 +330,7 @@ const SubNavbar = () => {
   );
 };
 
-const Navbar: React.FC<NavbarProps> = ({}) => {
+const Navbar = ({}) => {
   const router = useRouter();
 
   const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
@@ -357,7 +355,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
 
   //listen for clicks outside of input div and close it
   useEffect(() => {
-    let handler = (e: any) => {
+    const handler = (e: any) => {
       if (!inputElement.current?.contains(e.target)) {
         setSearchBarIsOpen(false);
       }

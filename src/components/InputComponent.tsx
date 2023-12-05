@@ -1,4 +1,5 @@
-import { FieldError, useFormContext } from "react-hook-form";
+import type { FieldError } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 export default function InputComponent({
   label,

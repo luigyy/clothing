@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { ClipLoader } from "react-spinners";
+import Image from "next/image";
 
 interface GarmentCardProps {
   brand: string;
@@ -21,7 +22,6 @@ interface GarmentCardProps {
     recommendations?: boolean;
     any?: boolean;
   };
-  showFavoriteButton: boolean;
 }
 
 const GarmentCard: React.FC<GarmentCardProps> = ({
@@ -34,7 +34,6 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   image_url,
   isFavorite,
   currentPage,
-  showFavoriteButton,
 }) => {
   //validate like the video
   //mutation
@@ -138,7 +137,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         href={`/garments/${id}`}
         className="relative mx-auto aspect-[3/4] w-[210px]   "
       >
-        <img src={image_url} className="h-full w-full object-cover" alt="" />
+        <Image src={image_url} className="h-full w-full object-cover" alt="" />
 
         <div className="absolute bottom-0 flex h-12 w-full translate-y-full items-center justify-between px-1">
           <div className="flex flex-col justify-between">
