@@ -27,7 +27,6 @@ const Recommendations = () => {
             key={garment.id}
             currentPage={currentPage}
             isFavorite={garment.isFavorite}
-            showFavoriteButton={true}
           />
         ))}
       </div>

@@ -77,8 +77,18 @@ export const ordersRouter = createTRPCRouter({
             garments: { connect: [{ id: garmentId }] },
           },
         });
-        return { message: "Created cart and added garment" };
+        return { error: false, message: "Created cart and added garment" };
       }
+
+      //check if garment is already in cart
+      const garmentIsAlreadyInCart = myOrder.garments.find(
+        (garment) => garment.id === garmentId,
+      );
+
+      if (garmentIsAlreadyInCart) {
+        return { error: true, message: "Garment already in cart" };
+      }
+
       await ctx.prisma.order.update({
         where: { id: myOrder.id },
         data: {
@@ -88,6 +98,7 @@ export const ordersRouter = createTRPCRouter({
         },
       });
 
+      return { error: false, message: "Garment added to cart successfully" };
       //
     }),
 });

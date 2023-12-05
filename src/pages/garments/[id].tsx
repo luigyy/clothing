@@ -10,6 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { AiFillHeart } from "react-icons/ai";
 import { FiHeart } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 function MeasurementsComponent({
   left,
@@ -47,7 +48,11 @@ const Garment = () => {
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
   const addToCart = api.orders.addGarmentToCart.useMutation();
+  const { data: myCart } = api.orders.getCurrentUserCart.useQuery();
+
   const utils = api.useContext();
+
+  const garmentIsInCart = myCart?.garments.find((garment) => garment.id === id);
 
   //handler for liking button
   async function handleLike() {
@@ -83,22 +88,32 @@ const Garment = () => {
     );
   }
 
-  async function handleAddToCart(garmentId: string) {
-    await addToCart.mutateAsync(
-      { garmentId },
-      {
-        onSuccess: () => {
-          utils.orders.getCurrentUserCart.setData(undefined, (oldData) => {
-            if (!oldData || !garment) return;
+  function handleAddToCart(garmentId: string) {
+    function addToCartFn() {
+      return addToCart.mutateAsync(
+        { garmentId },
+        {
+          onSuccess: (res) => {
+            if (res.error) return;
+            utils.orders.getCurrentUserCart.setData(undefined, (oldData) => {
+              if (!oldData || !garment) return;
 
-            return {
-              ...oldData,
-              garments: [...oldData.garments, garment],
-            };
-          });
+              return {
+                ...oldData,
+                garments: [...oldData.garments, garment],
+              };
+            });
+          },
         },
-      },
-    );
+      );
+    }
+
+    //toast
+    toast.promise(addToCartFn, {
+      pending: "Añadiendo al carrito",
+      success: "Añadido correctamente al carrito ",
+      error: "Error al añadir al carrito",
+    });
   }
 
   // To open the lightbox change the value of the "toggler" prop.
@@ -217,7 +232,7 @@ const Garment = () => {
                 : `₡${garment?.original_price.toLocaleString()}`}
             </span>
           </p>
-          <div className=" flex items-center gap-x-2 border-b border-blue border-opacity-50 pb-10 pt-4">
+          <div className=" flex items-center  gap-x-2 border-b border-blue border-opacity-50 pb-10 pt-4">
             <Button
               tw_text_size="text-xs"
               back_color="blue"
@@ -225,7 +240,10 @@ const Garment = () => {
               isLoading={addToCart.isLoading}
               loadingContent="Añadiendo"
               handlerFn={handleAddToCart}
-              content="Añadir al carrito"
+              content={`${
+                garmentIsInCart ? "Ya está en el bolsa" : "Añadir a la bolsa"
+              } `}
+              disabled={garmentIsInCart ? true : false}
             />
             <button
               onClick={handleLike}

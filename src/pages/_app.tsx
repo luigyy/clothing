@@ -11,6 +11,8 @@ import { Poppins } from "next/font/google";
 import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // const quicksand = Quicksand({
 //   subsets: ["latin"],
 //   variable: "--font-quicksand",

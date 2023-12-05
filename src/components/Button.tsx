@@ -6,21 +6,21 @@ function AsignColor(
 ) {
   if (place === "middle") {
     if (color === "blue") {
-      return "border-blue group-hover:bg-blue ";
+      return "border-blue  group-hover:bg-blue ";
     } else if (color === "green") {
-      return "border-green group-hover:bg-green";
+      return "border-green  group-hover:bg-green";
     } else {
-      return "border-orange group-hover:bg-orange";
+      return "border-orange  group-hover:bg-orange";
     }
   }
 
   if (place === "top") {
     if (color === "blue") {
-      return "bg-blue";
+      return " bg-blue";
     } else if (color === "green") {
-      return "bg-green";
+      return " bg-green";
     } else {
-      return "bg-orange";
+      return " bg-orange";
     }
   }
 
@@ -30,7 +30,7 @@ function AsignColor(
     } else if (color === "green") {
       return "text-green";
     } else {
-      return "group-hover:text-creme text-orange";
+      return " group-hover:text-creme text-orange";
     }
   }
 }
@@ -42,6 +42,7 @@ interface ButtonProps {
   isLoading?: boolean;
   loadingContent?: string;
   handlerFn?: (id: string) => void;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -52,11 +53,13 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   loadingContent,
   handlerFn,
+  disabled,
 }) => {
   return (
     <button
       className="inline-block items-center justify-center "
       onClick={() => (handlerFn && id ? handlerFn(id) : null)}
+      disabled={disabled}
     >
       <div className="group relative inline-block px-6 py-2 font-medium">
         <span

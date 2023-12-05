@@ -21,8 +21,6 @@ import { useSession } from "next-auth/react";
 import translation from "zod-i18n-map/locales/es/zod.json";
 import { api } from "~/utils/api";
 import { toast } from "react-toastify";
-
-import "react-toastify/dist/ReactToastify.css";
 import { NextPageWithLayout } from "next";
 import Layout from "./layout";
 
@@ -77,12 +75,6 @@ const CreateGarment: NextPageWithLayout = ({}) => {
       success: "Prenda creada exitosamente",
       error: "Error cuando se creaba la prenda",
     });
-
-    // if (imagesUrls.length === 0) return;
-    // const result = await createGarment.mutateAsync({
-    //   ...formValues,
-    //   pictures: imagesUrls,
-    // });
   };
   useEffect(() => {
     const defaultValues: GarmentSchemaType = {

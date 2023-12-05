@@ -48,7 +48,13 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         href={`/garments/${id}`}
         className="relative mx-auto aspect-[3/4] w-[210px]   "
       >
-        <Image src={image_url} className="h-full w-full object-cover" alt="" />
+        <Image
+          height={250}
+          width={250}
+          src={image_url}
+          className="h-full w-full object-cover"
+          alt=""
+        />
 
         <div className="absolute bottom-0 flex h-12 w-full translate-y-full items-center justify-between px-1">
           <div className="flex flex-col justify-between">
