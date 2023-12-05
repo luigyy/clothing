@@ -7,7 +7,7 @@ import {
 } from "~/server/api/trpc";
 
 export const ordersRouter = createTRPCRouter({
-  getCurrentUserCart: publicProcedure.query(async ({ ctx }) => {
+  getCurrentUserCart: protectedProcedure.query(async ({ ctx }) => {
     //get user
     const currentUserId = ctx.session?.user.id;
     const order = await ctx.prisma.order.findFirst({
