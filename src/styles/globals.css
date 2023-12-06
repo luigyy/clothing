@@ -8,13 +8,12 @@ html {
 
 p,
 span,
-button,
 li {
   @apply font-text;
 }
 
 h1 {
-  @apply font-title font-extrabold;
+  @apply font-title text-lg font-extrabold;
 }
 
 .clickable-effect:hover {
@@ -23,4 +22,10 @@ h1 {
 
 .clickable-effect:active {
   transform: scale(99.3%);
+}
+
+.btn {
+  @apply rounded border border-blue bg-blue px-3 py-2 font-text text-sm text-creme transition-transform duration-200
+  hover:scale-[102.6%]
+  active:scale-[97.4%];
 }

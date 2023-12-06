@@ -5,10 +5,9 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import { Antonio } from "next/font/google";
+import { Antonio, Nunito } from "next/font/google";
 import { Racing_Sans_One } from "next/font/google";
 import { Poppins } from "next/font/google";
-import {} from "next/font/google";
 import Navbar from "~/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,15 +18,20 @@ import "react-toastify/dist/ReactToastify.css";
 //   weight: ["400"],
 // });
 
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-title",
+});
+
 const poppings = Poppins({
   subsets: ["latin"],
   variable: "--font-text",
   weight: ["400"],
 });
-const antonio = Antonio({
-  subsets: ["latin"],
-  variable: "--font-title",
-});
+// const antonio = Antonio({
+//   subsets: ["latin"],
+//   variable: "--font-title",
+// });
 
 const racing = Racing_Sans_One({
   weight: ["400"],
@@ -42,10 +46,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <SessionProvider session={session}>
-      <Navbar />
       <main
-        className={`${antonio.variable} ${poppings.variable} ${racing.variable}`}
+        className={`${nunito.variable} ${poppings.variable} ${racing.variable}`}
       >
+        <Navbar />
         {getLayout(<Component {...pageProps} />)}
         <ToastContainer />
       </main>

@@ -132,10 +132,7 @@ const ProfileSettings = () => {
         />
 
         {methods.formState.isDirty ? (
-          <button
-            type="submit"
-            className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
-          >
+          <button className="btn" type="submit">
             Actualizar perfil
           </button>
         ) : null}
@@ -146,39 +143,6 @@ const ProfileSettings = () => {
 const Index: NextPageWithLayout = () => {
   return <ProfileSettings />;
 };
-
-function SelectComponent({
-  label,
-  updatingProfile,
-  options,
-  handlerFn,
-}: {
-  label: string;
-  updatingProfile: boolean;
-  options: string[];
-  handlerFn: (label: string) => void;
-}) {
-  return (
-    <div className="flex flex-col">
-      <label htmlFor="countries" className=" text-sm text-orange">
-        {label}
-      </label>
-      <select
-        id="countries"
-        className={`rounded ${
-          updatingProfile ? "border border-blue " : "border bg-zinc-50"
-        }  border-opacity-25 bg-creme px-2 py-1 text-sm outline-none placeholder:text-sm`}
-        onChange={(e) => handlerFn(e.target.value)}
-      >
-        {options.map((option) => (
-          <option value={option} disabled={options.length === 0}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
 
 Index.getLayout = (page) => <SettingsLayout>{page}</SettingsLayout>;
 

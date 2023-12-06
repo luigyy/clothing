@@ -16,13 +16,18 @@ import type { Garment } from "@prisma/client";
 import ClipLoader from "react-spinners/ClipLoader";
 import { MdSearch } from "react-icons/md";
 import { useRouter } from "next/router";
+import useOnClickOutside from "./useOnClickOutside";
 
 const ProfileButton = () => {
   const { data: sessionData } = useSession();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
     <>
       <div className="   relative flex items-center justify-between ">
-        <button className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   ">
+        <button
+          className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   "
+          onClick={() => setDropdownOpen(true)}
+        >
           <Image
             src={sessionData?.user.image ?? "/default-profile-picture.jpg"}
             className=""
@@ -32,100 +37,103 @@ const ProfileButton = () => {
           />
         </button>
         {/* profile card  */}
-        <div
-          className={`absolute right-0 top-full z-30 hidden    bg-creme ${
-            sessionData ? "h-60" : "h-52"
-          }  w-64 flex-col rounded-md   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
-        >
-          {/* upper  */}
-          {sessionData ? (
-            <>
-              <div className="my-3">
-                {" "}
-                <Image
-                  className="mx-auto rounded-full "
-                  src={
-                    sessionData?.user.image ?? "/default-profile-picture.jpg"
-                  }
-                  width={40}
-                  height={40}
-                  alt="Profile image"
-                />
-                <h1 className="text-center">{sessionData?.user.name}</h1>
-                <p className="text-center text-xs  ">
+
+        {dropdownOpen ? (
+          <div
+            className={`absolute right-0 top-full z-30 hidden w-64 flex-col rounded-md bg-creme pb-5   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
+          >
+            {/* upper  */}
+            {sessionData ? (
+              <>
+                <div className="my-3">
                   {" "}
-                  {sessionData?.user.email}{" "}
-                </p>
-              </div>
-
-              <div className="mt-5 flex flex-col gap-y-2">
-                <div className="flex flex-row items-center px-3 hover:text-orange ">
-                  <span>
-                    {<CiSettings className="text-2xl text-orange opacity-70" />}
-                  </span>
-                  <Link href={"/settings"} className="pl-2 text-sm ">
-                    Configuración
-                  </Link>
-                </div>
-                <div className="flex flex-row items-center px-3 hover:text-orange">
-                  <span>
-                    {
-                      <IoWalletOutline className="text-2xl text-orange opacity-70" />
+                  <Image
+                    className="mx-auto rounded-full "
+                    src={
+                      sessionData?.user.image ?? "/default-profile-picture.jpg"
                     }
-                  </span>
-                  <button className="pl-2 text-sm ">Ver monedero</button>
+                    width={40}
+                    height={40}
+                    alt="Profile image"
+                  />
+                  <h1 className="text-center">{sessionData?.user.name}</h1>
+                  <p className="text-center text-xs  ">
+                    {" "}
+                    {sessionData?.user.email}{" "}
+                  </p>
                 </div>
 
-                <div className="flex flex-row items-center px-3 hover:text-orange ">
-                  <span>
-                    {
-                      <IoIosHelpCircleOutline className="text-2xl text-orange opacity-70" />
-                    }
-                  </span>
-                  <button
-                    className="pl-2 text-sm "
-                    onClick={() => void signOut()}
-                  >
-                    Cerrar sesión
-                  </button>
+                <div className="mt-5 flex flex-col gap-y-2">
+                  <div className="flex flex-row items-center px-3 hover:text-orange ">
+                    <span>
+                      {
+                        <CiSettings className="text-2xl text-orange opacity-70" />
+                      }
+                    </span>
+                    <Link href={"/settings"} className="pl-2 text-sm ">
+                      Configuración
+                    </Link>
+                  </div>
+                  <div className="flex flex-row items-center px-3 hover:text-orange">
+                    <span>
+                      {
+                        <IoWalletOutline className="text-2xl text-orange opacity-70" />
+                      }
+                    </span>
+                    <button className="pl-2 text-sm ">Ver monedero</button>
+                  </div>
+
+                  <div className="flex flex-row items-center px-3 hover:text-orange ">
+                    <span>
+                      {
+                        <IoIosHelpCircleOutline className="text-2xl text-orange opacity-70" />
+                      }
+                    </span>
+                    <button
+                      className="pl-2 text-sm "
+                      onClick={() => void signOut()}
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="mt-5 ">
+                <span>
+                  {
+                    <BsPerson className="mx-auto text-center text-3xl text-orange" />
+                  }
+                  <h1 className="text-center text-lg">No estás logueado</h1>
+                </span>
+                <div className="flex flex-col gap-y-4 ">
+                  <div className="mt-5 flex items-center  px-2">
+                    <div>
+                      <FiLogIn className="text-2xl text-orange" />
+                    </div>
+                    <button
+                      className="pl-3 text-sm  hover:text-orange "
+                      onClick={() => signIn()}
+                    >
+                      Iniciar sesión
+                    </button>
+                  </div>
+                  <div className="flex items-center px-2">
+                    <div>
+                      <FiUserPlus className="ml-1 text-2xl text-orange" />
+                    </div>
+                    <button
+                      className="pl-2 text-sm  hover:text-orange "
+                      onClick={() => signIn()}
+                    >
+                      Registrarse
+                    </button>
+                  </div>
                 </div>
               </div>
-            </>
-          ) : (
-            <div className="mt-5 ">
-              <span>
-                {
-                  <BsPerson className="mx-auto text-center text-3xl text-orange" />
-                }
-                <h1 className="text-center text-lg">No estás logueado</h1>
-              </span>
-              <div className="flex flex-col gap-y-4 ">
-                <div className="mt-5 flex items-center  px-2">
-                  <div>
-                    <FiLogIn className="text-2xl text-orange" />
-                  </div>
-                  <button
-                    className="pl-3 text-sm  hover:text-orange "
-                    onClick={() => signIn()}
-                  >
-                    Iniciar sesión
-                  </button>
-                </div>
-                <div className="flex items-center px-2">
-                  <div>
-                    <FiUserPlus className="ml-1 text-2xl text-orange" />
-                  </div>
-                  <button
-                    className="pl-2 text-sm  hover:text-orange "
-                    onClick={() => signIn()}
-                  >
-                    Registrarse
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        ) : null}
       </div>
     </>
   );
@@ -193,6 +201,7 @@ export const ItemRow = ({
 const ShoppingCartDropdown = () => {
   const { data } = api.orders.getCurrentUserCart.useQuery();
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   //
   function calculateTotal(garments: Garment[] | null | undefined) {
     if (!garments) return 0;
@@ -207,20 +216,32 @@ const ShoppingCartDropdown = () => {
   useEffect(() => {
     setCartTotal(calculateTotal(data?.garments));
   }, [data]);
+
+  const ref = useRef(null);
+
+  const handleClickOutside = () => {
+    setDropdownOpen(false);
+  };
+
+  useOnClickOutside(ref, handleClickOutside);
+
   return (
-    <div className="relative mt-1 ">
+    <div ref={ref} className="relative mt-1 ">
       <button className="peer ">
-        <PiHandbagSimpleLight className="text-3xl" />
+        <PiHandbagSimpleLight
+          className="text-3xl"
+          onClick={() => setDropdownOpen(true)}
+        />
         {cartTotal != 0 ? (
-          <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center text-[10px] text-creme">
+          <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center font-text text-[10px] text-creme">
             {`₡${cartTotal.toLocaleString()}`}
           </span>
         ) : null}
       </button>
-      {data?.garments.length ? (
+      {data?.garments.length && dropdownOpen ? (
         <div
           className={`absolute right-0 top-full z-30  hidden ${
-            data?.garments.length ? "min-h-32" : "h-20 text-sm text-opacity-50"
+            data?.garments.length ? "" : "text-sm text-opacity-50"
           }  w-64  flex-col rounded-md bg-creme   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
         >
           <h1 className="pb-3 pt-2 text-center text-sm">Tus pedidos</h1>

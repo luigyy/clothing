@@ -158,7 +158,7 @@ const CreateGarment: NextPageWithLayout = ({}) => {
         <button
           type="submit"
           disabled={imagesUrls.length === 0}
-          className="clickable-effect rounded bg-blue px-5 py-2 text-sm text-creme"
+          className="btn"
         >
           Crear prenda
         </button>
