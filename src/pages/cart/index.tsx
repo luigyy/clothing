@@ -84,9 +84,7 @@ const Index = ({}) => {
             <h1>Total</h1>
             <p className="text-sm font-semibold">{`₡${cartTotal.toLocaleString()}`}</p>
           </div>
-          <button className="mx-auto mt-3 flex w-[95%] items-center justify-center rounded-md bg-blue px-3 py-1 text-center text-creme">
-            Ir a pagar
-          </button>
+          <button className="btn mx-1 my-4 w-full">Ir a pagar</button>
         </div>
       </div>
     </div>

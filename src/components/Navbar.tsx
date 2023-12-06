@@ -21,12 +21,21 @@ import useOnClickOutside from "./useOnClickOutside";
 const ProfileButton = () => {
   const { data: sessionData } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const ref = useRef(null);
+
+  const handleClickOutside = () => {
+    setDropdownOpen(false);
+  };
+
+  useOnClickOutside(ref, handleClickOutside);
+
   return (
     <>
-      <div className="   relative flex items-center justify-between ">
+      <div ref={ref} className="   relative flex items-center justify-between ">
         <button
           className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   "
-          onClick={() => setDropdownOpen(true)}
+          onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <Image
             src={sessionData?.user.image ?? "/default-profile-picture.jpg"}
@@ -40,7 +49,7 @@ const ProfileButton = () => {
 
         {dropdownOpen ? (
           <div
-            className={`absolute right-0 top-full z-30 hidden w-64 flex-col rounded-md bg-creme pb-5   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
+            className={`absolute right-0 top-full z-30 flex  w-64 flex-col rounded-md bg-creme   pb-5 shadow-2xl ring-1 ring-orange ring-opacity-30`}
           >
             {/* upper  */}
             {sessionData ? (
@@ -179,7 +188,10 @@ export const ItemRow = ({
   return (
     <>
       <div className="flex items-center justify-between  px-3 py-1 hover:text-orange">
-        <button onClick={() => handleDeleteFromCart(garmentId)}>
+        <button
+          className="transition-all duration-200 hover:scale-105"
+          onClick={() => handleDeleteFromCart(garmentId)}
+        >
           {isDeleting ? (
             <ClipLoader color="#d8690e" size={23} />
           ) : (
@@ -230,7 +242,7 @@ const ShoppingCartDropdown = () => {
       <button className="peer ">
         <PiHandbagSimpleLight
           className="text-3xl"
-          onClick={() => setDropdownOpen(true)}
+          onClick={() => setDropdownOpen(!dropdownOpen)}
         />
         {cartTotal != 0 ? (
           <span className="min-w-7 absolute -top-2 left-5 flex h-4 items-center justify-center rounded-[4px] bg-orange px-2 py-1 text-center font-text text-[10px] text-creme">
@@ -240,9 +252,9 @@ const ShoppingCartDropdown = () => {
       </button>
       {data?.garments.length && dropdownOpen ? (
         <div
-          className={`absolute right-0 top-full z-30  hidden ${
+          className={`absolute right-0 top-full z-30  px-3 pb-3  ${
             data?.garments.length ? "" : "text-sm text-opacity-50"
-          }  w-64  flex-col rounded-md bg-creme   shadow-2xl ring-1 ring-orange ring-opacity-30 hover:flex peer-hover:flex  peer-focus:flex`}
+          }  flex  w-64 flex-col rounded-md   bg-creme shadow-2xl ring-1 ring-orange ring-opacity-30`}
         >
           <h1 className="pb-3 pt-2 text-center text-sm">Tus pedidos</h1>
           <>
@@ -259,7 +271,8 @@ const ShoppingCartDropdown = () => {
               ))}
             </div>
             <Link
-              className="mx-auto mb-3 w-[90%] rounded-md bg-blue text-center text-creme"
+              onClick={() => setDropdownOpen(false)}
+              className="btn "
               href={"/cart"}
             >
               Ir al carrito

@@ -128,9 +128,9 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
         {toggleLike.isLoading ? (
           <ClipLoader color="#93a571" size={23} />
         ) : isFavorite ? (
-          <AiFillHeart className="h-6 w-6 text-green" />
+          <AiFillHeart className="h-6 w-6 text-green transition-all duration-200 hover:scale-110" />
         ) : (
-          <FiHeart className="h-6 w-6 text-green" />
+          <FiHeart className="h-6 w-6 text-green transition-all duration-200 hover:scale-110" />
         )}
       </button>
       <Link

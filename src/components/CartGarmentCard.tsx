@@ -35,7 +35,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
     <div className="relative mx-auto aspect-[3/4] w-[180px]">
       <button
         onClick={() => handleDeleteFromCart(id)}
-        className="absolute right-3 top-3 z-10 inline-block "
+        className="absolute right-3 top-3 z-10 inline-block transition-all duration-200 hover:scale-110 "
         disabled={deletingId === id}
       >
         {deletingId === id ? (
