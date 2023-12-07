@@ -2,22 +2,20 @@ import { NextPageWithLayout } from "next";
 import SettingsLayout from "./layout";
 
 const WalletComponent: NextPageWithLayout = () => {
+  const balance = 13500;
+  const retainedBalance = [5500, 6500, 1575];
   return (
-    <div className="relative mx-auto my-16 aspect-[1.9] w-1/2 max-w-[600px] rounded-md border border-blue bg-blue">
-      <h1 className="p-2 text-xl text-creme">Monedero virtual</h1>
+    <div className="">
+      <h1 className="mb-5 border-b pb-5 text-2xl">Monedero</h1>
+      {/* total balance  */}
+      <div className="rounded-md border bg-blue  p-5 text-creme">
+        <h1 className="text-lg font-semibold">Balance total</h1>
 
-      <div className="mt-5">
-        <h1 className="text-center text-creme">Tu balance es</h1>
-        <p className="text-center text-4xl font-bold text-creme">30.000</p>
+        <h1 className="py-7 text-4xl font-bold">₡{balance.toLocaleString()}</h1>
       </div>
-
-      <div className="absolute bottom-2 flex h-10  w-full gap-x-3 px-2 ">
-        <button className="clickable-effect w-1/2 rounded-md bg-creme px-2 py-1 text-blue">
-          Historial
-        </button>
-        <button className="clickable-effect w-1/2 rounded bg-green px-2 py-1">
-          Retirar
-        </button>
+      {/* saldo retenido */}
+      <div className="py-7">
+        <h1 className="text-lg font-semibold">Saldo retenido</h1>
       </div>
     </div>
   );
