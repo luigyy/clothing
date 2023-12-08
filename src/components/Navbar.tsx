@@ -410,7 +410,7 @@ const Navbar = ({}) => {
       {searchBarIsOpen ? (
         <div className="absolute  z-40 h-screen w-screen bg-black/10 backdrop-blur-[1px]  "></div>
       ) : null}
-      <div className="shadow-sm ">
+      <div className=" ">
         <div
           className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
         >

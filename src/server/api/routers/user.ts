@@ -30,6 +30,12 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
+  getUser: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(({ ctx, input: { userId } }) => {
+      return ctx.prisma.user.findFirst({ where: { id: userId } });
+    }),
+
   //creating thiis route
   updateUser: protectedProcedure
     .input(ExtendedProfileFormSchema)

@@ -47,7 +47,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <main
-        className={`${nunito.variable} ${poppings.variable} ${racing.variable}`}
+        className={`${nunito.variable} ${poppings.variable} ${racing.variable} mx-auto max-w-7xl `}
       >
         <Navbar />
         {getLayout(<Component {...pageProps} />)}

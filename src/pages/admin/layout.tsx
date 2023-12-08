@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex">
       {/* sidebar */}
-      <aside className="sticky top-0 h-screen w-48 border-r border-blue/5  px-7  py-5 ">
+      <aside className="sticky top-0 h-screen w-48 border-r border-blue/5 px-7 py-5  2xl:px-0  2xl:pr-7 ">
         <h1 className="text-xl">Admin</h1>
         <ol className="flex flex-col space-y-6 py-5 ">
           <SideButton

@@ -13,10 +13,6 @@ const WalletComponent: NextPageWithLayout = () => {
 
         <h1 className="py-7 text-4xl font-bold">₡{balance.toLocaleString()}</h1>
       </div>
-      {/* saldo retenido */}
-      <div className="py-7">
-        <h1 className="text-lg font-semibold">Saldo retenido</h1>
-      </div>
     </div>
   );
 };

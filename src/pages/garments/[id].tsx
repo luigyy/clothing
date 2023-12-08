@@ -10,7 +10,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { AiFillHeart } from "react-icons/ai";
 import { FiHeart } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
+import Image from "next/image";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 function MeasurementsComponent({
   left,
@@ -163,8 +165,10 @@ const Garment = () => {
               onClick={() => setToggler((prev) => !prev)}
               className="h-1/4 overflow-hidden rounded-md"
             >
-              <img
-                src={garment?.pictures[0]!.url}
+              <Image
+                width={400}
+                height={400}
+                src={garment?.pictures[0]!.url ?? ""}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -173,8 +177,10 @@ const Garment = () => {
               onClick={() => setToggler((prev) => !prev)}
               className="h-1/4 overflow-hidden rounded-md"
             >
-              <img
-                src={garment?.pictures[0]!.url}
+              <Image
+                width={400}
+                height={400}
+                src={garment?.pictures[0]!.url ?? ""}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -183,8 +189,10 @@ const Garment = () => {
               onClick={() => setToggler((prev) => !prev)}
               className="h-1/4 overflow-hidden rounded-md"
             >
-              <img
-                src={garment?.pictures[0]!.url}
+              <Image
+                width={400}
+                height={400}
+                src={garment?.pictures[0]!.url ?? ""}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -193,8 +201,10 @@ const Garment = () => {
               onClick={() => setToggler((prev) => !prev)}
               className="h-1/4 overflow-hidden rounded-md shadow-2xl"
             >
-              <img
-                src={garment?.pictures[0]!.url}
+              <Image
+                width={400}
+                height={400}
+                src={garment?.pictures[0]!.url ?? ""}
                 className="h-full  w-full object-cover"
                 alt=""
               />
@@ -216,9 +226,12 @@ const Garment = () => {
         <div className="mx-auto w-[45%] rounded-lg border border-blue px-10 py-10  ">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl">{garment?.brand}</h1>
-            <span className="text-xs text-orange underline">
+            <Link
+              href={`/user/${garment?.userId}`}
+              className="text-xs text-orange underline"
+            >
               {garment?.user.name}
-            </span>
+            </Link>
           </div>
           <span className="inline text-sm">
             Talla: {garment?.size}/

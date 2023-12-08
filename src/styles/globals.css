@@ -29,3 +29,8 @@ h1 {
   hover:scale-[102.6%]
   active:scale-[97.4%];
 }
+
+/* x padding for homepage  */
+.custom-x-padding {
+  @apply px-10 2xl:px-0;
+}
