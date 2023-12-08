@@ -14,6 +14,27 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
+const LoadingSkeleton = () => {
+  return (
+    <div className="flex px-32 py-5">
+      {/* left  */}
+      <div className="sticky top-5 flex h-[475px] w-1/2 justify-evenly  ">
+        <div className="flex w-1/6 flex-col  gap-y-1 py-1 ">
+          <Skeleton height={475} />
+        </div>
+        <div className="w-4/6">
+          <Skeleton height={475} />
+        </div>
+      </div>
+      {/* end left */}
+
+      <div className="mx-auto w-[45%]  px-10   ">
+        <Skeleton height={475} />
+      </div>
+    </div>
+  );
+};
+
 function MeasurementsComponent({
   left,
   right,
@@ -34,27 +55,49 @@ function MeasurementsComponent({
 }
 
 const Garment = () => {
-  //get garment id
-  const { id } = useRouter().query;
-
-  //error handling
-  if (!id || id instanceof Array) {
-    return <div>Redirect...</div>;
-  }
-  //query garment with garment id
-  const { data: myData, isLoading } = api.garments.getOne.useQuery({
-    id: id,
-  });
-  const garment = myData?.garment;
+  // To open the lightbox change the value of the "toggler" prop.
+  const [toggler, setToggler] = useState(false);
+  // array of pictures for lightbox
+  const [picturesUrls, setPicturesUrls] = useState<string[]>([]);
 
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
   const addToCart = api.orders.addGarmentToCart.useMutation();
   const { data: myCart } = api.orders.getCurrentUserCart.useQuery();
-
   const utils = api.useContext();
 
+  //get garment id
+  let { id } = useRouter().query;
+  if (Array.isArray(id)) {
+    id = id[0];
+  }
+
+  //query garment with garment id
+  const { data: garmentData, isLoading } = api.garments.getOne.useQuery({
+    id: id ?? "",
+  });
+  const garment = garmentData?.garment;
+
+  //populate array of pictures
+  useEffect(() => {
+    if (garment) {
+      let tempArray: string[] = [];
+      garment?.pictures.forEach((picture) => {
+        tempArray.push(picture.url);
+      });
+      setPicturesUrls(tempArray);
+    }
+  }, [garment]);
+
   const garmentIsInCart = myCart?.garments.find((garment) => garment.id === id);
+
+  if (!garmentData && !isLoading) {
+    return <div>garment not found</div>;
+  }
+  if (isLoading) {
+    //show skeleton on loading
+    return <LoadingSkeleton />;
+  }
 
   //handler for liking button
   async function handleLike() {
@@ -118,43 +161,6 @@ const Garment = () => {
     });
   }
 
-  // To open the lightbox change the value of the "toggler" prop.
-  const [toggler, setToggler] = useState(false);
-
-  // array of pictures for lightbox
-  const [picturesUrls, setPicturesUrls] = useState<string[]>([]);
-
-  //populate array of pictures
-  useEffect(() => {
-    let tempArray: string[] = [];
-    garment?.pictures.forEach((picture) => {
-      tempArray.push(picture.url);
-    });
-    setPicturesUrls(tempArray);
-  }, [garment]);
-
-  //show skeleton on loading
-  if (isLoading) {
-    return (
-      <div className="flex px-32 py-5">
-        {/* left  */}
-        <div className="sticky top-5 flex h-[475px] w-1/2 justify-evenly  ">
-          <div className="flex w-1/6 flex-col  gap-y-1 py-1 ">
-            <Skeleton height={475} />
-          </div>
-          <div className="w-4/6">
-            <Skeleton height={475} />
-          </div>
-        </div>
-        {/* end left */}
-
-        <div className="mx-auto w-[45%]  px-10   ">
-          <Skeleton height={475} />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className=" px-32 py-5">
       <div className="flex  ">
@@ -215,8 +221,10 @@ const Garment = () => {
             onClick={() => setToggler((prev) => !prev)}
             className=" w-4/6 "
           >
-            <img
-              src={garment?.pictures[0]!.url}
+            <Image
+              src={garment?.pictures[0]!.url ?? ""}
+              height={400}
+              width={400}
               className="h-full  w-full object-cover"
               alt=""
             />
@@ -265,7 +273,7 @@ const Garment = () => {
             >
               {toggleLike.isLoading ? (
                 <ClipLoader color="#93a571" size={23} />
-              ) : myData?.isFavorite ? (
+              ) : garmentData?.isFavorite ? (
                 <AiFillHeart className="text-2xl text-green" />
               ) : (
                 <FiHeart className="text-2xl text-green" />

@@ -141,9 +141,10 @@ export const garmentsRouter = createTRPCRouter({
               : { where: { userId: currentUserId } },
         },
       });
+      if (!data) return null;
       // return data;
-      const isFavorite = data?.likes && data?.likes.length > 0;
-      return { garment: { ...data! }, isFavorite };
+      const isFavorite = data.likes && data.likes.length > 0;
+      return { garment: { ...data }, isFavorite };
     }),
   getFavorites: protectedProcedure.query(async ({ ctx }) => {
     const currentUserId = ctx.session?.user.id;
