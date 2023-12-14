@@ -30,6 +30,11 @@ h1 {
   active:scale-[97.4%];
 }
 
+.click-effect {
+  @apply hover:scale-[101.8%]
+  active:scale-[97.3%];
+}
+
 /* x padding for homepage  */
 .custom-x-padding {
   @apply px-10 2xl:px-0;

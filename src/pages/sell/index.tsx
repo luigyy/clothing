@@ -1,9 +1,8 @@
 import React from "react";
 import Button from "../../components/Button";
+import Link from "next/link";
 
-interface vendeProps {}
-
-const Vende: React.FC<vendeProps> = ({}) => {
+const Sell = () => {
   return (
     <div>
       {/* hero section  */}
@@ -14,11 +13,13 @@ const Vende: React.FC<vendeProps> = ({}) => {
         <h1 className="font-racing mb-5 text-center text-6xl uppercase">
           Una segunda oportunidad
         </h1>
-        <Button
-          back_color="orange"
-          content="Agendar recolecta"
-          tw_text_size={""}
-        />
+        <Link href="/sell/schedule-form">
+          <Button
+            back_color="orange"
+            content="Agendar recolecta"
+            tw_text_size={""}
+          />
+        </Link>
       </div>
 
       {/* como funciona  */}
@@ -85,4 +86,4 @@ const Vende: React.FC<vendeProps> = ({}) => {
   );
 };
 
-export default Vende;
+export default Sell;

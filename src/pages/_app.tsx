@@ -1,22 +1,17 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-
 import { api } from "~/utils/api";
-
-import "~/styles/globals.css";
-import { Antonio, Nunito } from "next/font/google";
+import { Nunito } from "next/font/google";
 import { Racing_Sans_One } from "next/font/google";
 import { Poppins } from "next/font/google";
 import Navbar from "~/components/Navbar";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Head from "next/head";
 
-// const quicksand = Quicksand({
-//   subsets: ["latin"],
-//   variable: "--font-quicksand",
-//   weight: ["400"],
-// });
+//css
+import "react-toastify/dist/ReactToastify.css";
+import "~/styles/globals.css";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -28,10 +23,6 @@ const poppings = Poppins({
   variable: "--font-text",
   weight: ["400"],
 });
-// const antonio = Antonio({
-//   subsets: ["latin"],
-//   variable: "--font-title",
-// });
 
 const racing = Racing_Sans_One({
   weight: ["400"],

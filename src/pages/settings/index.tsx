@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { usePathname } from "next/navigation";
 import { api } from "~/utils/api";
 import { FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

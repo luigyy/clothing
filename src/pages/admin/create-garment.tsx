@@ -1,5 +1,4 @@
 import FileUpload from "~/components/FileUpload";
-import { DEV_CLOUDINARY_GARMENT_IMAGES_PRESET } from "~/constants";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 // Import via ES Modules
@@ -147,7 +146,7 @@ const CreateGarment: NextPageWithLayout = ({}) => {
           </p>
         ) : null}
         <FileUpload
-          preset={DEV_CLOUDINARY_GARMENT_IMAGES_PRESET}
+          preset={process.env.DEV_CLOUDINARY_GARMENT_IMAGES_PRESET ?? ""}
           userEmail={email ?? ""}
           imagesUrls={imagesUrls}
           setImagesFunction={setImagesUrls}

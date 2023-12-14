@@ -15,8 +15,10 @@ const SideButton = ({
     <Link
       href={buttonPath}
       className={`${
-        currentPath === buttonPath ? "bg-orange/60" : null
-      } rounded  px-3 py-2 text-sm font-medium tracking-tight`}
+        currentPath === buttonPath
+          ? "bg-orange/60 font-medium  text-blue/100"
+          : "text-blue/60"
+      } rounded px-3  py-2 text-sm  `}
     >
       {title}
     </Link>

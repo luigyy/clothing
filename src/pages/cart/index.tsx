@@ -49,8 +49,8 @@ const Index = ({}) => {
   if (!data?.garments.length) return <div>no orders!</div>;
 
   return (
-    <div className="flex px-20">
-      <div className=" flex  w-[65%] flex-wrap gap-x-4  gap-y-14  pb-14 pt-2">
+    <div className="flex px-4 pb-10">
+      <div className="grid w-[65%] grid-cols-4 flex-wrap gap-y-14 pb-14 pt-2">
         {data.garments.map((garment) => (
           <CartGarmentCard
             key={garment.id}
@@ -67,7 +67,7 @@ const Index = ({}) => {
           />
         ))}
       </div>
-      <div className="w-[35%]">
+      <div className="w-[35%]  ">
         <div className="sticky top-3  mx-auto mt-3 min-h-[200px] w-[85%] rounded-lg  ">
           {data.garments.map((garment) => (
             <ItemRow

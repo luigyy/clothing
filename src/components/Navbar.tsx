@@ -34,7 +34,7 @@ const ProfileButton = () => {
     <>
       <div ref={ref} className="   relative flex items-center justify-between ">
         <button
-          className="peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   "
+          className="click-effect peer right-0 h-[32px] w-[32px] overflow-hidden rounded-full   "
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <Image
@@ -241,7 +241,7 @@ const ShoppingCartDropdown = () => {
     <div ref={ref} className="relative mt-1 ">
       <button className="peer ">
         <PiHandbagSimpleLight
-          className="text-3xl"
+          className="click-effect text-3xl"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         />
         {cartTotal != 0 ? (
@@ -403,8 +403,6 @@ const Navbar = ({}) => {
   });
 
   //
-  const hoverUnderlineClass =
-    "before:contents-['']  before:absolute before:-bottom-0 before:w-0 before:border-b-2  before:border-orange before:transition-all hover:before:w-full";
   return (
     <div className="relative overflow-x-clip">
       {searchBarIsOpen ? (
@@ -414,37 +412,43 @@ const Navbar = ({}) => {
         <div
           className={`top-0 flex h-16 w-full items-center justify-between  px-[7%] `}
         >
-          <div className="flex items-center gap-x-5">
+          <div className="flex items-center gap-x-8">
             <Link
               href="/sell"
-              className={` relative ${hoverUnderlineClass} text-lg`}
+              className="click-effect relative font-title  text-xl font-semibold"
             >
               Vende
             </Link>
             <Link
               href="/garments"
-              className={`${hoverUnderlineClass} relative text-lg`}
+              className="click-effect relative font-title  text-xl font-semibold"
             >
               Compra
             </Link>
-            <Link
+            {/* <Link
               href="#_"
               className={`${hoverUnderlineClass} relative text-lg`}
             >
               Nosotros
-            </Link>
+            </Link> */}
           </div>
           <div className="absolute left-1/2 -translate-x-1/2">
-            <Link href="/" className="text-3xl">
-              <Image src="/logo-azul.png" width={130} height={130} alt="logo" />
+            <Link href="/" className=" text-3xl">
+              <Image
+                src="/logo-azul.png"
+                width={130}
+                height={130}
+                alt="logo"
+                className="click-effect"
+              />
             </Link>
           </div>
           <div className="flex items-center gap-x-8">
             <button onClick={() => setSearchBarIsOpen(!searchBarIsOpen)}>
-              <IoSearchOutline className="text-3xl" />
+              <IoSearchOutline className="click-effect text-3xl" />
             </button>
             <Link href="/favorites">
-              <BsHeart className="text-2xl" />
+              <BsHeart className="click-effect text-2xl" />
             </Link>
             <ShoppingCartDropdown />
             <ProfileButton />
