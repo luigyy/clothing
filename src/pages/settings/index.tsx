@@ -1,5 +1,5 @@
 //TODO: create layout and move input componenets to components folder
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "~/utils/api";
@@ -16,6 +16,8 @@ import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/es/zod.json";
 import { NextPageWithLayout } from "next";
 import SettingsLayout from "./layout";
+import LocationForm from "~/components/LocationForm";
+import { ContextProvider as CostaRicaLocationContextProvider } from "react-select-costarica-location";
 
 // lng and resources key depend on your locale.
 i18next.init({
@@ -43,6 +45,11 @@ type ProfileFormType = z.infer<typeof ProfileFormSchema>;
 const ProfileSettings = () => {
   const { data } = api.users.getCurrentUser.useQuery();
   const updateUser = api.users.updateUser.useMutation();
+  const [location, setLocation] = useState({
+    province: "",
+    municipality: "",
+    district: "",
+  });
 
   //useForm stuff
   // const { register, handleSubmit, formState, reset } = useForm({
@@ -89,6 +96,7 @@ const ProfileSettings = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+        <h1 className="py-1">Datos personales</h1>
         <InputComponent
           label="Nombre"
           registerName="name"
@@ -117,18 +125,25 @@ const ProfileSettings = () => {
           type="text"
         />
 
-        <InputComponent
-          label="Link de Google Maps"
-          registerName="locationLink"
-          error={methods.formState.errors.locationLink}
-          type="text"
-        />
-        <InputComponent
-          label="Dirección exacta"
-          registerName="exactLocation"
-          error={methods.formState.errors.exactLocation}
-          type="text"
-        />
+        {/* location section  */}
+        <div className="space-y-6">
+          <h1 className="py-3">Datos de ubicación</h1>
+          <CostaRicaLocationContextProvider>
+            <LocationForm setLocationFn={setLocation} />
+          </CostaRicaLocationContextProvider>
+          <InputComponent
+            label="Link de Google Maps"
+            registerName="locationLink"
+            error={methods.formState.errors.locationLink}
+            type="text"
+          />
+          <InputComponent
+            label="Dirección exacta"
+            registerName="exactLocation"
+            error={methods.formState.errors.exactLocation}
+            type="text"
+          />
+        </div>
 
         {methods.formState.isDirty ? (
           <button className="btn" type="submit">

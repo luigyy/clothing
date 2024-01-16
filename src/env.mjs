@@ -18,7 +18,7 @@ export const env = createEnv({
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string().min(1) : z.string().url()
+      process.env.VERCEL ? z.string().min(1) : z.string().url(),
     ),
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     DISCORD_CLIENT_ID: z.string(),
@@ -32,6 +32,10 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_TILOPAY_APIKEY: z.string().min(1),
+    NEXT_PUBLIC_TILOPAY_APIUSER: z.string().min(1),
+    NEXT_PUBLIC_TILOPAY_PASSWORD: z.string().min(1),
+    //
   },
 
   /**
@@ -39,6 +43,10 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_TILOPAY_APIKEY: process.env.NEXT_PUBLIC_TILOPAY_APIKEY,
+    NEXT_PUBLIC_TILOPAY_APIUSER: process.env.NEXT_PUBLIC_TILOPAY_APIUSER,
+    NEXT_PUBLIC_TILOPAY_PASSWORD: process.env.NEXT_PUBLIC_TILOPAY_PASSWORD,
+    //
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
