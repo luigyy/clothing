@@ -17,8 +17,6 @@ export const ProfileFormSchema = z.object({
     message: "El número de celular debe contener al menos 8 caracteres",
   }),
   email: z.string().email(),
-  locationLink: z.string(),
-  exactLocation: z.string(),
 });
 
 export type ProfileFormType = z.infer<typeof ProfileFormSchema>;

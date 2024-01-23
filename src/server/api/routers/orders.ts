@@ -23,7 +23,7 @@ export const ordersRouter = createTRPCRouter({
     return order;
   }),
 
-  deleteGarmentFromCart: publicProcedure
+  deleteGarmentFromCart: protectedProcedure
     .input(z.object({ garmentId: z.string() }))
     .mutation(async ({ ctx, input: { garmentId } }) => {
       //get user
@@ -53,7 +53,7 @@ export const ordersRouter = createTRPCRouter({
       return { message: "Successfully deleted from cart" };
     }),
 
-  addGarmentToCart: publicProcedure
+  addGarmentToCart: protectedProcedure
     .input(z.object({ garmentId: z.string() }))
     .mutation(async ({ ctx, input: { garmentId } }) => {
       //get user

@@ -4,6 +4,7 @@ import {
   MunicipalitySelect,
   DistrictSelect,
   Location as useCostaRicaLocation,
+  LocationMethods,
 } from "react-select-costarica-location";
 
 interface LocationFormProps {
@@ -17,20 +18,39 @@ interface LocationFormProps {
     municipality: string;
     district: string;
   }) => void;
+  defaultLocation?: {
+    province: string;
+    municipality: string;
+    district: string;
+  };
 }
 
-export default function LocationForm({ setLocationFn }: LocationFormProps) {
+export default function LocationForm({
+  setLocationFn,
+  defaultLocation,
+}: LocationFormProps) {
   const {
     provincia: province,
     canton: municipality,
     distrito: district,
   } = useCostaRicaLocation();
 
-  //   this is to update the location in the parent component
+  const methods = LocationMethods();
+  if (!methods) return <p>no context!</p>;
+
+  const { useSetLocationValues } = methods;
+
+  //  this is to update the location in the parent component
   function updateLocation() {
     if (!(province && municipality && district)) return;
     return setLocationFn({ province, municipality, district });
   }
+
+  useEffect(() => {
+    if (defaultLocation) {
+      useSetLocationValues(defaultLocation);
+    }
+  }, []);
 
   useEffect(() => {
     updateLocation();

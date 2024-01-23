@@ -6,7 +6,8 @@ import { api } from "~/utils/api";
 import { FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputComponent from "~/components/InputComponent";
-
+import { NextPageWithLayout } from "next";
+import SettingsLayout from "./layout";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,10 +15,6 @@ import "react-toastify/dist/ReactToastify.css";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/es/zod.json";
-import { NextPageWithLayout } from "next";
-import SettingsLayout from "./layout";
-import LocationForm from "~/components/LocationForm";
-import { ContextProvider as CostaRicaLocationContextProvider } from "react-select-costarica-location";
 
 // lng and resources key depend on your locale.
 i18next.init({
@@ -36,8 +33,6 @@ const ProfileFormSchema = z.object({
     message: "El número de celular debe contener al menos 8 caracteres",
   }),
   email: z.string().email(),
-  locationLink: z.string(),
-  exactLocation: z.string(),
 });
 
 type ProfileFormType = z.infer<typeof ProfileFormSchema>;
@@ -85,8 +80,6 @@ const ProfileSettings = () => {
       name: data?.name ?? "",
       lastName: data?.lastName ?? "",
       email: data?.email ?? "",
-      exactLocation: data?.exactLocation ?? "",
-      locationLink: data?.locationLink ?? "",
       phoneNumber: data?.phoneNumber ?? "",
     };
     methods.reset({ ...defaultValues });
@@ -125,32 +118,13 @@ const ProfileSettings = () => {
           type="text"
         />
 
-        {/* location section  */}
-        <div className="space-y-6">
-          <h1 className="py-3">Datos de ubicación</h1>
-          <CostaRicaLocationContextProvider>
-            <LocationForm setLocationFn={setLocation} />
-          </CostaRicaLocationContextProvider>
-          <InputComponent
-            label="Link de Google Maps"
-            registerName="locationLink"
-            error={methods.formState.errors.locationLink}
-            type="text"
-          />
-          <InputComponent
-            label="Dirección exacta"
-            registerName="exactLocation"
-            error={methods.formState.errors.exactLocation}
-            type="text"
-          />
-        </div>
-
-        {methods.formState.isDirty ? (
-          <button className="btn" type="submit">
-            Actualizar perfil
-          </button>
-        ) : null}
+        <button className="btn" type="submit">
+          Actualizar perfil
+        </button>
       </form>
+
+      {/* // */}
+      {/* location section  */}
     </FormProvider>
   );
 };

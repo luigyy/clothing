@@ -24,8 +24,16 @@ export const userRouter = createTRPCRouter({
         lastName: true,
         phoneNumber: true,
         email: true,
-        locationLink: true,
-        exactLocation: true,
+        userLocation: {
+          select: {
+            id: true,
+            province: true,
+            municipality: true,
+            district: true,
+            exactLocation: true,
+            locationLink: true,
+          },
+        },
       },
     });
   }),
@@ -48,8 +56,6 @@ export const userRouter = createTRPCRouter({
         data: {
           name: input.name,
           lastName: input.lastName,
-          exactLocation: input.exactLocation,
-          locationLink: input.locationLink,
           phoneNumber: input.phoneNumber,
         },
       });

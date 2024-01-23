@@ -55,10 +55,8 @@ model User {
     image         String?
     role          String?
 
-    lastName      String?
-    phoneNumber   String?
-    locationLink  String?
-    exactLocation String?
+    lastName    String?
+    phoneNumber String?
 
     //
     accounts Account[]
@@ -68,6 +66,7 @@ model User {
     Garment      Garment[]
     garmentLikes garmentLikes[]
     Order        Order[]
+    userLocation Location[]
 }
 
 model VerificationToken {
@@ -76,6 +75,22 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Location {
+    id String @id @default(cuid())
+
+    province     String
+    municipality String
+    district     String
+
+    locationLink  String?
+    exactLocation String?
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
 
 //

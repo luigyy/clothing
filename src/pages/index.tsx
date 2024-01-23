@@ -4,13 +4,11 @@ import Image from "next/image";
 import { BsCheckCircle, BsArrowReturnLeft } from "react-icons/bs";
 import { GiSeaTurtle } from "react-icons/gi";
 import Slider from "react-slick";
-import TilopayProcessPayment from "~/utils/tilopay/TilopayProcessPayment";
 
 //
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useEffect } from "react";
-import TilopayLogin from "~/utils/tilopay/TilopayLogin";
 import TilopayGenerateCheckoutLink from "~/utils/tilopay/TilopayGenerateCheckoutLink";
 
 const GarmentCategoryCard = ({

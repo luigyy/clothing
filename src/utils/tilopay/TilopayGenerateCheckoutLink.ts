@@ -6,8 +6,6 @@ const apiuser = env.NEXT_PUBLIC_TILOPAY_APIUSER;
 const apikey = env.NEXT_PUBLIC_TILOPAY_APIKEY;
 const password = env.NEXT_PUBLIC_TILOPAY_PASSWORD;
 
-console.log(apiuser, apikey);
-
 export default async function TilopayGenerateCheckoutLink() {
   //generate token
 
