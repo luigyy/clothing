@@ -78,6 +78,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
 
     if (path === "/cart/location-confirmation") {
       linkLocationToOrder();
+      redirectToCheckoutLink();
     }
   };
 
