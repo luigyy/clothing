@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "next";
 import SettingsLayout from "./layout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { BsTrash } from "react-icons/bs";
 import { ClipLoader } from "react-spinners";
@@ -50,6 +50,7 @@ const UserLocation: NextPageWithLayout = () => {
   const createLocation = api.location.createLocation.useMutation();
   //
   const [createNewLocationIsOn, setCreateNewLocationIsOn] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   //
   const methods = useForm<LocationFormType>({
     resolver: zodResolver(LocationFormSchema),
@@ -60,6 +61,12 @@ const UserLocation: NextPageWithLayout = () => {
     municipality: "",
     district: "",
   });
+
+  const toggleForm = () => {
+    setCreateNewLocationIsOn(!createNewLocationIsOn);
+    //move focus to form
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   //handlers
   const onSubmit = (formValues: LocationFormType) => {
@@ -118,10 +125,11 @@ const UserLocation: NextPageWithLayout = () => {
             </div>
           </div>
           <div
+            ref={ref}
             className={` transition-all duration-200 space-y-2${
               createNewLocationIsOn
                 ? ""
-                : "pointer-events-none -z-10 h-0 -translate-y-full opacity-0"
+                : "pointer-events-none  -z-10  h-0 -translate-y-[130vh] opacity-0  "
             }`}
           >
             <CostaRicaLocationContextProvider>
@@ -148,10 +156,7 @@ const UserLocation: NextPageWithLayout = () => {
           </div>
 
           {createNewLocationIsOn ? null : (
-            <button
-              onClick={() => setCreateNewLocationIsOn(!createNewLocationIsOn)}
-              className="btn"
-            >
+            <button onClick={() => toggleForm()} className="btn">
               Crear nueva ubicación
             </button>
           )}

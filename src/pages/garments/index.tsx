@@ -5,6 +5,8 @@ import { CategoriesType, GenreType, SizeType } from "~/constants";
 import InfiniteGarmentSearch from "~/components/InfiniteGarmentSearch";
 import { IoIosArrowForward } from "react-icons/io";
 import { FiltersType } from "~/constants";
+import LoadingPage from "~/components/LoadingPage";
+import { ClipLoader } from "react-spinners";
 
 interface indexProps {}
 
@@ -112,13 +114,7 @@ const Index: React.FC<indexProps> = ({}) => {
   }
   //loading component
   if (garments.isLoading) {
-    return (
-      <div className="flex ">
-        <div className="gap-y-24 border-2  border-red-500 px-1 pt-2 ">
-          <h1 className="text-blue">Loading...</h1>
-        </div>
-      </div>
-    );
+    return <ClipLoader color="#93a571" size={40} />;
   }
   return (
     <div className="flex ">

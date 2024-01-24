@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import useOnClickOutside from "./useOnClickOutside";
 
 const ProfileButton = () => {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const ref = useRef(null);
@@ -29,6 +29,10 @@ const ProfileButton = () => {
   };
 
   useOnClickOutside(ref, handleClickOutside);
+
+  if (status === "loading") {
+    return <ClipLoader color="#93a571" size={26} />;
+  }
 
   return (
     <>
