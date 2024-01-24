@@ -3,6 +3,7 @@
 import { NextPageWithLayout } from "next";
 import SettingsLayout from "./layout";
 import { BsTrash } from "react-icons/bs";
+import { UserLocation } from "../cart/location-confirmation";
 
 const truncate = (input: string, length: number) =>
   input.length > length ? `${input.substring(0, length)}...` : input;
