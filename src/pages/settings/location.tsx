@@ -44,10 +44,21 @@ const LocationFormSchema = z.object({
 
 type LocationFormType = z.infer<typeof LocationFormSchema>;
 
-const UserLocation: NextPageWithLayout = () => {
-  const { data, isLoading } = api.users.getCurrentUser.useQuery();
+export const UserLocation = ({
+  selectedLocationId,
+  selectLocationFn,
+  showDeleteButton,
+}: {
+  selectedLocationId?: string;
+  selectLocationFn?: (id: string) => void;
+  showDeleteButton?: boolean;
+}) => {
+  const { data, isLoading } = api.location.getUserLocations.useQuery();
+  const { data: cart } = api.orders.getCurrentUserCart.useQuery();
   const deleteLocation = api.location.deleteLocation.useMutation();
   const createLocation = api.location.createLocation.useMutation();
+
+  const utils = api.useContext();
   //
   const [createNewLocationIsOn, setCreateNewLocationIsOn] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -76,13 +87,34 @@ const UserLocation: NextPageWithLayout = () => {
       const { province, municipality, district } = location;
 
       //create location
-      createLocation.mutateAsync({
-        ...formValues,
-        province,
-        municipality,
-        district,
-      });
-      console.log(formValues);
+      createLocation.mutateAsync(
+        {
+          ...formValues,
+          province,
+          municipality,
+          district,
+        },
+        {
+          onSuccess: (response) => {
+            utils.location.getUserLocations.setData(undefined, (oldData) => {
+              if (!oldData) return;
+              const oldLocation = oldData.userLocation;
+              oldLocation.push({
+                province,
+                municipality,
+                district,
+                ...formValues,
+                id: response.id,
+                userId: response.userId,
+              });
+              return {
+                ...oldData,
+                userLocation: oldLocation,
+              };
+            });
+          },
+        },
+      );
     }
 
     toast.promise(createLocationFn, {
@@ -100,11 +132,21 @@ const UserLocation: NextPageWithLayout = () => {
     });
   };
 
+  //if already exists location, select it
+  useEffect(() => {
+    if (!cart?.locationId) return;
+    selectLocationFn && selectLocationFn(cart.locationId);
+  }, [isLoading]);
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="space-y-6">
-          <h1 className="py-2">Datos de ubicación</h1>
+          {selectLocationFn ? (
+            <h1 className="py-4 text-center">Seleccione la ubicación</h1>
+          ) : (
+            <h1 className="py-2">Datos de ubicación</h1>
+          )}
           <div className=" ">
             <h1 className="mb-2  text-sm font-bold">Ubicaciones guardadas</h1>
             {isLoading ? (
@@ -120,6 +162,9 @@ const UserLocation: NextPageWithLayout = () => {
                   location={location}
                   index={index}
                   deleteLocationFn={deleteLocationFn}
+                  selectLocationFn={selectLocationFn}
+                  selectedLocationId={selectedLocationId}
+                  showDeleteButton={showDeleteButton}
                 />
               ))}
             </div>
@@ -150,9 +195,17 @@ const UserLocation: NextPageWithLayout = () => {
               error={methods.formState.errors.exactLocation}
               type="text"
             />
-            <button className="btn mt-2" type="submit">
-              Crear ubicación
-            </button>
+            <div className="flex gap-x-4">
+              <button className="btn mt-2" type="submit">
+                Crear ubicación
+              </button>
+              <button
+                onClick={() => setCreateNewLocationIsOn(false)}
+                className="btn mt-2 [&&]:border-green [&&]:bg-green"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
 
           {createNewLocationIsOn ? null : (
@@ -166,11 +219,14 @@ const UserLocation: NextPageWithLayout = () => {
   );
 };
 
-const LocationCard = ({
+export const LocationCard = ({
   id,
   location,
   index,
   deleteLocationFn,
+  selectLocationFn,
+  selectedLocationId,
+  showDeleteButton,
 }: {
   id: string;
   location: {
@@ -181,10 +237,23 @@ const LocationCard = ({
     locationLink: string | null;
   };
   index: number;
-  deleteLocationFn: ({ id }: { id: string }) => void;
+  deleteLocationFn?: ({ id }: { id: string }) => void;
+  selectLocationFn?: (id: string) => void;
+  selectedLocationId?: string;
+  showDeleteButton?: boolean;
 }) => {
   return (
     <div className="flex gap-x-1">
+      {selectLocationFn ? (
+        <div className="flex items-center justify-center ">
+          <input
+            onChange={() => selectLocationFn(id)}
+            className=" mx-auto flex aspect-[1] w-7 items-center justify-center rounded  accent-[#93a571]   "
+            checked={selectedLocationId === id}
+            type="radio"
+          ></input>
+        </div>
+      ) : null}
       <div className=" flex flex-grow justify-between rounded border border-orange/30 p-1 pl-2">
         <div className="flex flex-col gap-y-3">
           <h1 className="text-xs font-semibold">Ubicacion #{index + 1}</h1>
@@ -201,17 +270,23 @@ const LocationCard = ({
           </h1>
         </div>
       </div>
-      <div className=" ">
-        <button
-          onClick={() => deleteLocationFn({ id })}
-          className=" mx-auto flex h-full w-16 items-center justify-center  rounded bg-blue"
-        >
-          <BsTrash className="click-effect flex h-2/3 w-2/3 cursor-pointer text-orange" />
-        </button>
-      </div>
+      {deleteLocationFn && showDeleteButton ? (
+        <div className=" ">
+          <button
+            onClick={() => deleteLocationFn({ id })}
+            className=" mx-auto flex h-full w-16 items-center justify-center  rounded bg-blue"
+          >
+            <BsTrash className="click-effect flex h-2/3 w-2/3 cursor-pointer text-orange" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
-UserLocation.getLayout = (page) => <SettingsLayout>{page}</SettingsLayout>;
 
-export default UserLocation;
+const Index: NextPageWithLayout = () => {
+  return <UserLocation showDeleteButton={true} />;
+};
+Index.getLayout = (page) => <SettingsLayout>{page}</SettingsLayout>;
+
+export default Index;

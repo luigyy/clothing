@@ -25,7 +25,7 @@ h1 {
 }
 
 .btn {
-  @apply rounded border border-blue bg-blue px-3 py-2 font-text text-sm text-creme transition-transform duration-200
+  @apply block rounded border border-blue bg-blue px-3 py-2 font-text text-sm text-creme transition-transform duration-200
   hover:scale-[102.6%]
   active:scale-[97.4%];
 }

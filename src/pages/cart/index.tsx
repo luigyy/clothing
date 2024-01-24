@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import CartGarmentCard from "~/components/CartGarmentCard";
-import { ItemRow } from "~/components/Navbar";
 import { Garment } from "@prisma/client";
+import { NextPageWithLayout } from "next";
+import CartLayout from "./layout";
+import { ClipLoader } from "react-spinners";
 
-const Index = ({}) => {
+const Index: NextPageWithLayout = () => {
   const deleteFromCart = api.orders.deleteGarmentFromCart.useMutation();
-  const { data } = api.orders.getCurrentUserCart.useQuery();
+  const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
+
   const [deletingId, setDeletingId] = useState("");
   const utils = api.useContext();
 
@@ -46,11 +49,16 @@ const Index = ({}) => {
     setCartTotal(calculateTotal(data?.garments));
   }, [data]);
 
+  if (isLoading) {
+    return <ClipLoader color="#93a571" size={23} />;
+  }
+
   if (!data?.garments.length) return <div>no orders!</div>;
 
   return (
-    <div className="flex px-4 pb-10">
-      <div className="grid w-[65%] grid-cols-4 flex-wrap gap-y-14 pb-14 pt-2">
+    <div>
+      <h1 className="py-4 text-center">Confirme su orden</h1>
+      <div className="grid w-full grid-cols-4 ">
         {data.garments.map((garment) => (
           <CartGarmentCard
             key={garment.id}
@@ -67,28 +75,10 @@ const Index = ({}) => {
           />
         ))}
       </div>
-      <div className="w-[35%]  ">
-        <div className="sticky top-3  mx-auto mt-3 min-h-[200px] w-[85%] rounded-lg  ">
-          {data.garments.map((garment) => (
-            <ItemRow
-              key={garment.id}
-              brand={garment.brand}
-              current_price={garment.current_price}
-              garmentId={garment.id}
-              genre={garment.genre}
-              size={garment.size}
-            />
-          ))}
-
-          <div className="mt-3  flex justify-between  border-t border-orange border-opacity-25 px-3 pt-3">
-            <h1>Total</h1>
-            <p className="text-sm font-semibold">{`₡${cartTotal.toLocaleString()}`}</p>
-          </div>
-          <button className="btn mx-1 my-4 w-full">Ir a pagar</button>
-        </div>
-      </div>
     </div>
   );
 };
+
+Index.getLayout = (page) => <CartLayout>{page}</CartLayout>;
 
 export default Index;

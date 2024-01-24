@@ -5,6 +5,12 @@ import { USER_ROLES } from "~/constants";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const locationRouter = createTRPCRouter({
+  getUserLocations: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findFirst({
+      where: { id: ctx.session.user.id },
+      include: { userLocation: true },
+    });
+  }),
   //checks if current user has admin role
   createLocation: protectedProcedure
     .input(

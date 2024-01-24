@@ -101,4 +101,26 @@ export const ordersRouter = createTRPCRouter({
       return { error: false, message: "Garment added to cart successfully" };
       //
     }),
+
+  linkLocationToOrder: protectedProcedure
+    .input(z.object({ locationId: z.string(), orderId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      //check if location already connected
+      const order = await ctx.prisma.order.findFirst({
+        where: { id: input.orderId },
+      });
+
+      //if already existing location, disconnect it
+      if (order?.locationId) {
+        await ctx.prisma.order.update({
+          where: { id: input.orderId },
+          data: { location: { disconnect: true } },
+        });
+      }
+
+      return await ctx.prisma.order.update({
+        where: { id: input.orderId },
+        data: { locationId: input.locationId },
+      });
+    }),
 });
