@@ -78,9 +78,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     if (path === "/cart") {
       router.push("/cart/location-confirmation");
     }
-
     if (path === "/cart/location-confirmation") {
       linkLocationToOrder();
+      router.push("/cart/data-confirmation");
+    }
+    if (path === "/cart/data-confirmation") {
       redirectToCheckoutLink();
     }
   };
@@ -118,7 +120,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
               onClick={onClickHandler}
               className="btn my-4 block w-full border-2  border-red-500 text-center "
             >
-              {path === "/cart" ? "Siguiente" : "Ir a pagar"}
+              {path !== "/cart/data-confirmation" ? "Siguiente" : "Ir a pagar"}
             </button>
           </div>
         </div>

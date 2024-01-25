@@ -66,7 +66,7 @@ export const LocationCard = ({
         <div className=" ">
           <button
             onClick={() => deleteLocationFn({ id })}
-            className=" mx-auto flex h-full w-16 items-center justify-center  rounded bg-blue"
+            className=" mx-auto flex h-full w-16 items-center justify-center rounded bg-blue"
           >
             <BsTrash className="click-effect flex h-2/3 w-2/3 cursor-pointer text-orange" />
           </button>

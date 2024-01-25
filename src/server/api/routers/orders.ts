@@ -17,6 +17,7 @@ export const ordersRouter = createTRPCRouter({
       },
       include: {
         garments: { include: { pictures: true } },
+        location: true,
       },
     });
 
@@ -120,7 +121,7 @@ export const ordersRouter = createTRPCRouter({
 
       return await ctx.prisma.order.update({
         where: { id: input.orderId },
-        data: { locationId: input.locationId },
+        data: { location: { connect: { id: input.locationId } } },
       });
     }),
 });

@@ -154,7 +154,25 @@ export const UserLocation = ({
   };
 
   const deleteLocationFn = ({ id }: { id: string }) => {
-    toast.promise(deleteLocation.mutateAsync({ id }), {
+    const deleteUserLocation = async () => {
+      await deleteLocation.mutateAsync(
+        { id },
+        {
+          onSuccess: () => {
+            utils.location.getUserLocations.setData(undefined, (oldData) => {
+              if (!oldData) return;
+              return {
+                ...oldData,
+                userLocation: oldData.userLocation.filter(
+                  (data) => id !== data.id,
+                ),
+              };
+            });
+          },
+        },
+      );
+    };
+    toast.promise(deleteUserLocation, {
       pending: "Borrando ubicación",
       success: "Ubicación borrada",
       error: "Error al borrar la ubicación",
