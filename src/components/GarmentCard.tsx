@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { ClipLoader } from "react-spinners";
 import Image from "next/image";
+import LoginModal from "./LoginModal";
 
 interface GarmentCardProps {
   brand: string;
@@ -35,7 +36,8 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   isFavorite,
   currentPage,
 }) => {
-  //validate like the video
+  const [showLoginModal, setLoginModal] = useState(false);
+
   //mutation
   const toggleLike = api.garments.toggleLike.useMutation();
   const utils = api.useContext();
@@ -44,7 +46,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
   //handler for liking button
   async function handleLike() {
     if (!id) return;
-    if (!sessionData?.user) return;
+    if (!sessionData?.user) return setLoginModal(true);
     // //perform action
     await toggleLike.mutateAsync(
       { garmentId: id },
@@ -120,6 +122,7 @@ const GarmentCard: React.FC<GarmentCardProps> = ({
 
   return (
     <div className="relative mx-auto aspect-[3/4] w-[210px]">
+      <LoginModal showModal={showLoginModal} setShowModal={setLoginModal} />
       <button
         onClick={handleLike}
         className="absolute right-3 top-3 z-10 inline-block "

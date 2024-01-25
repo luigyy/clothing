@@ -58,7 +58,11 @@ const Index: NextPageWithLayout = () => {
   );
   //loading component
   if (garments.isLoading) {
-    return <ClipLoader color="#93a571" size={40} />;
+    return (
+      <div className="flex h-[70vh] items-center justify-center ">
+        <ClipLoader color="#93a571" size={70} />
+      </div>
+    );
   }
   return (
     <InfiniteGarmentSearch

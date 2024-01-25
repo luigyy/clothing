@@ -13,6 +13,8 @@ import { ClipLoader } from "react-spinners";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import LoginModal from "~/components/LoginModal";
+import { useSession } from "next-auth/react";
 
 const LoadingSkeleton = () => {
   return (
@@ -55,8 +57,10 @@ function MeasurementsComponent({
 }
 
 const Garment = () => {
+  const { data: sessionData } = useSession();
   // To open the lightbox change the value of the "toggler" prop.
   const [toggler, setToggler] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   // array of pictures for lightbox
   const [picturesUrls, setPicturesUrls] = useState<string[]>([]);
 
@@ -101,6 +105,10 @@ const Garment = () => {
 
   //handler for liking button
   async function handleLike() {
+    //check logged in
+    if (!sessionData?.user) {
+      return setShowLoginModal(true);
+    }
     if (!garment?.id) return;
     // //perform action
     await toggleLike.mutateAsync(
@@ -134,6 +142,9 @@ const Garment = () => {
   }
 
   function handleAddToCart(garmentId: string) {
+    if (!sessionData?.user) {
+      return setShowLoginModal(true);
+    }
     function addToCartFn() {
       return addToCart.mutateAsync(
         { garmentId },
@@ -163,6 +174,7 @@ const Garment = () => {
 
   return (
     <div className=" px-32 py-5">
+      <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
       <div className="flex  ">
         {/* images border  */}
         <div className="sticky top-5 flex h-[475px] w-1/2 justify-evenly  ">
