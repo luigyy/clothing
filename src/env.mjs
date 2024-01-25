@@ -23,6 +23,10 @@ export const env = createEnv({
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
+    //tilopay
+    TILOPAY_APIKEY: z.string().min(1),
+    TILOPAY_APIUSER: z.string().min(1),
+    TILOPAY_PASSWORD: z.string().min(1),
   },
 
   /**
@@ -32,9 +36,6 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
-    NEXT_PUBLIC_TILOPAY_APIKEY: z.string().min(1),
-    NEXT_PUBLIC_TILOPAY_APIUSER: z.string().min(1),
-    NEXT_PUBLIC_TILOPAY_PASSWORD: z.string().min(1),
     //
   },
 
@@ -43,9 +44,9 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    NEXT_PUBLIC_TILOPAY_APIKEY: process.env.NEXT_PUBLIC_TILOPAY_APIKEY,
-    NEXT_PUBLIC_TILOPAY_APIUSER: process.env.NEXT_PUBLIC_TILOPAY_APIUSER,
-    NEXT_PUBLIC_TILOPAY_PASSWORD: process.env.NEXT_PUBLIC_TILOPAY_PASSWORD,
+    TILOPAY_APIKEY: process.env.TILOPAY_APIKEY,
+    TILOPAY_APIUSER: process.env.TILOPAY_APIUSER,
+    TILOPAY_PASSWORD: process.env.TILOPAY_PASSWORD,
     //
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,

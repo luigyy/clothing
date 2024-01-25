@@ -8,8 +8,6 @@ import Slider from "react-slick";
 //
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect } from "react";
-import TilopayGenerateCheckoutLink from "~/utils/tilopay/TilopayGenerateCheckoutLink";
 
 const GarmentCategoryCard = ({
   image_link,
@@ -77,13 +75,6 @@ export default function Home() {
     autoplaySpeed: 3200,
   };
 
-  useEffect(() => {
-    async function test() {
-      const link = await TilopayGenerateCheckoutLink();
-      console.log("LINK", link);
-    }
-    test();
-  }, []);
   return (
     <>
       <Head>

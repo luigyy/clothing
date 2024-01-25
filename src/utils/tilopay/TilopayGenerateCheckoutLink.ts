@@ -1,12 +1,15 @@
 import TilopayLogin from "./TilopayLogin";
 import TilopayProcessPayment from "./TilopayProcessPayment";
-import { env } from "~/env.mjs";
 
-const apiuser = env.NEXT_PUBLIC_TILOPAY_APIUSER;
-const apikey = env.NEXT_PUBLIC_TILOPAY_APIKEY;
-const password = env.NEXT_PUBLIC_TILOPAY_PASSWORD;
-
-export default async function TilopayGenerateCheckoutLink() {
+export default async function TilopayGenerateCheckoutLink({
+  apiuser,
+  apikey,
+  password,
+}: {
+  apiuser: string;
+  apikey: string;
+  password: string;
+}) {
   //generate token
 
   const loginResponse = await TilopayLogin({ apiuser, password });

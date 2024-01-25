@@ -1,12 +1,10 @@
 import { Garment } from "@prisma/client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ItemRow } from "~/components/Navbar";
 import { api } from "~/utils/api";
-import TilopayGenerateCheckoutLink from "~/utils/tilopay/TilopayGenerateCheckoutLink";
 
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
   // toasts
@@ -23,11 +21,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     : router.query.locationId;
 
   //
-  const [checkoutLink, setCheckoutLink] = useState("");
 
   const path = usePathname();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
+  const { data: checkoutLink } = api.payment.generateLink.useQuery();
 
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
 
@@ -48,10 +46,8 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
 
   /**redirects to checkout */
   const redirectToCheckoutLink = async () => {
-    const link = await TilopayGenerateCheckoutLink();
-    if (!link) return errorGeneratingCheckoutLinkToast();
-    //link successfully generated, redirect
-    router.push(link);
+    if (!checkoutLink) return errorGeneratingCheckoutLinkToast();
+    router.push(checkoutLink);
   };
 
   /**
@@ -59,7 +55,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
    * link the recently selected location to the order
    * @returns
    */
-  const linkLocationToOrder = () => {
+  const linkLocationToOrder = async () => {
     if (!(data?.id && locationId)) {
       return noSelectedLocationToast();
     }
