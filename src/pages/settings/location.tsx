@@ -19,6 +19,7 @@ export const LocationCard = ({
 }: {
   id: string;
   location: {
+    name: string;
     province: string;
     municipality: string;
     district: string;
@@ -45,14 +46,16 @@ export const LocationCard = ({
       ) : null}
       <div className=" flex flex-grow justify-between rounded border border-orange/30 p-1 pl-2">
         <div className="flex flex-col gap-y-3">
-          <h1 className="text-xs font-semibold">Ubicacion #{index + 1}</h1>
-          <p className="text-xs font-semibold">
+          <h1 className="text-sm font-bold">{location.name}</h1>
+          <h1 className="text-xs font-semibold text-blue/70">
             {location.province}, {location.municipality}, {location.district}
-          </p>
+          </h1>
         </div>
 
         <div className="flex flex-col gap-y-3">
-          <h1 className="text-right text-xs">Ubicacion exacta: </h1>
+          <h1 className="text-right text-xs font-medium text-blue/60">
+            Ubicacion exacta:{" "}
+          </h1>
           <h1 className="text-xs font-medium">
             {" "}
             {location.exactLocation ? truncate(location.exactLocation, 50) : ""}

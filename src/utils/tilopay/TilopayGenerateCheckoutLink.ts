@@ -5,10 +5,15 @@ export default async function TilopayGenerateCheckoutLink({
   apiuser,
   apikey,
   password,
+  paymentData,
 }: {
   apiuser: string;
   apikey: string;
   password: string;
+  paymentData: {
+    amount: string;
+    billToEmail: string;
+  };
 }) {
   //generate token
 
@@ -17,7 +22,11 @@ export default async function TilopayGenerateCheckoutLink({
 
   const accessToken = loginResponse.access_token;
 
-  const result = await TilopayProcessPayment({ apikey, apitoken: accessToken });
+  const result = await TilopayProcessPayment({
+    apikey,
+    apitoken: accessToken,
+    paymentData,
+  });
 
   if (!result) return null;
 

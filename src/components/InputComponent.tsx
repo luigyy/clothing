@@ -7,12 +7,14 @@ export default function InputComponent({
   inputInfo,
   error,
   type,
+  placeholder,
 }: {
   label: string;
   registerName: string;
   inputInfo?: string;
   error: FieldError | undefined;
   type: "text" | "number";
+  placeholder?: string;
 }) {
   const { register } = useFormContext();
   return (
@@ -25,7 +27,7 @@ export default function InputComponent({
       <input
         {...register(registerName, { valueAsNumber: type === "number" })}
         type={type}
-        placeholder={label}
+        placeholder={placeholder ?? label}
         className={`rounded border
         border-blue border-opacity-10 bg-creme px-2 py-2 text-sm shadow-sm outline-none  placeholder:text-sm placeholder:tracking-tight `}
       />

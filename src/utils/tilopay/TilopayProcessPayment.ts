@@ -1,6 +1,10 @@
 interface ParamsType {
   apikey: string;
   apitoken: string;
+  paymentData: {
+    amount: string;
+    billToEmail: string;
+  };
 }
 
 interface ResponseType {
@@ -12,6 +16,7 @@ interface ResponseType {
 export default async function TilopayProcessPayment({
   apikey,
   apitoken,
+  paymentData,
 }: ParamsType) {
   //
   const myHeaders = new Headers();
@@ -22,8 +27,8 @@ export default async function TilopayProcessPayment({
   const body = {
     redirect: "https://www.urlToRedirect.com",
     key: apikey,
-    amount: "100",
-    currency: "USD",
+    amount: paymentData.amount,
+    currency: "CRC",
     billToFirstName: "DEMO",
     billToLastName: "DEMO",
     billToAddress: "San Jose",
@@ -33,7 +38,7 @@ export default async function TilopayProcessPayment({
     billToZipPostCode: "10061",
     billToCountry: "CR",
     billToTelephone: "88888888",
-    billToEmail: "useremail@gmail.com",
+    billToEmail: paymentData.billToEmail,
     orderNumber: "1212122",
     capture: "1",
     subscription: "0",

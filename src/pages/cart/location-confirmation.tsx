@@ -56,14 +56,8 @@ const LocationConfirmation: NextPageWithLayout = () => {
   );
 };
 
-//test: to delete
-const DEFAULT_LOCATION = {
-  province: "Cartago",
-  municipality: "Turrialba",
-  district: "Tuis",
-};
-
 const LocationFormSchema = z.object({
+  name: z.string().min(1),
   exactLocation: z.string().min(1),
   locationLink: z.string().min(1),
 });
@@ -83,6 +77,11 @@ export const UserLocation = ({
   const { data: cart } = api.orders.getCurrentUserCart.useQuery();
   const deleteLocation = api.location.deleteLocation.useMutation();
   const createLocation = api.location.createLocation.useMutation();
+
+  const router = useRouter();
+  const locationId = Array.isArray(router.query.locationId)
+    ? router.query.locationId[0]
+    : router.query.locationId;
 
   const utils = api.useContext();
   //
@@ -132,6 +131,7 @@ export const UserLocation = ({
                 ...formValues,
                 id: response.id,
                 userId: response.userId,
+                name: response.name,
               });
               return {
                 ...oldData,
@@ -148,6 +148,9 @@ export const UserLocation = ({
       success: "Ubicación creada",
       error: "Error al crear la ubicación",
     });
+    //clear form
+    methods.reset();
+    setCreateNewLocationIsOn(false);
   };
 
   const deleteLocationFn = ({ id }: { id: string }) => {
@@ -163,6 +166,12 @@ export const UserLocation = ({
     if (!cart?.locationId) return;
     selectLocationFn && selectLocationFn(cart.locationId);
   }, [isLoading]);
+
+  useEffect(() => {
+    if (locationId) {
+      selectLocationFn && selectLocationFn(locationId);
+    }
+  }, [locationId]);
 
   return (
     <FormProvider {...methods}>
@@ -203,11 +212,15 @@ export const UserLocation = ({
                 : "pointer-events-none  -z-10  h-0 -translate-y-[130vh] opacity-0  "
             }`}
           >
+            <InputComponent
+              label="Nombre"
+              registerName="name"
+              error={methods.formState.errors.name}
+              type="text"
+            />
+
             <CostaRicaLocationContextProvider>
-              <LocationForm
-                defaultLocation={DEFAULT_LOCATION}
-                setLocationFn={setLocation}
-              />
+              <LocationForm setLocationFn={setLocation} />
             </CostaRicaLocationContextProvider>
             <InputComponent
               label="Link de Google Maps"

@@ -15,6 +15,7 @@ export const locationRouter = createTRPCRouter({
   createLocation: protectedProcedure
     .input(
       z.object({
+        name: z.string(),
         province: z.string(),
         municipality: z.string(),
         district: z.string(),
@@ -25,6 +26,7 @@ export const locationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.location.create({
         data: {
+          name: input.name,
           province: input.province,
           municipality: input.municipality,
           district: input.district,

@@ -80,6 +80,8 @@ model VerificationToken {
 model Location {
     id String @id @default(cuid())
 
+    name String @default("Mi ubicación")
+
     province     String
     municipality String
     district     String

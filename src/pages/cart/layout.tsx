@@ -1,4 +1,5 @@
 import { Garment } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { ItemRow } from "~/components/Navbar";
 import { api } from "~/utils/api";
 
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
+  const { data: sessionData } = useSession();
   // toasts
 
   const noSelectedLocationToast = () =>
@@ -25,9 +27,14 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const path = usePathname();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
-  const { data: checkoutLink } = api.payment.generateLink.useQuery();
 
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
+
+  //states
+  const { data: checkoutLink } = api.payment.generateLink.useQuery({
+    amount: cartTotal.toString(),
+    email: sessionData?.user.email || "",
+  });
 
   /**
    *
