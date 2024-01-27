@@ -5,7 +5,10 @@ import { z } from "zod";
 import InputComponent from "~/components/InputComponent";
 import LocationForm from "~/components/LocationForm";
 import { api } from "~/utils/api";
-import { ContextProvider as CostaRicaLocationContextProvider } from "react-select-costarica-location";
+import {
+  ContextProvider as CostaRicaLocationContextProvider,
+  Location,
+} from "react-select-costarica-location";
 
 const ProfileFormSchema = z.object({
   name: z.string().min(3),
@@ -27,10 +30,7 @@ export default function ScheduleForm() {
     district: "",
   });
 
-  useEffect(() => {
-    console.log(location);
-  }, []);
-
+  const { provincia, canton, distrito } = Location();
   const { data } = api.users.getCurrentUser.useQuery();
 
   const methods = useForm<ProfileFormType>({
@@ -59,8 +59,6 @@ export default function ScheduleForm() {
       name: data?.name ?? "",
       lastName: data?.lastName ?? "",
       email: data?.email ?? "",
-      exactLocation: data?.exactLocation ?? "",
-      locationLink: data?.locationLink ?? "",
       phoneNumber: data?.phoneNumber ?? "",
     };
     methods.reset({ ...defaultValues });

@@ -1,6 +1,7 @@
 import React from "react";
 import { api } from "~/utils/api";
 import GarmentCard from "./GarmentCard";
+import { useSession } from "next-auth/react";
 
 //TODO: CREATE NEW ROUTE TO HANDLE RECOMMENDATIONS (do not allow to reccomend the same item, handle situation where there isnt enough garments, 4 at least neeeded)
 

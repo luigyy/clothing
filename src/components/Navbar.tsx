@@ -113,12 +113,19 @@ const ProfileButton = () => {
               </>
             ) : (
               <div className="mt-5 ">
-                <span>
+                <div className="">
                   {
-                    <BsPerson className="mx-auto text-center text-3xl text-orange" />
+                    <Image
+                      className="mx-auto rounded-full "
+                      src={"/default-profile-picture.jpg"}
+                      width={40}
+                      height={40}
+                      alt="Profile image"
+                    />
+                    // <BsPerson className="mx-auto text-center text-3xl text-orange" />
                   }
                   <h1 className="text-center text-lg">No estás logueado</h1>
-                </span>
+                </div>
                 <div className="flex flex-col gap-y-4 ">
                   <div className="mt-5 flex items-center  px-2">
                     <div>

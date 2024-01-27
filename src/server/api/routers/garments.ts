@@ -196,7 +196,7 @@ export const garmentsRouter = createTRPCRouter({
       return { addedLike: false };
     }),
 
-  getRecommendations: publicProcedure.query(async ({ ctx, input }) => {
+  getRecommendations: publicProcedure.query(async ({ ctx }) => {
     const currentUserId = ctx.session?.user.id;
 
     const data = await ctx.prisma.garment.findMany({

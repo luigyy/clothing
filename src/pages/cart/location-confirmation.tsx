@@ -13,7 +13,10 @@ import { z } from "zod";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/es/zod.json";
-import { ContextProvider as CostaRicaLocationContextProvider } from "react-select-costarica-location";
+import {
+  ContextProvider as CostaRicaLocationContextProvider,
+  Location,
+} from "react-select-costarica-location";
 import LocationForm from "~/components/LocationForm";
 
 i18next.init({
@@ -213,7 +216,6 @@ export const UserLocation = ({
                   id={location.id}
                   key={index}
                   location={location}
-                  index={index}
                   deleteLocationFn={deleteLocationFn}
                   selectLocationFn={selectLocationFn}
                   selectedLocationId={selectedLocationId}
@@ -264,7 +266,6 @@ export const UserLocation = ({
               </button>
             </div>
           </div>
-
           {createNewLocationIsOn ? null : (
             <button onClick={() => toggleForm()} className="btn">
               Crear nueva ubicación

@@ -11,7 +11,6 @@ const truncate = (input: string, length: number) =>
 export const LocationCard = ({
   id,
   location,
-  index,
   deleteLocationFn,
   selectLocationFn,
   selectedLocationId,
@@ -26,7 +25,6 @@ export const LocationCard = ({
     exactLocation: string | null;
     locationLink: string | null;
   };
-  index: number;
   deleteLocationFn?: ({ id }: { id: string }) => void;
   selectLocationFn?: (id: string) => void;
   selectedLocationId?: string;

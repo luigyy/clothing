@@ -9,24 +9,29 @@ import { api } from "~/utils/api";
 
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: sessionData } = useSession();
+  const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
+  const { data: userData } = api.users.getCurrentUser.useQuery();
+  const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
   // toasts
 
   const noSelectedLocationToast = () =>
     toast("Tienes que seleccionar una ubicación", { type: "error" });
   const errorGeneratingCheckoutLinkToast = () =>
     toast("Error al dirigirse a la pagina de pago", { type: "error" });
+
+  const requiredUserDataIsNotComplete = () =>
+    toast("Los datos del usuario están incompletos. Complete su perfíl", {
+      type: "error",
+    });
   //
   const router = useRouter();
+  const path = usePathname();
 
   const locationId = Array.isArray(router.query.locationId)
     ? router.query.locationId[0]
     : router.query.locationId;
 
   //
-
-  const path = usePathname();
-  const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
-  const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
 
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
 
@@ -74,6 +79,38 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const requiredUserDataIsComplete = ({
+    name,
+    email,
+    phoneNumber,
+  }: {
+    name: string;
+    email: string;
+    phoneNumber: string;
+  }) => {
+    if (!(name && email && phoneNumber)) {
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * checks user profile contains required data before going to checkout
+   */
+  const checkUserDataIsComplete = () => {
+    if (
+      !requiredUserDataIsComplete({
+        name: userData?.name ?? "",
+        email: userData?.email ?? "",
+        phoneNumber: userData?.phoneNumber ?? "",
+      })
+    ) {
+      requiredUserDataIsNotComplete();
+      return false;
+    }
+    return true;
+  };
+
   const onClickHandler = () => {
     if (path === "/cart") {
       router.push("/cart/location-confirmation");
@@ -83,6 +120,8 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
+      const isComplete = checkUserDataIsComplete();
+      if (!isComplete) return;
       redirectToCheckoutLink();
     }
   };
