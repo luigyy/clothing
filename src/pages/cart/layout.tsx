@@ -69,7 +69,8 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
    */
   const linkLocationToOrder = async () => {
     if (!(data?.id && locationId)) {
-      return noSelectedLocationToast();
+      noSelectedLocationToast();
+      return false;
     }
 
     toast.promise(linkLocation({ locationId, orderId: data?.id }), {
@@ -77,6 +78,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       pending: "Guardadon ubicación del pedido",
       error: "Hubo un error al guardar la ubicación del pedido",
     });
+    return true;
   };
 
   const requiredUserDataIsComplete = ({
@@ -111,17 +113,21 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     return true;
   };
 
-  const onClickHandler = () => {
+  const onClickHandler = async () => {
     if (path === "/cart") {
       router.push("/cart/location-confirmation");
     }
     if (path === "/cart/location-confirmation") {
-      linkLocationToOrder();
+      //check if location was linked successfully
+      const result = await linkLocationToOrder();
+      if (!result) return;
+
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
       const isComplete = checkUserDataIsComplete();
       if (!isComplete) return;
+
       redirectToCheckoutLink();
     }
   };

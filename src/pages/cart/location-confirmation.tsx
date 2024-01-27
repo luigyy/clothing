@@ -204,7 +204,14 @@ export const UserLocation = ({
             <h1 className="py-2">Datos de ubicación</h1>
           )}
           <div className=" ">
-            <h1 className="mb-2  text-sm font-bold">Ubicaciones guardadas</h1>
+            {data?.userLocation.length === 0 ? (
+              <h1 className="mb-2 text-sm font-bold text-red-500">
+                No tienes ubicaciones todavía
+              </h1>
+            ) : (
+              <h1 className="mb-2  text-sm font-bold">Ubicaciones guardadas</h1>
+            )}
+
             {isLoading ? (
               <div className="flex justify-center">
                 <ClipLoader color="#d8690e" size={40} className="" />
