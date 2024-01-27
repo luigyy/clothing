@@ -13,10 +13,7 @@ import { z } from "zod";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/es/zod.json";
-import {
-  ContextProvider as CostaRicaLocationContextProvider,
-  Location,
-} from "react-select-costarica-location";
+import { ContextProvider as CostaRicaLocationContextProvider } from "react-select-costarica-location";
 import LocationForm from "~/components/LocationForm";
 
 i18next.init({
@@ -240,7 +237,7 @@ export const UserLocation = ({
             }`}
           >
             <InputComponent
-              label="Nombre"
+              label="Nombre de ubicación"
               registerName="name"
               error={methods.formState.errors.name}
               type="text"

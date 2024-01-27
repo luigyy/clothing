@@ -49,7 +49,10 @@ const Index: NextPageWithLayout = () => {
 
       {/*  */}
       <div className="grid grid-cols-3 gap-x-1 gap-y-2">
-        <DataSlot placeholder={`${location?.name} ` || ""} label="Nombre" />
+        <DataSlot
+          placeholder={`${location?.name} ` || ""}
+          label="Nombre de ubicación"
+        />
         <DataSlot
           placeholder={
             `${location?.province}, ${location?.municipality}, ${location?.district},` ||
@@ -60,7 +63,7 @@ const Index: NextPageWithLayout = () => {
 
         <DataSlot
           placeholder={`${location?.exactLocation} ` || ""}
-          label="Nombre"
+          label="Dirección exacta"
         />
       </div>
     </div>

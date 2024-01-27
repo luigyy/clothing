@@ -41,4 +41,17 @@ export const locationRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.location.delete({ where: { id: input.id } });
     }),
+  checkLocationExists: protectedProcedure
+    .input(z.object({ locationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      //check if location obj exists
+      const location = await ctx.prisma.location.findFirst({
+        where: { id: input.locationId },
+      });
+
+      if (!location) {
+        return false;
+      }
+      return true;
+    }),
 });

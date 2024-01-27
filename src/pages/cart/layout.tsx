@@ -8,10 +8,23 @@ import { ItemRow } from "~/components/Navbar";
 import { api } from "~/utils/api";
 
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const path = usePathname();
+
+  const locationId = Array.isArray(router.query.locationId)
+    ? router.query.locationId[0]
+    : router.query.locationId;
+
+  //
+
   const { data: sessionData } = useSession();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const { data: userData } = api.users.getCurrentUser.useQuery();
   const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
+  const { data: locationExists, isFetched } =
+    api.location.checkLocationExists.useQuery({
+      locationId: locationId ?? "",
+    });
   // toasts
 
   const noSelectedLocationToast = () =>
@@ -23,14 +36,6 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     toast("Los datos del usuario están incompletos. Complete su perfíl", {
       type: "error",
     });
-  //
-  const router = useRouter();
-  const path = usePathname();
-
-  const locationId = Array.isArray(router.query.locationId)
-    ? router.query.locationId[0]
-    : router.query.locationId;
-
   //
 
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
@@ -70,15 +75,24 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const linkLocationToOrder = async () => {
     if (!(data?.id && locationId)) {
       noSelectedLocationToast();
-      return false;
+      return null;
+    }
+    //check location exists
+    if (!locationExists) {
+      toast("Ubicación incorrecta. Crea una nueva ubicación", {
+        type: "error",
+      });
+      return null;
     }
 
-    toast.promise(linkLocation({ locationId, orderId: data?.id }), {
-      success: "Ubicación guardada con éxito",
-      pending: "Guardadon ubicación del pedido",
-      error: "Hubo un error al guardar la ubicación del pedido",
-    });
-    return true;
+    return await toast.promise(
+      () => linkLocation({ locationId, orderId: data?.id }),
+      {
+        success: "Ubicación guardada con éxito",
+        pending: "Guardadon ubicación del pedido",
+        error: "Hubo un error al guardar la ubicación del pedido",
+      },
+    );
   };
 
   const requiredUserDataIsComplete = ({
@@ -135,6 +149,18 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setCartTotal(calculateTotal(data?.garments));
   }, [data]);
+
+  useEffect(() => {
+    if (!isFetched) {
+      return;
+    }
+
+    //if location does not exists, remove locationId param from url
+    if (!locationExists) {
+      router.query.locationId = [];
+      router.push(router);
+    }
+  }, [isFetched]);
 
   //loading states
   if (!data?.garments.length && isLoading === false)

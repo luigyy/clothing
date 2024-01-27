@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
@@ -103,9 +104,21 @@ export const ordersRouter = createTRPCRouter({
       //
     }),
 
+  /**
+   * links an existing location of id : @locationId, to an order, if location of id : @locationId does not exist, returns false, else true
+   */
   linkLocationToOrder: protectedProcedure
     .input(z.object({ locationId: z.string(), orderId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      //check if location obj exists
+      const location = await ctx.prisma.location.findFirst({
+        where: { id: input.locationId },
+      });
+
+      if (!location) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+
       //check if location already connected
       const order = await ctx.prisma.order.findFirst({
         where: { id: input.orderId },
@@ -119,9 +132,24 @@ export const ordersRouter = createTRPCRouter({
         });
       }
 
-      return await ctx.prisma.order.update({
+      await ctx.prisma.order.update({
         where: { id: input.orderId },
         data: { location: { connect: { id: input.locationId } } },
       });
+      return true;
+    }),
+
+  checkLocationExists: protectedProcedure
+    .input(z.object({ locationId: z.string(), orderId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      //check if location obj exists
+      const location = await ctx.prisma.location.findFirst({
+        where: { id: input.locationId },
+      });
+
+      if (!location) {
+        return false;
+      }
+      return true;
     }),
 });
