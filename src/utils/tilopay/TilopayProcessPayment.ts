@@ -25,7 +25,7 @@ export default async function TilopayProcessPayment({
   myHeaders.append("Content-Type", "application/json");
 
   const body = {
-    redirect: "https://www.urlToRedirect.com",
+    redirect: "http://localhost:3000/checkout",
     key: apikey,
     amount: paymentData.amount,
     currency: "CRC",
@@ -39,7 +39,7 @@ export default async function TilopayProcessPayment({
     billToCountry: "CR",
     billToTelephone: "88888888",
     billToEmail: paymentData.billToEmail,
-    orderNumber: "1212122",
+    orderNumber: "212122",
     capture: "1",
     subscription: "0",
     platform: "api",

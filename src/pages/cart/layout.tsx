@@ -7,6 +7,21 @@ import { toast } from "react-toastify";
 import { ItemRow } from "~/components/Navbar";
 import { api } from "~/utils/api";
 
+export const requiredUserDataIsComplete = ({
+  name,
+  email,
+  phoneNumber,
+}: {
+  name: string;
+  email: string;
+  phoneNumber: string;
+}) => {
+  if (!(name && email && phoneNumber)) {
+    return false;
+  }
+  return true;
+};
+
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const path = usePathname();
@@ -36,6 +51,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     toast("Los datos del usuario están incompletos. Complete su perfíl", {
       type: "error",
     });
+
   //
 
   const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
@@ -93,21 +109,6 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
         error: "Hubo un error al guardar la ubicación del pedido",
       },
     );
-  };
-
-  const requiredUserDataIsComplete = ({
-    name,
-    email,
-    phoneNumber,
-  }: {
-    name: string;
-    email: string;
-    phoneNumber: string;
-  }) => {
-    if (!(name && email && phoneNumber)) {
-      return false;
-    }
-    return true;
   };
 
   /**
