@@ -7,7 +7,9 @@ import TilopayValidatePayment from "~/utils/tilopay/TilopayValidatePayment";
 
 export const paymentRouter = createTRPCRouter({
   generateLink: protectedProcedure
-    .input(z.object({ email: z.string(), amount: z.string() }))
+    .input(
+      z.object({ email: z.string(), amount: z.string(), orderId: z.string() }),
+    )
     .query(async ({ input }) => {
       const apikey = env.TILOPAY_APIKEY;
       const apiuser = env.TILOPAY_APIUSER;
@@ -22,6 +24,7 @@ export const paymentRouter = createTRPCRouter({
         paymentData: {
           amount: input.amount,
           billToEmail: input.email,
+          orderId: input.orderId,
         },
       });
     }),

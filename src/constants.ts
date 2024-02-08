@@ -39,3 +39,9 @@ export interface FiltersType {
   category?: string;
   size?: string;
 }
+
+export const ORDER_STATUS = {
+  CART: "cart",
+  PAID: "paid",
+  DELIVERED: "delivered",
+};

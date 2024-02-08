@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { ORDER_STATUS } from "~/constants";
 
 import {
   createTRPCRouter,
@@ -19,6 +20,7 @@ export const ordersRouter = createTRPCRouter({
       include: {
         garments: { include: { pictures: true } },
         location: true,
+        user: true,
       },
     });
 
@@ -107,7 +109,7 @@ export const ordersRouter = createTRPCRouter({
   /**
    * links an existing location of id : @locationId, to an order, if location of id : @locationId does not exist, returns false, else true
    */
-  linkLocationToOrder: protectedProcedure
+  setOrderLocation: protectedProcedure
     .input(z.object({ locationId: z.string(), orderId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       //check if location obj exists
@@ -139,17 +141,39 @@ export const ordersRouter = createTRPCRouter({
       return true;
     }),
 
-  checkLocationExists: protectedProcedure
-    .input(z.object({ locationId: z.string(), orderId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      //check if location obj exists
-      const location = await ctx.prisma.location.findFirst({
-        where: { id: input.locationId },
+  setOrderPrice: protectedProcedure
+    .input(z.object({ total: z.number(), orderId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.order.update({
+        where: { id: input.orderId },
+        data: {
+          purchaseTotal: input.total,
+        },
       });
+    }),
 
-      if (!location) {
-        return false;
-      }
-      return true;
+  setOrderToAlreadyPaid: protectedProcedure
+    .input(z.object({ orderId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.order.update({
+        where: { id: input.orderId },
+        data: {
+          //update order
+          isPaid: true,
+          orderStatus: ORDER_STATUS.PAID,
+          purchaseDate: new Date(),
+
+          //update garments inside order
+          garments: {
+            updateMany: {
+              where: { orderId: input.orderId },
+              data: {
+                isAvailabe: false,
+                purchaseDate: new Date(),
+              },
+            },
+          },
+        },
+      });
     }),
 });

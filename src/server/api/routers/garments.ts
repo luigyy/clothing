@@ -63,6 +63,7 @@ export const garmentsRouter = createTRPCRouter({
             },
 
             where: {
+              isAvailabe: true,
               likes: {
                 some: {
                   userId: currentUserId,
@@ -77,6 +78,7 @@ export const garmentsRouter = createTRPCRouter({
             orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 
             where: {
+              isAvailabe: true,
               OR: [
                 { brand: { contains: searchQuery || "" } },
                 { category: { contains: searchQuery || "" } },
@@ -125,6 +127,7 @@ export const garmentsRouter = createTRPCRouter({
       const data = await ctx.prisma.garment.findFirst({
         where: {
           id,
+          isAvailabe: true,
         },
         include: {
           pictures: true,
@@ -151,6 +154,7 @@ export const garmentsRouter = createTRPCRouter({
     const data = await ctx.prisma.garment.findMany({
       where: {
         userId: currentUserId,
+        isAvailabe: true,
       },
       include: {
         pictures: true,
@@ -200,6 +204,7 @@ export const garmentsRouter = createTRPCRouter({
     const currentUserId = ctx.session?.user.id;
 
     const data = await ctx.prisma.garment.findMany({
+      where: { isAvailabe: true },
       take: 4,
       include: {
         pictures: true,

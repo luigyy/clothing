@@ -4,6 +4,7 @@ interface ParamsType {
   paymentData: {
     amount: string;
     billToEmail: string;
+    orderId: string;
   };
 }
 
@@ -39,7 +40,7 @@ export default async function TilopayProcessPayment({
     billToCountry: "CR",
     billToTelephone: "88888888",
     billToEmail: paymentData.billToEmail,
-    orderNumber: "1234",
+    orderNumber: paymentData.orderId,
     capture: "1",
     subscription: "0",
     platform: "api",

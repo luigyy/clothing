@@ -112,6 +112,9 @@ model Garment {
     genre          String
     createdAt      DateTime @default(now())
 
+    purchaseDate DateTime?
+    isAvailabe   Boolean   @default(true)
+
     user     User           @relation(fields: [userId], references: [id])
     likes    garmentLikes[]
     pictures Pictures[]
@@ -144,16 +147,19 @@ model garmentLikes {
 }
 
 model Order {
-    id          String    @id @default(cuid())
-    userId      String
-    garments    Garment[]
-    user        User      @relation(fields: [userId], references: [id])
-    createdAt   DateTime  @default(now())
-    isPaid      Boolean   @default(false) //false === is in cart still 
-    orderStatus String    @default("cart")
-    locationId  String?
+    id        String    @id @default(cuid())
+    userId    String
+    garments  Garment[]
+    user      User      @relation(fields: [userId], references: [id])
+    createdAt DateTime  @default(now())
 
-    location Location? @relation(fields: [locationId], references: [id])
+    isPaid        Boolean   @default(false) //false === is in cart still 
+    orderStatus   String    @default("cart")
+    purchaseDate  DateTime?
+    purchaseTotal Float?    @default(0)
+
+    locationId String?
+    location   Location? @relation(fields: [locationId], references: [id])
 
     @@index([locationId])
     @@index([userId])

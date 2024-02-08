@@ -35,11 +35,13 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: sessionData } = useSession();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const { data: userData } = api.users.getCurrentUser.useQuery();
-  const linkLocation = api.orders.linkLocationToOrder.useMutation().mutateAsync;
+  const linkLocation = api.orders.setOrderLocation.useMutation().mutateAsync;
   const { data: locationExists, isFetched } =
     api.location.checkLocationExists.useQuery({
       locationId: locationId ?? "",
     });
+
+  const linkTotalPrice = api.orders.setOrderPrice.useMutation();
   // toasts
 
   const noSelectedLocationToast = () =>
@@ -60,6 +62,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: checkoutLink } = api.payment.generateLink.useQuery({
     amount: cartTotal.toString(),
     email: sessionData?.user.email || "",
+    orderId: data?.id || "",
   });
 
   /**
@@ -128,6 +131,17 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     return true;
   };
 
+  const linkTotalPriceToOrder = async () => {
+    return await toast.promise(
+      linkTotalPrice.mutateAsync({ orderId: data?.id ?? "", total: cartTotal }),
+      {
+        success: "Se añadio el precio total de la orden",
+        pending: "Procesando el precio",
+        error: "Hubo un error al procesar el precio",
+      },
+    );
+  };
+
   const onClickHandler = async () => {
     if (path === "/cart") {
       router.push("/cart/location-confirmation");
@@ -140,6 +154,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
+      await linkTotalPriceToOrder();
       const isComplete = checkUserDataIsComplete();
       if (!isComplete) return;
 

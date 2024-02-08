@@ -13,6 +13,7 @@ export default async function TilopayGenerateCheckoutLink({
   paymentData: {
     amount: string;
     billToEmail: string;
+    orderId: string;
   };
 }) {
   //generate token
