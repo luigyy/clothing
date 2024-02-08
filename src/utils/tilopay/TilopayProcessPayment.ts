@@ -1,3 +1,5 @@
+import { env } from "~/env.mjs";
+
 interface ParamsType {
   apikey: string;
   apitoken: string;
@@ -26,7 +28,7 @@ export default async function TilopayProcessPayment({
   myHeaders.append("Content-Type", "application/json");
 
   const body = {
-    redirect: "http://localhost:3000/checkout",
+    redirect: `${env.NEXT_PUBLIC_URL}/checkout`,
     key: apikey,
     amount: paymentData.amount,
     currency: "CRC",
