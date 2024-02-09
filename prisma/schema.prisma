@@ -58,9 +58,10 @@ model User {
     lastName    String?
     phoneNumber String?
 
+    walletCredits Float     @default(0)
     //
-    accounts Account[]
-    sessions Session[]
+    accounts      Account[]
+    sessions      Session[]
 
     //non next-auth
     Garment      Garment[]

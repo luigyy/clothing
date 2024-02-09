@@ -5,10 +5,11 @@ import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import LoadingPage from "~/components/LoadingPage";
 import { useEffect } from "react";
-import { promise } from "zod";
 import { toast } from "react-toastify";
 
 export default function CheckoutResult() {
+  const utils = api.useContext();
+
   const updateOrderToAlreadyPaid =
     api.orders.setOrderToAlreadyPaid.useMutation();
   //
@@ -44,9 +45,16 @@ export default function CheckoutResult() {
     //cambiar el estado de la orden a isPaid=true
     if (isFetched && urlIsNotModified && code === "1") {
       toast.promise(
-        updateOrderToAlreadyPaid.mutateAsync({
-          orderId: (Array.isArray(order) ? order[0] : order) ?? "",
-        }),
+        updateOrderToAlreadyPaid.mutateAsync(
+          {
+            orderId: (Array.isArray(order) ? order[0] : order) ?? "",
+          },
+          {
+            onSuccess: () => {
+              utils.orders.getCurrentUserCart.setData(undefined, null);
+            },
+          },
+        ),
         {
           success: "Orden procesada",
           pending: "Procesando order",

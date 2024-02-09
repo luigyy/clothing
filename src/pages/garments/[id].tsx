@@ -58,6 +58,7 @@ function MeasurementsComponent({
 
 const Garment = () => {
   const { data: sessionData } = useSession();
+  const { data: userData } = api.users.getCurrentUser.useQuery();
   // To open the lightbox change the value of the "toggler" prop.
   const [toggler, setToggler] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -152,7 +153,45 @@ const Garment = () => {
           onSuccess: (res) => {
             if (res.error) return;
             utils.orders.getCurrentUserCart.setData(undefined, (oldData) => {
-              if (!oldData || !garment) return;
+              if (garment && !oldData) {
+                return {
+                  id: "1234",
+                  orderStatus: "cart",
+                  createdAt: new Date(),
+                  isPaid: false,
+                  userId: userData?.id ?? "",
+                  user: {
+                    email:
+                      userData?.email === undefined ? null : userData?.email,
+                    emailVerified: null,
+                    id: userData?.id ?? "1234",
+                    image:
+                      sessionData?.user.image === undefined
+                        ? null
+                        : sessionData.user.image,
+                    lastName:
+                      userData?.lastName === undefined
+                        ? null
+                        : userData?.lastName,
+                    name: userData?.name === undefined ? null : userData?.name,
+                    phoneNumber:
+                      userData?.phoneNumber === undefined
+                        ? null
+                        : userData?.phoneNumber,
+                    role: "user",
+                    walletCredits: 0,
+                  },
+                  garments: [{ ...garment }],
+                  purchaseDate: null,
+                  purchaseTotal: null,
+                  location: null,
+                  locationId: null,
+                };
+              }
+
+              if (!oldData || !garment) {
+                return;
+              }
 
               return {
                 ...oldData,

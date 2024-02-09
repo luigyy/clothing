@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { ORDER_STATUS } from "~/constants";
+import { calculateTotal } from "~/pages/cart/layout";
 
 import {
   createTRPCRouter,
@@ -142,14 +143,56 @@ export const ordersRouter = createTRPCRouter({
     }),
 
   setOrderPrice: protectedProcedure
-    .input(z.object({ total: z.number(), orderId: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.order.update({
+    .input(
+      z.object({
+        total: z.number(),
+        orderId: z.string(),
+        discountAmount: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      //general cleanse
+      if (input.discountAmount < 0 || input.total < 0) {
+        return false;
+      }
+
+      //check order total server side
+      const myOrder = await ctx.prisma.order.findFirst({
+        where: { id: input.orderId },
+        include: { garments: true },
+      });
+
+      const serverSideTotal = calculateTotal(myOrder?.garments);
+
+      //check if disccount amount is available in user cart
+      const myUser = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user.id },
+      });
+
+      if (
+        //if null or walletCredits are lt the disccount amount user is trying to apply an incorrect disccount
+        (!myUser?.walletCredits ||
+          myUser.walletCredits >= input.discountAmount) &&
+        input.discountAmount !== 0
+      ) {
+        return false;
+      }
+
+      //if doesnt match, price coming from client has been modified
+      if (serverSideTotal - input.discountAmount !== input.total) {
+        return false;
+      }
+
+      //else,  total match. So update purchase total accordingly
+      await ctx.prisma.order.update({
         where: { id: input.orderId },
         data: {
           purchaseTotal: input.total,
         },
       });
+
+      //success
+      return true;
     }),
 
   setOrderToAlreadyPaid: protectedProcedure

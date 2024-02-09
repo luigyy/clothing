@@ -22,6 +22,21 @@ export const requiredUserDataIsComplete = ({
   return true;
 };
 
+/**
+ *
+ * @param garments list of garments to pay
+ * @returns total amount to pay
+ */
+export function calculateTotal(garments: Garment[] | null | undefined) {
+  if (!garments) return 0;
+
+  let total = 0;
+  garments.forEach((garment) => {
+    total += garment.current_price;
+  });
+  return total;
+}
+
 const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const path = usePathname();
@@ -56,32 +71,31 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
 
   //
 
-  const [cartTotal, setCartTotal] = useState(calculateTotal(data?.garments));
+  const [cartSubtotal, setcartSubtotal] = useState(
+    calculateTotal(data?.garments),
+  );
+  const [useCredits, setUseCredits] = useState(false);
+  const [creditsAmount, setCreditsAmount] = useState(2000);
+  const [cartTotal, setcartTotal] = useState(0);
 
   //states
   const { data: checkoutLink } = api.payment.generateLink.useQuery({
-    amount: cartTotal.toString(),
+    amount: cartSubtotal.toString(),
     email: sessionData?.user.email || "",
     orderId: data?.id || "",
   });
 
-  /**
-   *
-   * @param garments list of garments to pay
-   * @returns total amount to pay
-   */
-  function calculateTotal(garments: Garment[] | null | undefined) {
-    if (!garments) return 0;
-
-    let total = 0;
-    garments.forEach((garment) => {
-      total += garment.current_price;
-    });
-    return total;
-  }
-
   /**redirects to checkout */
   const redirectToCheckoutLink = async () => {
+    const priceIsCorrect = await linkTotalPriceToOrder();
+    //price not correct, some number has been modified
+    if (!priceIsCorrect) {
+      toast("El precio es incorrecto. Recargar página", { type: "error" });
+      return;
+    } else {
+      toast("Se guardó el precio de la orden");
+    }
+
     if (!checkoutLink) return errorGeneratingCheckoutLinkToast();
     router.push(checkoutLink);
   };
@@ -132,14 +146,19 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const linkTotalPriceToOrder = async () => {
-    return await toast.promise(
-      linkTotalPrice.mutateAsync({ orderId: data?.id ?? "", total: cartTotal }),
+    const result = await toast.promise(
+      linkTotalPrice.mutateAsync({
+        orderId: data?.id ?? "",
+        total: cartSubtotal,
+        //if user not using their credits, set discount amount to 0.
+        discountAmount: useCredits ? creditsAmount : 0,
+      }),
       {
-        success: "Se añadio el precio total de la orden",
         pending: "Procesando el precio",
         error: "Hubo un error al procesar el precio",
       },
     );
+    return result;
   };
 
   const onClickHandler = async () => {
@@ -154,7 +173,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
-      await linkTotalPriceToOrder();
+      //check user data is complete
       const isComplete = checkUserDataIsComplete();
       if (!isComplete) return;
 
@@ -163,7 +182,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    setCartTotal(calculateTotal(data?.garments));
+    setcartSubtotal(calculateTotal(data?.garments));
   }, [data]);
 
   useEffect(() => {
@@ -177,6 +196,18 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push(router);
     }
   }, [isFetched]);
+
+  //useCredits: update total amount to apply disccount
+  useEffect(() => {
+    if (useCredits) {
+      return setcartTotal(cartSubtotal - creditsAmount);
+    }
+    setcartTotal(cartSubtotal);
+  }, [useCredits]);
+
+  useEffect(() => {
+    setcartTotal(cartSubtotal);
+  }, [cartSubtotal]);
 
   //loading states
   if (!data?.garments.length && isLoading === false)
@@ -198,8 +229,32 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
                 size={garment.size}
               />
             ))}
+            <div className="mt-3  flex items-center justify-between border-opacity-25 py-2 pl-1">
+              <button
+                onClick={() => setUseCredits(!useCredits)}
+                className="btn [&&]:border-green  [&&]:bg-green [&&]:text-xs"
+              >
+                {useCredits ? "No usar creditos" : "Usar creditos"}
+              </button>
+              <div className="flex items-center gap-x-3">
+                <p className="text-sm text-blue/80">{`₡${creditsAmount.toLocaleString()}`}</p>
+              </div>
+            </div>
+            {useCredits ? (
+              <>
+                <div className=" flex justify-between border-t border-orange border-opacity-25 pl-1 pt-2  ">
+                  <h1 className="text-xs font-semibold">Subtotal</h1>
+                  <p className="text-xs font-semibold text-blue/80">{`₡${cartSubtotal.toLocaleString()}`}</p>
+                </div>
 
-            <div className="mt-3  flex justify-between  border-t border-orange border-opacity-25 px-3 pt-3">
+                <div className=" flex justify-between   border-opacity-25 pl-1  ">
+                  <h1 className="text-xs font-semibold">Descuento</h1>
+                  <p className="text-xs font-semibold text-red-500/80">{`-₡${creditsAmount.toLocaleString()}`}</p>
+                </div>
+              </>
+            ) : null}
+
+            <div className=" flex justify-between  border-opacity-25  pl-1 pt-1 ">
               <h1>Total</h1>
               <p className="text-sm font-semibold">{`₡${cartTotal.toLocaleString()}`}</p>
             </div>
