@@ -15,10 +15,12 @@ export default function CheckoutResult() {
   //
   const router = useRouter();
   const { data: cartData } = api.orders.getCurrentUserCart.useQuery();
-  let { code, auth, order, OrderHash, tpt, description } = router.query;
+  let { code, auth, order, OrderHash, tpt, description, wp_cancel } =
+    router.query;
   // console.log(code, auth, order, OrderHash);
 
   //clean types string[] -> string of params
+  wp_cancel = cleanQueryParam(wp_cancel);
   code = cleanQueryParam(code);
   order = cleanQueryParam(order);
   OrderHash = cleanQueryParam(OrderHash);
@@ -66,6 +68,23 @@ export default function CheckoutResult() {
 
   if (isLoading) {
     return <LoadingPage />;
+  }
+
+  if (wp_cancel && wp_cancel === "yes") {
+    return (
+      <div className="flex h-[75vh] w-full items-center justify-center ">
+        <div className="flex flex-col">
+          <h1 className="py-3 text-center">Pedido cancelado</h1>
+
+          <button
+            onClick={() => router.push("/cart")}
+            className="btn uppercase"
+          >
+            Volver al carrito
+          </button>
+        </div>
+      </div>
+    );
   }
 
   //if url has been modified
