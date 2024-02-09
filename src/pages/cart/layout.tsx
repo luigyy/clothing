@@ -56,6 +56,9 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       locationId: locationId ?? "",
     });
 
+  const ORDER_ID = data?.id;
+  const USER_EMAIL = sessionData?.user.email;
+
   const linkTotalPrice = api.orders.setOrderPrice.useMutation();
   // toasts
 
@@ -75,14 +78,16 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     calculateTotal(data?.garments),
   );
   const [useCredits, setUseCredits] = useState(false);
-  const [creditsAmount, setCreditsAmount] = useState(2000);
-  const [cartTotal, setcartTotal] = useState(0);
+  const [creditsAmount, setCreditsAmount] = useState(
+    userData?.walletCredits ?? 0,
+  );
+  const [cartTotal, setcartTotal] = useState(cartSubtotal);
 
   //states
   const { data: checkoutLink } = api.payment.generateLink.useQuery({
-    amount: cartSubtotal.toString(),
-    email: sessionData?.user.email || "",
-    orderId: data?.id || "",
+    amount: cartTotal.toString(),
+    email: USER_EMAIL ?? "",
+    orderId: ORDER_ID ?? "",
   });
 
   /**redirects to checkout */
@@ -93,7 +98,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       toast("El precio es incorrecto. Recargar página", { type: "error" });
       return;
     } else {
-      toast("Se guardó el precio de la orden");
+      toast("Se guardó el precio de la orden", { type: "success" });
     }
 
     if (!checkoutLink) return errorGeneratingCheckoutLinkToast();
@@ -208,6 +213,12 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setcartTotal(cartSubtotal);
   }, [cartSubtotal]);
+
+  useEffect(() => {
+    if (userData) {
+      setCreditsAmount(userData?.walletCredits);
+    }
+  }, [userData]);
 
   //loading states
   if (!data?.garments.length && isLoading === false)

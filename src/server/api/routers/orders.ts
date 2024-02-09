@@ -164,26 +164,31 @@ export const ordersRouter = createTRPCRouter({
 
       const serverSideTotal = calculateTotal(myOrder?.garments);
 
-      //check if disccount amount is available in user cart
       const myUser = await ctx.prisma.user.findFirst({
         where: { id: ctx.session.user.id },
       });
 
+      //validate if user has enough credits to apply the disccount,
+      //which means, see if walletCredits < disccount, else the user is trying to apply a disccount greater than what he/she has.
+      if (input.discountAmount !== 0) {
+        if (
+          !myUser?.walletCredits ||
+          myUser.walletCredits < input.discountAmount
+        ) {
+          console.log(myUser?.walletCredits, input.discountAmount);
+          return false;
+        }
+      }
+      //if server-side calculated total doesnt match to client total, price coming from client has been modified
       if (
-        //if null or walletCredits are lt the disccount amount user is trying to apply an incorrect disccount
-        (!myUser?.walletCredits ||
-          myUser.walletCredits >= input.discountAmount) &&
-        input.discountAmount !== 0
+        serverSideTotal - input.discountAmount !==
+        input.total - input.discountAmount
       ) {
+        console.log(serverSideTotal - input.discountAmount, input.total);
         return false;
       }
 
-      //if doesnt match, price coming from client has been modified
-      if (serverSideTotal - input.discountAmount !== input.total) {
-        return false;
-      }
-
-      //else,  total match. So update purchase total accordingly
+      // total match. So update purchase total accordingly
       await ctx.prisma.order.update({
         where: { id: input.orderId },
         data: {
