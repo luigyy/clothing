@@ -158,6 +158,7 @@ model Order {
     orderStatus   String    @default("cart")
     purchaseDate  DateTime?
     purchaseTotal Float?    @default(0)
+    creditsUsed   Float? //user wallet credits
 
     locationId String?
     location   Location? @relation(fields: [locationId], references: [id])

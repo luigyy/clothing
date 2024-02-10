@@ -93,7 +93,9 @@ const ProfileButton = () => {
                         <IoWalletOutline className="text-2xl text-orange opacity-70" />
                       }
                     </span>
-                    <button className="pl-2 text-sm ">Ver monedero</button>
+                    <Link href={"/settings/wallet"} className="pl-2 text-sm ">
+                      Ver monedero
+                    </Link>
                   </div>
 
                   <div className="flex flex-row items-center px-3 hover:text-orange ">

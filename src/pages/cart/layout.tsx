@@ -50,11 +50,14 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: sessionData } = useSession();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const { data: userData } = api.users.getCurrentUser.useQuery();
-  const linkLocation = api.orders.setOrderLocation.useMutation().mutateAsync;
+  const linkLocation = api.orders.setOrderLocation.useMutation();
   const { data: locationExists, isFetched } =
     api.location.checkLocationExists.useQuery({
       locationId: locationId ?? "",
     });
+
+  const ORDER_ID = data?.id;
+  const USER_EMAIL = sessionData?.user.email;
 
   const linkTotalPrice = api.orders.setOrderPrice.useMutation();
   // toasts
@@ -75,14 +78,16 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     calculateTotal(data?.garments),
   );
   const [useCredits, setUseCredits] = useState(false);
-  const [creditsAmount, setCreditsAmount] = useState(2000);
-  const [cartTotal, setcartTotal] = useState(0);
+  const [creditsAmount, setCreditsAmount] = useState(
+    userData?.walletCredits ?? 0,
+  );
+  const [cartTotal, setcartTotal] = useState(cartSubtotal);
 
   //states
   const { data: checkoutLink } = api.payment.generateLink.useQuery({
-    amount: cartSubtotal.toString(),
-    email: sessionData?.user.email || "",
-    orderId: data?.id || "",
+    amount: cartTotal.toString(),
+    email: USER_EMAIL ?? "",
+    orderId: ORDER_ID ?? "",
   });
 
   /**redirects to checkout */
@@ -93,7 +98,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       toast("El precio es incorrecto. Recargar página", { type: "error" });
       return;
     } else {
-      toast("Se guardó el precio de la orden");
+      toast("Se guardó el precio de la orden", { type: "success" });
     }
 
     if (!checkoutLink) return errorGeneratingCheckoutLinkToast();
@@ -119,7 +124,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     }
 
     return await toast.promise(
-      () => linkLocation({ locationId, orderId: data?.id }),
+      () => linkLocation.mutateAsync({ locationId, orderId: data?.id }),
       {
         success: "Ubicación guardada con éxito",
         pending: "Guardadon ubicación del pedido",
@@ -166,6 +171,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/location-confirmation");
     }
     if (path === "/cart/location-confirmation") {
+      //check if already loading
+      if (linkLocation.isLoading) {
+        return;
+      }
+
       //check if location was linked successfully
       const result = await linkLocationToOrder();
       if (!result) return;
@@ -173,6 +183,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
+      //check if already pressed button
+      if (linkTotalPrice.isLoading) {
+        return;
+      }
+
       //check user data is complete
       const isComplete = checkUserDataIsComplete();
       if (!isComplete) return;
@@ -209,6 +224,12 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     setcartTotal(cartSubtotal);
   }, [cartSubtotal]);
 
+  useEffect(() => {
+    if (userData) {
+      setCreditsAmount(userData?.walletCredits);
+    }
+  }, [userData]);
+
   //loading states
   if (!data?.garments.length && isLoading === false)
     return <div>no orders!</div>;
@@ -229,17 +250,19 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
                 size={garment.size}
               />
             ))}
-            <div className="mt-3  flex items-center justify-between border-opacity-25 py-2 pl-1">
-              <button
-                onClick={() => setUseCredits(!useCredits)}
-                className="btn [&&]:border-green  [&&]:bg-green [&&]:text-xs"
-              >
-                {useCredits ? "No usar creditos" : "Usar creditos"}
-              </button>
-              <div className="flex items-center gap-x-3">
-                <p className="text-sm text-blue/80">{`₡${creditsAmount.toLocaleString()}`}</p>
+            {creditsAmount === 0 ? null : (
+              <div className="mt-3  flex items-center justify-between border-opacity-25 py-2 pl-1">
+                <button
+                  onClick={() => setUseCredits(!useCredits)}
+                  className="btn [&&]:border-green  [&&]:bg-green [&&]:text-xs"
+                >
+                  {useCredits ? "No usar creditos" : "Usar creditos"}
+                </button>
+                <div className="flex items-center gap-x-3">
+                  <p className="text-sm text-blue/80">{`₡${creditsAmount.toLocaleString()}`}</p>
+                </div>
               </div>
-            </div>
+            )}
             {useCredits ? (
               <>
                 <div className=" flex justify-between border-t border-orange border-opacity-25 pl-1 pt-2  ">

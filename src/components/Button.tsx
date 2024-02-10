@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className="inline-block items-center justify-center "
-      onClick={() => (handlerFn && id ? handlerFn(id) : null)}
+      onClick={() => (handlerFn && id && !isLoading ? handlerFn(id) : null)}
       disabled={disabled}
     >
       <div className="group relative inline-block px-6 py-2 font-medium">
