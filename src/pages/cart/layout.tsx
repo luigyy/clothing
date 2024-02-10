@@ -50,7 +50,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: sessionData } = useSession();
   const { data, isLoading } = api.orders.getCurrentUserCart.useQuery();
   const { data: userData } = api.users.getCurrentUser.useQuery();
-  const linkLocation = api.orders.setOrderLocation.useMutation().mutateAsync;
+  const linkLocation = api.orders.setOrderLocation.useMutation();
   const { data: locationExists, isFetched } =
     api.location.checkLocationExists.useQuery({
       locationId: locationId ?? "",
@@ -124,7 +124,7 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
     }
 
     return await toast.promise(
-      () => linkLocation({ locationId, orderId: data?.id }),
+      () => linkLocation.mutateAsync({ locationId, orderId: data?.id }),
       {
         success: "Ubicación guardada con éxito",
         pending: "Guardadon ubicación del pedido",
@@ -171,6 +171,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/location-confirmation");
     }
     if (path === "/cart/location-confirmation") {
+      //check if already loading
+      if (linkLocation.isLoading) {
+        return;
+      }
+
       //check if location was linked successfully
       const result = await linkLocationToOrder();
       if (!result) return;
@@ -178,6 +183,11 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
       router.push("/cart/data-confirmation");
     }
     if (path === "/cart/data-confirmation") {
+      //check if already pressed button
+      if (linkTotalPrice.isLoading) {
+        return;
+      }
+
       //check user data is complete
       const isComplete = checkUserDataIsComplete();
       if (!isComplete) return;
