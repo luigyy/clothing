@@ -181,6 +181,7 @@ const Garment = () => {
                     role: "user",
                     walletCredits: 0,
                   },
+                  creditsUsed: 0,
                   garments: [{ ...garment }],
                   purchaseDate: null,
                   purchaseTotal: null,
