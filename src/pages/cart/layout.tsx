@@ -240,17 +240,19 @@ const CartLayout = ({ children }: { children: React.ReactNode }) => {
                 size={garment.size}
               />
             ))}
-            <div className="mt-3  flex items-center justify-between border-opacity-25 py-2 pl-1">
-              <button
-                onClick={() => setUseCredits(!useCredits)}
-                className="btn [&&]:border-green  [&&]:bg-green [&&]:text-xs"
-              >
-                {useCredits ? "No usar creditos" : "Usar creditos"}
-              </button>
-              <div className="flex items-center gap-x-3">
-                <p className="text-sm text-blue/80">{`₡${creditsAmount.toLocaleString()}`}</p>
+            {creditsAmount === 0 ? null : (
+              <div className="mt-3  flex items-center justify-between border-opacity-25 py-2 pl-1">
+                <button
+                  onClick={() => setUseCredits(!useCredits)}
+                  className="btn [&&]:border-green  [&&]:bg-green [&&]:text-xs"
+                >
+                  {useCredits ? "No usar creditos" : "Usar creditos"}
+                </button>
+                <div className="flex items-center gap-x-3">
+                  <p className="text-sm text-blue/80">{`₡${creditsAmount.toLocaleString()}`}</p>
+                </div>
               </div>
-            </div>
+            )}
             {useCredits ? (
               <>
                 <div className=" flex justify-between border-t border-orange border-opacity-25 pl-1 pt-2  ">

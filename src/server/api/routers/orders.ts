@@ -3,11 +3,7 @@ import { z } from "zod";
 import { ORDER_STATUS } from "~/constants";
 import { calculateTotal } from "~/pages/cart/layout";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const ordersRouter = createTRPCRouter({
   getCurrentUserCart: protectedProcedure.query(async ({ ctx }) => {
@@ -184,15 +180,15 @@ export const ordersRouter = createTRPCRouter({
         serverSideTotal - input.discountAmount !==
         input.total - input.discountAmount
       ) {
-        console.log(serverSideTotal - input.discountAmount, input.total);
         return false;
       }
 
-      // total match. So update purchase total accordingly
+      // total match. So update purchase total and credits used accordingly
       await ctx.prisma.order.update({
         where: { id: input.orderId },
         data: {
-          purchaseTotal: input.total,
+          purchaseTotal: input.total - input.discountAmount,
+          creditsUsed: input.discountAmount,
         },
       });
 
@@ -200,13 +196,39 @@ export const ordersRouter = createTRPCRouter({
       return true;
     }),
 
+  //handles successfull payments
   setOrderToAlreadyPaid: protectedProcedure
-    .input(z.object({ orderId: z.string() }))
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.order.update({
+    .input(z.object({ orderId: z.string(), creditsUsed: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      //check if order has already been paid
+      const order = await ctx.prisma.order.findFirst({
+        where: { id: input.orderId },
+      });
+
+      if (!order) return;
+
+      if (order.isPaid === true) {
+        return;
+      }
+      if (input.creditsUsed < 0) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "User credits less than 0",
+        });
+      }
+
+      //update user wallet to decrement credits used
+      await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          walletCredits: { decrement: input.creditsUsed },
+        },
+      });
+
+      // update order
+      return await ctx.prisma.order.update({
         where: { id: input.orderId },
         data: {
-          //update order
           isPaid: true,
           orderStatus: ORDER_STATUS.PAID,
           purchaseDate: new Date(),

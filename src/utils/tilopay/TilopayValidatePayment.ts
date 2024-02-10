@@ -41,7 +41,6 @@ export default function TilopayValidatePayment(params: Params) {
     .update(new URLSearchParams(objectToHash).toString())
     .digest("hex");
 
-  console.log(new URLSearchParams(objectToHash).toString());
   try {
     var hashesMatch = crypto.timingSafeEqual(
       Buffer.from(hashOwnServer),
@@ -55,6 +54,5 @@ export default function TilopayValidatePayment(params: Params) {
     return true;
   }
 
-  console.log("hashes", hashOwnServer, params.orderHash);
   return false;
 }

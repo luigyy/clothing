@@ -181,7 +181,8 @@ const Garment = () => {
                     role: "user",
                     walletCredits: 0,
                   },
-                  garments: [{ ...garment }],
+                  creditsUsed: 0,
+                  garments: [garment],
                   purchaseDate: null,
                   purchaseTotal: null,
                   location: null,
@@ -305,18 +306,29 @@ const Garment = () => {
             </span>
           </p>
           <div className=" flex items-center  gap-x-2 border-b border-blue border-opacity-50 pb-10 pt-4">
-            <Button
-              tw_text_size="text-xs"
-              back_color="blue"
-              id={id}
-              isLoading={addToCart.isLoading}
-              loadingContent="Añadiendo"
-              handlerFn={handleAddToCart}
-              content={`${
-                garmentIsInCart ? "Ya está en el bolsa" : "Añadir a la bolsa"
-              } `}
-              disabled={garmentIsInCart ? true : false}
-            />
+            {addToCart.isLoading ? (
+              <Button
+                tw_text_size="text-xs"
+                back_color="blue"
+                id={id}
+                content={`Añadiendo `}
+                disabled={true}
+              />
+            ) : (
+              <Button
+                tw_text_size="text-xs"
+                back_color="blue"
+                id={id}
+                isLoading={addToCart.isLoading}
+                loadingContent="Añadiendo"
+                handlerFn={handleAddToCart}
+                content={`${
+                  garmentIsInCart ? "Ya está en el bolsa" : "Añadir a la bolsa"
+                } `}
+                disabled={garmentIsInCart ? true : false}
+              />
+            )}
+
             <button
               onClick={handleLike}
               disabled={toggleLike.isLoading}

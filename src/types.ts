@@ -45,3 +45,6 @@ export const CategoriesTypeSchema = z.enum([
   "blusa",
   "accesorio",
 ]);
+
+//tilopay
+export type ReturnDataType = { walletCreditsUsed: number };

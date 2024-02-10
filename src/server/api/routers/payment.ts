@@ -5,10 +5,16 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import TilopayGenerateCheckoutLink from "~/utils/tilopay/TilopayGenerateCheckoutLink";
 import TilopayValidatePayment from "~/utils/tilopay/TilopayValidatePayment";
 
+export const ReturnDataSchema = z.object({ walletCreditsUsed: z.number() });
+
 export const paymentRouter = createTRPCRouter({
   generateLink: protectedProcedure
     .input(
-      z.object({ email: z.string(), amount: z.string(), orderId: z.string() }),
+      z.object({
+        email: z.string(),
+        amount: z.string(),
+        orderId: z.string(),
+      }),
     )
     .query(async ({ input }) => {
       const apikey = env.TILOPAY_APIKEY;
@@ -57,8 +63,6 @@ export const paymentRouter = createTRPCRouter({
         orderId: input.orderId ?? "",
         responseCode: input.responseCode ?? "",
       });
-
-      //incorrect or modified url, invalid payment
       return result;
     }),
 });
